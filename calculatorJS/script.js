@@ -1,0 +1,908 @@
+//для глобализации этих переменных
+let currentSelectedTask = null;
+let choosingRowElement = null;
+let editingTask = null;
+let originalTask = null;
+
+document.addEventListener('DOMContentLoaded', function () {
+    const alertBox = document.getElementById('customAlert');
+    const closeBtn = document.getElementById('alertCloseBtn');
+
+    // Закрытие по кнопке
+    closeBtn.addEventListener('click', hideAlert);
+
+    // Закрытие по клику на фон
+    alertBox.addEventListener('click', function (e) {
+        if (e.target === alertBox) {
+            hideAlert();
+        }
+    });
+
+    // Закрытие по Escape
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && alertBox.classList.contains('show')) {
+            hideAlert();
+        }
+    });
+
+    //Проверка параметров
+    const urlParams = new URLSearchParams(window.location.search);
+    const mode = urlParams.get('mode');
+
+    if (mode === 'converter') {
+        // Переключаем на конвертер
+        converterWind.style.display = 'flex';
+        converterWind.style.opacity = '1';
+        converterWind.style.transform = 'scale(1) translateY(0)';
+
+        calcWind.style.display = 'none';
+        calcWind.style.opacity = '0';
+        calcWind.style.transform = 'scale(0.9) translateY(15px)';
+
+        ToDoWind.style.display = 'none';
+        ToDoWind.style.opacity = '0';
+        ToDoWind.style.transform = 'scale(0.9) translateY(15px)';
+
+        document.getElementById('mainString').textContent = 'Конвертер валют';
+    }
+    if (mode === 'ToDoList') {
+        // Переключаем на конвертер
+        ToDoWind.style.display = 'flex';
+        ToDoWind.style.opacity = '1';
+        ToDoWind.style.transform = 'scale(1) translateY(0)';
+
+        calcWind.style.display = 'none';
+        calcWind.style.opacity = '0';
+        calcWind.style.transform = 'scale(0.9) translateY(15px)';
+
+        converterWind.style.display = 'none';
+        converterWind.style.opacity = '0';
+        converterWind.style.transform = 'scale(0.9) translateY(15px)';
+
+        document.getElementById('mainString').textContent = 'Список задач';
+    }
+
+    let tasks = loadTasks();
+    renderTasks(tasks);
+
+    // Обработчик клика на строки
+    choosingRowElement = document.querySelector('.choosingRow');
+
+    let rowsContainer = document.querySelector('.rows-container');
+    rowsContainer.addEventListener('click', function (event) {
+        let row = event.target.closest('.row');
+        if (!row) {
+            currentSelectedTask = null;
+            choosingRowElement.textContent = 'Выбрано:';
+            choosingRowElement.classList.remove('row-active');
+            document.querySelectorAll('.row').forEach(r => r.classList.remove('row-active'));
+            setButtonMode('add');
+            return;
+        };
+
+        setButtonMode('edit');
+        document.querySelectorAll('.row').forEach(r => r.classList.remove('row-active'));
+        let taskId = parseInt(row.getAttribute('data-id'));
+        currentSelectedTask = getTaskById(taskId);
+        choosingRowElement.textContent = `Выбрано: ${cutText(currentSelectedTask.text)}`;
+        choosingRowElement.classList.add('row-active');
+        row.classList.add('row-active');
+    });
+    //доп обработчик для клика вне rows container
+    document.addEventListener('click', function (event) {
+        let rowsContainer = document.querySelector('.rows-container');
+        let isClickInsideTable = rowsContainer.contains(event.target);
+
+        if (!isClickInsideTable && currentSelectedTask !== null) {
+            currentSelectedTask = null;
+            choosingRowElement.textContent = 'Выбрано:';
+            choosingRowElement.classList.remove('row-active');
+            document.querySelectorAll('.row').forEach(r => r.classList.remove('row-active'));
+            setButtonMode('add');
+        }
+    });
+});
+
+let buttonBack = document.getElementById('back-arrow');
+document.addEventListener('click', function (event) {
+    if (event.target == buttonBack) {
+        location.href = 'index.html';
+    }
+});
+//Инициализация кнопок
+let buttonOne = document.getElementById('one');
+let buttonTwo = document.getElementById('two');
+let buttonThree = document.getElementById('three');
+let buttonFour = document.getElementById('four');
+let buttonFive = document.getElementById('five');
+let buttonSix = document.getElementById('six');
+let buttonSeven = document.getElementById('seven');
+let buttonEight = document.getElementById('eight');
+let buttonNine = document.getElementById('nine');
+let buttonZero = document.getElementById('zero');
+let buttonClear = document.getElementById('clear');
+let buttonEquality = document.getElementById('equality');
+let buttonLeftBracket = document.getElementById('leftBracket');
+let buttonRightBracket = document.getElementById('rightBracket');
+let buttonDivide = document.getElementById('divide');
+let buttonTimes = document.getElementById('times');
+let buttonPlus = document.getElementById('plus');
+let buttonMinus = document.getElementById('minus');
+let buttonComma = document.getElementById('comma');
+let buttonINFO = document.getElementById('infoMath');
+
+
+let resultSpan = document.getElementById('resultText');
+let currentExpression = '';
+
+
+
+//Обработчики кнопок калькулятора
+document.querySelector('.Math').addEventListener('click', function (event) {
+    const target = event.target;
+
+    // цифры
+    if (target === buttonZero) {
+        currentExpression += '0';
+    } else if (target === buttonOne) {
+        currentExpression += '1';
+    } else if (target === buttonTwo) {
+        currentExpression += '2';
+    } else if (target === buttonThree) {
+        currentExpression += '3';
+    } else if (target === buttonFour) {
+        currentExpression += '4';
+    } else if (target === buttonFive) {
+        currentExpression += '5';
+    } else if (target === buttonSix) {
+        currentExpression += '6';
+    } else if (target === buttonSeven) {
+        currentExpression += '7';
+    } else if (target === buttonEight) {
+        currentExpression += '8';
+    } else if (target === buttonNine) {
+        currentExpression += '9';
+    }
+    // операторы
+    else if (target === buttonPlus) {
+        currentExpression += '+';
+    } else if (target === buttonMinus) {
+        currentExpression += '-';
+    } else if (target === buttonTimes) {
+        currentExpression += '*';
+    } else if (target === buttonDivide) {
+        currentExpression += '/';
+    }
+
+    // скобки и запятая
+    else if (target === buttonLeftBracket) {
+        currentExpression += '(';
+    } else if (target === buttonRightBracket) {
+        currentExpression += ')';
+    } else if (target === buttonComma) {
+        currentExpression += '.';
+    }
+
+    // очистка
+    else if (target === buttonClear) {
+        currentExpression = '';
+    }
+
+    // вычисление
+    else if (target === buttonEquality) {
+        currentExpression = calculate(currentExpression);
+    }
+    else if (target.closest('#infoMath')) {
+        showAlert('◆ Возможности:\n' +
+            '   • Сложение, вычитание, умножение, деление\n' +
+            '   • Скобки, десятичные дроби, унарный минус\n' +
+            '   • Приоритет операций\n\n' +
+            '◆ Исключения:\n' +
+            '   • Деление на ноль - ошибка\n' +
+            '   • Несбалансированные скобки - ошибка\n' +
+            '   • Две точки в числе - ошибка\n' +
+            '   • Пустое выражение - игнорируется\n\n' +
+            '◆ Советы:\n' +
+            '   • CE - очистить выражение\n' +
+            '   • Используйте запятую для дробей\n\n' +
+            '◆ Детали:\n' +
+            '   • Точность: до 10 знаков\n' +
+            '   • Убирает лишние нули', icon = 'ⓘ');
+    }
+
+    // обновление
+    resultSpan.textContent = currentExpression;
+    resultSpan.scrollLeft = resultSpan.scrollWidth;
+});
+function calculate(expr) {
+    // Очищаем строку от пробелов и недопустимых символов
+    expr = expr.replace(/\s+/g, '');
+
+    // Заменяем запятые на точки для дробных чисел
+    expr = expr.replace(/,/g, '.');
+
+    if (expr === '') return '';
+
+    // Валидация: проверяем, что строка содержит только допустимые символы
+    if (!/^[0-9+\-*/()\.]+$/.test(expr)) {
+        return 'Ошибка';
+    }
+
+    try {
+        // Проверка деления на ноль
+        if (/\/0(?!\.)/.test(expr)) {
+            showAlert('Ошибка: деление на ноль!');
+            return '';
+        }
+
+        // Преобразуем выражение в обратную польскую запись и вычисляем
+        let result = evaluateExpression(expr);
+
+        // Проверяем, является ли результат целым числом
+        if (Number.isInteger(result)) {
+            return result.toString();
+        } else {
+            // Убираем лишние нули в конце
+            return parseFloat(result.toFixed(10)).toString();
+        }
+    } catch (e) {
+        showAlert('Ошибка: неккоректный ввод!', '❌');
+        return '';
+    }
+}
+
+// Функция вычисления через обратную польскую запись (алгоритм сортировочной станции)
+function evaluateExpression(expr) {
+    let outputQueue = [];
+    let operatorStack = [];
+
+    // Приоритеты операторов
+    const precedence = {
+        '+': 1,
+        '-': 1,
+        '*': 2,
+        '/': 2
+    };
+
+    // Ассоциативность (левая)
+    const associativity = {
+        '+': 'left',
+        '-': 'left',
+        '*': 'left',
+        '/': 'left'
+    };
+
+    // Токенизация выражения
+    let i = 0;
+    let lastTokenWasOperator = true; // Для определения унарного минуса/плюса
+
+    while (i < expr.length) {
+        let char = expr[i];
+
+        // Пропускаем пробелы
+        if (char === ' ') {
+            i++;
+            continue;
+        }
+
+        // Число (целое или дробное)
+        if (/[0-9.]/.test(char)) {
+            let numStr = '';
+            let hasDecimal = false;
+
+            while (i < expr.length && (/[0-9.]/.test(expr[i]))) {
+                if (expr[i] === '.') {
+                    if (hasDecimal) {
+                        throw new Error('Две точки в числе');
+                    }
+                    hasDecimal = true;
+                }
+                numStr += expr[i];
+                i++;
+            }
+
+            // Проверка на корректность числа
+            if (numStr === '.' || numStr.startsWith('..')) {
+                throw new Error('');
+            }
+
+            let num = parseFloat(numStr);
+            if (lastTokenWasOperator && numStr[0] !== '.') {
+                // Это унарный минус/плюс уже обработан в парсинге операторов
+            }
+            outputQueue.push(num);
+            lastTokenWasOperator = false;
+            continue;
+        }
+
+        // Оператор или скобка
+        if (char === '(') {
+            operatorStack.push(char);
+            lastTokenWasOperator = true;
+            i++;
+        } else if (char === ')') {
+            while (operatorStack.length > 0 && operatorStack[operatorStack.length - 1] !== '(') {
+                outputQueue.push(operatorStack.pop());
+            }
+            if (operatorStack.length === 0) {
+                throw new Error('');
+            }
+            operatorStack.pop(); // Удаляем '('
+            lastTokenWasOperator = false;
+            i++;
+        } else if ('+-*/'.includes(char)) {
+            // Обработка унарного минуса/плюса
+            if (lastTokenWasOperator && (char === '-' || char === '+')) {
+                if (char === '-') {
+                    operatorStack.push('_'); // Специальный токен для унарного минуса
+                }
+                // Унарный плюс игнорируем
+                i++;
+                continue;
+            }
+
+            // Бинарный оператор
+            while (operatorStack.length > 0 && operatorStack[operatorStack.length - 1] !== '(') {
+                let topOp = operatorStack[operatorStack.length - 1];
+                if (topOp === '_') break;
+
+                if (precedence[topOp] > precedence[char] ||
+                    (precedence[topOp] === precedence[char] && associativity[char] === 'left')) {
+                    outputQueue.push(operatorStack.pop());
+                } else {
+                    break;
+                }
+            }
+            operatorStack.push(char);
+            lastTokenWasOperator = true;
+            i++;
+        } else {
+            throw new Error('');
+        }
+    }
+
+    // Выталкиваем оставшиеся операторы
+    while (operatorStack.length > 0) {
+        let op = operatorStack.pop();
+        if (op === '(') {
+            throw new Error('');
+        }
+        outputQueue.push(op);
+    }
+
+    // Вычисление обратной польской записи
+    let stack = [];
+
+    for (let token of outputQueue) {
+        if (typeof token === 'number') {
+            stack.push(token);
+        } else if (token === '_') {
+            // Унарный минус
+            let a = stack.pop();
+            stack.push(-a);
+        } else {
+            // Бинарный оператор
+            let b = stack.pop();
+            let a = stack.pop();
+
+            if (a === undefined || b === undefined) {
+                throw new Error('');
+            }
+
+            switch (token) {
+                case '+':
+                    stack.push(a + b);
+                    break;
+                case '-':
+                    stack.push(a - b);
+                    break;
+                case '*':
+                    stack.push(a * b);
+                    break;
+                case '/':
+                    if (b === 0) {
+                        throw new Error('Деление на ноль');
+                    }
+                    stack.push(a / b);
+                    break;
+            }
+        }
+    }
+
+    if (stack.length !== 1) {
+        throw new Error('Ошибка вычисления');
+    }
+
+    return stack[0];
+}
+
+//Функция кастомного alert
+// Функция для показа кастомного уведомления
+function showAlert(message, icon = '⚠️') {
+    const alertBox = document.getElementById('customAlert');
+    const alertMessage = document.getElementById('alertMessage');
+    const alertIcon = alertBox.querySelector('.custom-alert-icon');
+
+    alertIcon.textContent = icon;
+    alertMessage.textContent = message;
+    alertBox.classList.add('show');
+}
+
+// Функция для скрытия
+function hideAlert() {
+    const alertBox = document.getElementById('customAlert');
+    alertBox.classList.remove('show');
+}
+
+
+//Логика переключения окон с анимацией
+let mathTab = document.getElementById('Math');
+let converterTab = document.getElementById('Converter');
+let ToDoTab = document.getElementById('ToDoList');
+
+let calcWind = document.getElementById('calculatorWind');
+let converterWind = document.getElementById('converterWind');
+let ToDoWind = document.getElementById('ToDoWind');
+
+
+
+// Установка начальных стилей
+calcWind.style.opacity = '1';
+calcWind.style.transform = 'scale(1) translateY(0)';
+calcWind.style.display = 'flex';
+
+converterWind.style.opacity = '0';
+converterWind.style.transform = 'scale(0.9) translateY(15px)';
+converterWind.style.display = 'none';
+
+ToDoWind.style.opacity = '0';
+ToDoWind.style.transform = 'scale(0.9) translateY(15px)';
+ToDoWind.style.display = 'none';
+
+
+// Функция для переключения с анимацией
+function switchToWindow(showWind) {
+    const allWindows = [calcWind, converterWind, ToDoWind];
+
+    allWindows.forEach(win => {
+        if (win !== showWind && win.style.display !== 'none') {
+            win.style.opacity = '0';
+            win.style.transform = 'scale(0.9) translateY(15px)';
+
+            setTimeout(() => {
+                if (win.style.opacity === '0' || win.style.opacity === '') {
+                    win.style.display = 'none';
+                }
+            }, 300);
+        }
+    });
+
+    showWind.style.display = 'flex';
+    showWind.style.opacity = '0';
+    showWind.style.transform = 'scale(0.9) translateY(-15px)';
+
+    setTimeout(() => {
+        showWind.style.opacity = '1';
+        showWind.style.transform = 'scale(1) translateY(0)';
+    }, 300);
+}
+
+// Обработчик для "Калькулятор"
+mathTab.addEventListener('click', function () {
+    if (calcWind.style.display !== 'flex') {
+        switchToWindow(calcWind);
+        document.getElementById('mainString').textContent = 'Калькулятор';
+    }
+});
+
+// Обработчик для "Конвертер валют"
+converterTab.addEventListener('click', function () {
+    if (converterWind.style.display !== 'flex') {
+        switchToWindow(converterWind);
+        document.getElementById('mainString').textContent = 'Конвертер валют';
+    }
+});
+
+// Обработчик для "Список задач"
+ToDoTab.addEventListener('click', function () {
+    if (ToDoWind.style.display !== 'flex') {
+        switchToWindow(ToDoWind);
+        document.getElementById('mainString').textContent = 'Список задач';
+    }
+});
+
+//Обьект хранящий курсы валют
+let currencyRates = {};
+//Функция получения API актуальных курсов валют отнгосительно BYN
+async function loadCurrencyRates() {
+    try {
+        let response = await fetch();
+        let data = await response.json();
+        currencyRates = data.conversion_rates;
+    } catch (error) {
+        console.log(error);
+    }
+}
+loadCurrencyRates();
+function convertation() {
+    if (Object.keys(currencyRates).length === 0) {
+        showAlert('Подождите...Идет загрузка', '⏳');
+        return;
+    }
+    let resultStr = document.getElementById('toInput');
+    let selectElementFrom = document.getElementById('fromCurrency');
+    let selectElementTo = document.getElementById('toCurrency');
+    let selectValue = document.getElementById('fromInput').value;
+    let result = (selectValue / currencyRates[selectElementFrom.value]) * currencyRates[selectElementTo.value];
+    resultStr.value = result.toFixed(3);
+}
+//обработчик кнопки 'кновертировать'
+let convertBtn = document.getElementById('convertBtn');
+convertBtn.addEventListener('click', convertation);
+//кнопка INFO
+let infoConverter = document.getElementById('infoConverter');
+infoConverter.addEventListener('click', () => {
+    showAlert('★ Возможности:\n' +
+        '   • Конвертация между 5 валютами\n' +
+        '   • Актуальные курсы с ExchangeRate-API\n' +
+        '   • Обновление курсов при загрузке\n\n' +
+        '★ Использование:\n' +
+        '   • Ввод суммы в левом поле\n' +
+        '   • Выбор валюты "Из" и "В"\n' +
+        '   • Результат до 3 знаков после запятой\n\n' +
+        '★ Советы:\n' +
+        '   • При загрузке курсов — ожидание\n\n' +
+        '★ Примечания:\n' +
+        '   • BYN — Белорусский рубль\n' +
+        '   • USD — Доллар США\n' +
+        '   • EUR — Евро\n' +
+        '   • RUB — Российский рубль\n' +
+        '   • CNY — Китайский юань', 'ⓘ')
+});
+
+//Обработчик для кнопки Info Todo
+let infoBtnTodo = document.getElementById('infoTodo');
+infoBtnTodo.addEventListener('click', () => {
+    showAlert('✸ Возможности:\n' +
+        '   • Добавление, редактирование, удаление\n' +
+        '   • Сортировка через меню фильтрации\n\n' +
+        '✸ Сортировка:\n' +
+        '   • По дате (возрастание/убывание)\n' +
+        '   • По статусу (выполненые/невыполненые)\n\n' +
+        '✸ Использование:\n' +
+        '   • Добавить+ — добавить новую задачу\n' +
+        '   • Клик по задаче — редактировать задачу\n' +
+        '   • Удалить× — удалить задачу\n\n' +
+        '✸ Статусы задач:\n' +
+        '   • Не выполнено → В процессе → Выполнено\n\n' +
+        '✸ Примечания:\n' +
+        '   • Данные сохраняются в localStorage\n' +
+        '   • Задачи не пропадут после перезагрузки\n', 'ⓘ')
+});
+
+//Обработчик для кнопки добавить
+let switchBtn = document.getElementById('switchBtn');
+let modalOverlay = document.querySelector('.modalOverlay');
+function openModal() {
+    modalOverlay.classList.add('show');
+    let mainContent = document.querySelector('.main-content');
+    let textArea = document.getElementById('taskInput');
+    textArea.value = '';
+    mainContent.style.filter = 'blur(2px)';
+    mainContent.style.pointerEvents = 'none';
+    setTimeout(() => {
+        textArea.focus();
+    }, 50);
+}
+
+function closeModal() {
+    modalOverlay.classList.remove('show');
+    let mainContent = document.querySelector('.main-content');
+    mainContent.style.filter = 'none';
+    mainContent.style.pointerEvents = 'auto';
+}
+
+
+//Обработчик для кнопки добавить в модальном окне
+let modalAddBtn = document.getElementById('modalAddBtn');
+
+
+// Получить следующий id
+function getNextId() {
+    let nextId = localStorage.getItem('nextTaskId');
+
+    if (nextId === null) {
+        // Если счетчика нет — начинаем с 1
+        nextId = 1;
+    } else {
+        nextId = parseInt(nextId);
+    }
+
+    // Увеличиваем и сохраняем
+    localStorage.setItem('nextTaskId', nextId + 1);
+
+    return nextId;
+}
+
+// загрузить задачи из localStorage
+function loadTasks() {
+    let saved = localStorage.getItem('todoTasks');
+    if (saved) {
+        return JSON.parse(saved);
+    }
+    return [];
+}
+//сохранить задачи в localStorage
+function saveTasks(tasks) {
+    localStorage.setItem('todoTasks', JSON.stringify(tasks));
+}
+
+let textArea = document.getElementById('taskInput');
+modalAddBtn.addEventListener('click', function () {
+    let userText = textArea.value.trim();
+    if (textArea.value.length == 0) {
+        closeModal();
+        return;
+    }
+    let currentId = getNextId();
+    let currentDate = new Date().toLocaleDateString();
+
+
+    const newTask = {
+        id: currentId,
+        text: userText,
+        status: 'Не выполнено',
+        date: currentDate
+    };
+
+    let tasks = loadTasks();
+    tasks.push(newTask);
+    saveTasks(tasks);
+    renderTasks(tasks);
+    closeModal();
+    textArea.value = '';
+});
+
+//фукнция перерисовки таблицы
+function renderTasks(tasks) {
+    let rowsContainer = document.querySelector('.rows-container');
+    rowsContainer.innerHTML = '';
+
+    for (let i = 0; i < tasks.length; i++) {
+        let row = document.createElement('div');
+        row.className = 'row';
+        row.setAttribute('data-id', tasks[i].id);
+
+        row.innerHTML = `
+            <div class="columns">${tasks[i].text}</div>
+            <div class="columns">${tasks[i].status}</div>
+            <div class="columns">${tasks[i].date}</div>
+        `;
+
+        rowsContainer.appendChild(row);
+    }
+}
+
+//функция сокращения стркои для choosingRow
+function cutText(text) {
+    let result = text;
+    if (text.length > 25) {
+        result = text.slice(0, 24) + '...';
+        return result;
+    } else return result;
+}
+
+//функция получения задачи по ее айди
+function getTaskById(taskId) {
+    let tasks = loadTasks();
+    let task = tasks.find(t => t.id === taskId);
+    return task;
+}
+
+
+
+//Обработчик для кнопки удалить
+let btnDelete = document.querySelector('.btnDelete');
+btnDelete.addEventListener('click', function () {
+    if (currentSelectedTask) {
+        let tasks = loadTasks();
+        let newArrOfTasks = tasks.filter(task => task.id !== currentSelectedTask.id);
+        saveTasks(newArrOfTasks);
+        renderTasks(newArrOfTasks);
+        choosingRowElement.textContent = 'Выбрано: ';
+        currentSelectedTask = null;
+        setButtonMode('add');
+        choosingRowElement.classList.remove('row-active');
+        showAlert('Задача успешно удалена!', '✓');
+    } else {
+        showAlert('Ошибка: выберите задачу!', '⚠️');
+    }
+});
+
+
+//функции для смены обработчиков для кнопки switchBtn
+function handleAddClick() {
+    openModal();
+    currentSelectedTask = null;
+    choosingRowElement.textContent = 'Выбрано:';
+    choosingRowElement.classList.remove('row-active');
+    document.querySelectorAll('.row').forEach(r => r.classList.remove('row-active'));
+}
+
+function handleEditClick() {
+    openEditModal(currentSelectedTask);
+}
+
+// смена режима кнопки
+function setButtonMode(mode) {
+    switchBtn.removeEventListener('click', handleAddClick);
+    switchBtn.removeEventListener('click', handleEditClick);
+
+    if (mode === 'edit') {
+        switchBtn.addEventListener('click', handleEditClick);
+        switchBtn.classList.add('btnEdit');
+        switchBtn.textContent = 'Редактировать✎';
+    } else {
+        switchBtn.addEventListener('click', handleAddClick);
+        switchBtn.classList.remove('btnEdit');
+        switchBtn.textContent = 'Добавить+';
+    }
+}
+
+//инициализация при загрузке страницы
+setButtonMode('add');
+
+//открытие модального окна редактирования
+function openEditModal(currentSelectedTask) {
+    originalTask = currentSelectedTask;
+    editingTask = currentSelectedTask;
+    modalOverlayEdit.classList.add('show');
+    let mainContent = document.querySelector('.main-content');
+    let textAreaEdit = document.getElementById('taskInputEdit');
+    textAreaEdit.value = currentSelectedTask.text;
+    mainContent.style.filter = 'blur(2px)';
+    mainContent.style.pointerEvents = 'none';
+    updateSelectedStatusInMenu(currentSelectedTask.status);
+    setTimeout(() => {
+        textAreaEdit.focus();;
+    }, 50);
+}
+//закрытие модального окна редактирования
+function closeEditModal() {
+    modalOverlayEdit.classList.remove('show');
+    let mainContent = document.querySelector('.main-content');
+    mainContent.style.filter = 'none';
+    mainContent.style.pointerEvents = 'auto';
+    editingTask = null;
+    originalTask = null;
+}
+
+
+//кнопка изменить статус в модальнм окне редактирования
+let dropdownBtn = document.getElementById('statusDropdownBtn');
+let dropdownMenu = document.getElementById('statusDropdownMenu');
+let arrow = dropdownBtn.querySelector('.arrow');
+
+// открытие закрытие dropdown
+dropdownBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    dropdownMenu.classList.toggle('show');
+    arrow.classList.toggle('open');
+});
+
+// закрытие при клике вне
+document.addEventListener('click', function (e) {
+    if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+        dropdownMenu.classList.remove('show');
+        arrow.classList.remove('open');
+    }
+});
+
+// обработка выбора статуса
+dropdownMenu.querySelectorAll('.dropdown-item').forEach(item => {
+    item.addEventListener('click', function (e) {
+        e.stopPropagation();
+
+        let newStatus = this.getAttribute('data-status');
+
+        // ИСПОЛЬЗУЕМ editingTask вместо currentSelectedTask
+
+        let tasksArray = loadTasks();
+        let task = tasksArray.find(t => t.id === editingTask.id);
+
+        if (task) {
+            task.status = newStatus;
+            saveTasks(tasksArray);
+
+            // Обновляем editingTask
+            editingTask = task;
+
+            // Обновляем currentSelectedTask если он совпадает
+            if (currentSelectedTask && currentSelectedTask.id === task.id) {
+                currentSelectedTask = task;
+            }
+
+            renderTasks(tasksArray);
+
+            if (choosingRowElement && currentSelectedTask && currentSelectedTask.id === task.id) {
+                choosingRowElement.textContent = `Выбрано: ${cutText(task.text)}`;
+            }
+
+            updateSelectedStatusInMenu(newStatus);
+        }
+
+
+    });
+});
+
+// Функция обновления выделенного элемента в меню 
+function updateSelectedStatusInMenu(selectedStatus) {
+    let dropdownMenu = document.getElementById('statusDropdownMenu');
+    if (dropdownMenu) {
+        dropdownMenu.querySelectorAll('.dropdown-item').forEach(item => {
+            if (item.getAttribute('data-status') === selectedStatus) {
+                item.classList.add('selected');
+            } else {
+                item.classList.remove('selected');
+            }
+        });
+    }
+}
+
+// обработчик для кнопки "принять" 
+modalEditBtn.addEventListener('click', function () {
+    let textAreaEdit = document.getElementById('taskInputEdit');
+    let newText = textAreaEdit.value.trim();
+    if (newText.length === 0) {
+        showAlert('Пожалуйста введите текст!', '⚠️');
+        return;
+    }
+
+
+
+    let tasksArray = loadTasks();
+    let task = tasksArray.find(t => t.id === editingTask.id);
+
+    //проверка на изменения
+    if (originalTask.text == newText && originalTask.status == task.status) {
+        currentSelectedTask = task;
+        choosingRowElement.textContent = `Выбрано: ${cutText(task.text)}`;
+        closeEditModal();
+        return
+    }
+    if (task) {
+        task.text = newText;
+        saveTasks(tasksArray);
+        renderTasks(tasksArray);
+
+        // Обновляем editingTask
+        editingTask = task;
+
+        // Обновляем currentSelectedTask если он совпадает
+        if (currentSelectedTask && currentSelectedTask.id === task.id) {
+            currentSelectedTask = task;
+            if (choosingRowElement) {
+                choosingRowElement.textContent = `Выбрано: ${cutText(task.text)}`;
+            }
+        }
+
+        showAlert('Задача успешно обновлена!', '✓');
+        closeEditModal();
+    }
+
+});
+
+//функция дял кнопки отмены
+function cancelEditBtn() {
+    let tasksArray = loadTasks();
+    let task = tasksArray.find(t => t.id === originalTask.id);
+
+    task.text = originalTask.text;
+    task.status = originalTask.status;
+    saveTasks(tasksArray);
+
+    currentSelectedTask = task;
+    renderTasks(tasksArray);
+    choosingRowElement.textContent = `Выбрано: ${cutText(task.text)}`;
+    closeEditModal();
+}

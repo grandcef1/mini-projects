@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мини-Проекты</title>
+    <link rel="stylesheet" href="css/calculatorStyle.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lexend+Giga:wght@100..900&family=Major+Mono+Display&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/png" href="icons/mainicon.png">
+</head>
+
+<body>
+
+    <!--Шапка-->
+    <div class="containerSticky">
+        <div class="header-wrapper">
+            <button class="back-arrow" id="back-arrow"></button>
+            <h1 id='mainString' class="Montserrat-h1">Калькулятор</h1>
+        </div>
+        <hr class="glass">
+    </div>
+
+    <div class="main-content">
+        <!--Выбор калькулятора + навигационное меню-->
+        <div class="containerNav">
+            <nav class="navMenu">
+                <div id="Math">Калькулятор</div>
+                <div id="Converter">Конвертер валют</div>
+                <div id="ToDoList">Список задач</div>
+            </nav>
+        </div>
+
+        <!--Контейнер для окон (калькулятор,конвертер,todoList)-->
+        <div style="position: relative; width: 100%; height: 100%;">
+            <!--Окно конвертера-->
+            <div class="calculatorWind" id="converterWind" style="position: absolute; top: 0; left: 0;">
+                <div class="Converter">
+
+                    <!-- Окна ввода -->
+                    <div class="ConvertationWinds">
+                        <!-- From: число + селект -->
+                        <div class="From">
+                            <input type="number" id="fromInput" placeholder="0" value="1">
+                            <select id="fromCurrency">
+                                <option value="BYN">BYN</option>
+                                <option value="USD">USD</option>
+                                <option value="EUR">EUR</option>
+                                <option value="RUB">RUB</option>
+                                <option value="CNY">CNY</option>
+                            </select>
+                        </div>
+
+                        <div class="iconExchange" id="swapBtn">
+                            <img src="icons/right-arrow.png" width="40px" height="40px" alt="swap">
+                        </div>
+
+
+                        <div class="To">
+                            <input type="text" id="toInput" placeholder="Результат" readonly>
+                            <select id="toCurrency">
+                                <option value="BYN">BYN</option>
+                                <option value="USD">USD</option>
+                                <option value="EUR" selected>EUR</option>
+                                <option value="RUB">RUB</option>
+                                <option value="CNY">CNY</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <button class="convert-btn" id="convertBtn">Конвертировать</button>
+
+
+                    <div class="Converter-info">
+                        <div class="operators" id="infoConverter">
+                            <img src="icons/INFO.png" width="45px" height="45px">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!--Окно ToDoList-->
+            <div class="calculatorWind" id="ToDoWind" style="position: absolute; top: 0; left: 0;">
+                <div class="TasksWinds">
+                    <div class="TableWind">
+                        <!-- Заголовки (первая строка) -->
+                        <div class="row">
+                            <div class="columns" style="border-radius: 5px;">Задача</div>
+                            <div class="columns" style="border-radius: 5px;">Статус</div>
+                            <div class="columns" style="border-radius: 5px;">Дата</div>
+                        </div>
+
+                        <div class="rows-container">
+
+                        </div>
+                    </div>
+                    <div class="buttonsPanel">
+                        <div class="btnContainer">
+                            <div class="btnAdd" id="switchBtn">Добавить+</div>
+                            <div class="btnDelete">Удалить×</div>
+                            <div class="choosingRow">Выбрано:</div>
+                        </div>
+                        <div class="infoContainer">
+                            <div id="infoTodo"><img src="icons/INFO.png" width="45px" height="45px"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!--Окно калькулятора-->
+            <div class="calculatorWind" id="calculatorWind">
+                <div class="Math">
+                    <div id="result">
+                        <span id="resultText"></span>
+                    </div>
+                    <div class="operators" id="clear">CE</div>
+                    <div id="one">1</div>
+                    <div id="two">2</div>
+                    <div id="three">3</div>
+                    <div class="operators" id="equality">=</div>
+                    <div class="operators" id="leftBracket">(</div>
+                    <div id="four">4</div>
+                    <div id="five">5</div>
+                    <div id="six">6</div>
+                    <div class="operators" id="divide">&divide;</div>
+                    <div class="operators" id="rightBracket">)</div>
+                    <div id="seven">7</div>
+                    <div id="eight">8</div>
+                    <div id="nine">9</div>
+                    <div class="operators" id="times">&times;</div>
+                    <div class="operators" id="comma">,</div>
+                    <div class="operators" id="plus">+</div>
+                    <div id="zero">0</div>
+                    <div class="operators" id="minus">-</div>
+                    <div class='operators' id='infoMath'><img src="icons/INFO.png" width="45px" height="45px"></div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <!--Модальное окно добавления задачи ToDoList-->
+    <div class="modalOverlay">
+        <div class="modalContainer">
+            <textarea id="taskInput" placeholder="Напишите что-то"></textarea>
+            <div class="taskBtns">
+                <div class="btnAdd" id="modalAddBtn">Добавить+</div>
+                <div class="btnDelete" onclick="closeModal()">Отмена×</div>
+            </div>
+        </div>
+    </div>
+    <!--Модальное окно редактирования задачи ToDoList-->
+    <div class="modalOverlayEdit" id="modalOverlayEdit">
+        <div class="modalContainerEdit">
+            <textarea id="taskInputEdit"></textarea>
+            <div class="taskBtns">
+                <div class="btnAdd" id="modalEditBtn">Принять</div>
+                <div class="custom-dropdown">
+                    <button class="dropdown-btn" id="statusDropdownBtn">
+                        Изменить статус <span class="arrow">▼</span>
+                    </button>
+                    <div class="dropdown-menu" id="statusDropdownMenu">
+                        <div class="dropdown-item" data-status="Не выполнено">
+                            <span class="status-icon" style="margin-right: 1px;margin-left: 1px;">×</span>
+                            Не выполнено
+                        </div>
+                        <div class="dropdown-item" data-status="В процессе">
+                            <span class="status-icon">◔</span>
+                            В процессе
+                        </div>
+                        <div class="dropdown-item" data-status="Выполнено">
+                            <span class="status-icon" style="margin-right: 2px;margin-left: 1px;">✓</span>
+                            Выполнено
+                        </div>
+                    </div>
+                </div>
+                <div class="btnDelete" onclick="cancelEditBtn()">Отмена</div>
+            </div>
+        </div>
+    </div>
+    <!--Кастомное alert-->
+    <div class="custom-alert" id="customAlert">
+        <div class="custom-alert-content">
+            <div class="custom-alert-icon">⚠️</div>
+            <div class="custom-alert-message" id="alertMessage">Текст уведомления</div>
+            <button class="custom-alert-btn" id="alertCloseBtn">OK</button>
+        </div>
+    </div>
+
+    <script src="calculatorJS/script.js"></script>
+</body>
+
+</html>
