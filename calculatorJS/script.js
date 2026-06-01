@@ -565,7 +565,7 @@ let infoBtnTodo = document.getElementById('infoTodo');
 infoBtnTodo.addEventListener('click', () => {
     showAlert('✸ Возможности:\n' +
         '   • Добавление, редактирование, удаление\n' +
-        '   • Сортировка через меню фильтрации\n\n' +
+        '   • Сортировка задач в один клик\n\n' +
         '✸ Сортировка:\n' +
         '   • По дате (возрастание/убывание)\n' +
         '   • По статусу (выполненые/невыполненые)\n\n' +
@@ -655,6 +655,8 @@ modalAddBtn.addEventListener('click', function () {
         date: currentDate
     };
 
+    filterIconImg.src = 'icons/oldestToNewest.png';
+    let isDateSortedAscending = false;
     let tasks = loadTasks();
     tasks.push(newTask);
     saveTasks(tasks);
@@ -906,3 +908,64 @@ function cancelEditBtn() {
     choosingRowElement.textContent = `Выбрано: ${cutText(task.text)}`;
     closeEditModal();
 }
+
+
+//обработчик для кнопки фильтра статусов
+let filterSpanStatus = document.querySelector('.filter-icon-status');
+let isSorted = false;
+let isSortedFromUncompleted = false;
+
+function sortByStatus(){
+    let tasks = loadTasks();
+    let arrOfCompleted = tasks.filter((t) => t.status == 'Выполнено');
+    let arrOfInProgress = tasks.filter((t) => t.status == 'В процессе');
+    let arrOfUncompleted = tasks.filter((t) => t.status == 'Не выполнено');
+    if (isSorted === false){
+        let resultArr = [...arrOfUncompleted,...arrOfInProgress,...arrOfCompleted];
+        isSorted = true;
+        isSortedFromUncompleted = true;
+        filterIconImg.src = 'icons/oldestToNewest.png';
+        renderTasks(resultArr);
+    } else if(isSortedFromUncompleted === true){
+        let resultArr = [...arrOfCompleted,...arrOfInProgress,...arrOfUncompleted];
+        isSortedFromUncompleted = false;
+        filterIconImg.src = 'icons/oldestToNewest.png';
+        renderTasks(resultArr);
+    } else if(isSortedFromUncompleted === false){
+        let resultArr = [...arrOfUncompleted,...arrOfInProgress,...arrOfCompleted];
+        isSortedFromUncompleted = true;
+        filterIconImg.src = 'icons/oldestToNewest.png';
+        renderTasks(resultArr);
+    }
+}
+filterSpanStatus.addEventListener('click',() => {sortByStatus()});
+
+//обработчик для кнопки фильтра дат
+let filterSpanDate = document.querySelector('.filter-icon-date');
+let filterIconImg = filterSpanDate.querySelector('img');
+let isDateSortedAscending = true; // По умолчанию от старых к новым
+
+function sortByDate() {
+    let tasks = loadTasks();
+    
+    function parseDate(dateStr) {
+        let parts = dateStr.split('.');
+        return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+    }
+    
+    if (isDateSortedAscending) {
+        // от новых к старым (по убыванию)
+        let resultArr = tasks.sort((a, b) => parseDate(b.date) - parseDate(a.date));
+        isDateSortedAscending = false;
+        filterIconImg.src = 'icons/newestToOldest.png';
+        renderTasks(resultArr);
+    } else {
+        // от старых к новым (по возрастанию)
+        let resultArr = tasks.sort((a, b) => parseDate(a.date) - parseDate(b.date));
+        isDateSortedAscending = true;
+        filterIconImg.src = 'icons/oldestToNewest.png';
+        renderTasks(resultArr);
+    }
+}
+
+filterSpanDate.addEventListener('click', sortByDate);
