@@ -29,51 +29,70 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     const observer = new IntersectionObserver(addClasses, options);
 
-    observer.observe(document.querySelector('.first-project-image'));
-    observer.observe(document.querySelector('.first-project-text'));
-    observer.observe(document.querySelector('.second-project-image'));
+observer.observe(document.querySelector('.first-project-image'));
+observer.observe(document.querySelector('.first-project-text'));
+observer.observe(document.querySelector('.second-project-image'));
+observer.observe(document.querySelector('.second-project-text'));
+observer.observe(document.querySelector('.third-project-image'));
+observer.observe(document.querySelector('.third-project-text'));
 
-    observer.observe(document.querySelector('.second-project-text'));
+function addClasses(entries) {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            if (entry.target.classList.contains('first-project-image')) {
+                entry.target.classList.add('animationImg');
+            }
+            if (entry.target.classList.contains('first-project-text')) {
+                entry.target.classList.add('animationText');
+            }
+            if (entry.target.classList.contains('second-project-image')) {
+                entry.target.classList.add('animationImg');
+            }
+            if (entry.target.classList.contains('second-project-text')) {
+                entry.target.classList.add('animationText');
+            }
+            if (entry.target.classList.contains('third-project-image')) {
+                entry.target.classList.add('animationImg');
+            }
+            if (entry.target.classList.contains('third-project-text')) {
+                entry.target.classList.add('animationText');
+            }
+            observer.unobserve(entry.target);
+        }
+    });
+}
 
-    function addClasses(entries) {
+//Логика появления и исчезания кнопки вверх
+let scrollTopBtn = document.getElementById('scroll-btn');
 
+// Отслеживаем, какие проекты видны
+let visibleProjects = new Set();
+
+const scrollBtnObserver = new IntersectionObserver(
+    function (entries) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                if (entry.target.classList.contains('first-project-image')) {
-                    entry.target.classList.add('animationImg');
-                }
-                if (entry.target.classList.contains('first-project-text')) {
-                    entry.target.classList.add('animationText');
-                }
-                if (entry.target.classList.contains('second-project-image')) {
-                    entry.target.classList.add('animationImg');
-                }
-                if (entry.target.classList.contains('second-project-text')) {
-                    entry.target.classList.add('animationText');
-                }
-                observer.unobserve(entry.target);
+                visibleProjects.add(entry.target);
+            } else {
+                visibleProjects.delete(entry.target);
             }
         });
-    }
+        
+        // Показываем кнопку, если виден хотя бы один проект
+        if (visibleProjects.size > 0) {
+            scrollTopBtn.style.opacity = '1';
+            scrollTopBtn.style.cursor = 'pointer';
+        } else {
+            scrollTopBtn.style.opacity = '0';
+            scrollTopBtn.style.cursor = 'default';
+        }
+    },
+    { threshold: 0.1 }
+);
 
-    //Логика появления и исчезания кнопки вверх
-    let scrollTopBtn = document.getElementById('scroll-btn');
-    const scrollBtnObserver = new IntersectionObserver(
-        function ([entry]) {
-            if (entry.isIntersecting) {
-                scrollTopBtn.style.opacity = '1';
-                scrollTopBtn.style.cursor = 'pointer';
-            } else {
-                scrollTopBtn.style.opacity = '0';
-                scrollTopBtn.style.cursor = 'default';
-            }
-        },
-        { threshold: 0.1 }
-    );
-
-    scrollBtnObserver.observe(
-        document.querySelector('.first-project-image')
-    );
+scrollBtnObserver.observe(document.querySelector('.first-project-image'));
+scrollBtnObserver.observe(document.querySelector('.second-project-image'));
+scrollBtnObserver.observe(document.querySelector('.third-project-image'));
 
     //прокрутка вверх
     scrollTopBtn.addEventListener('click', function(event) {

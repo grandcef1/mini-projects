@@ -56,9 +56,9 @@ hr.glass {
     height: 2px;
     background: linear-gradient(90deg,
             transparent 0%,
-            rgba(0, 0, 0, 0.5) 15%,
-            rgba(0, 0, 0, 0.7) 50%,
-            rgba(0, 0, 0, 0.5) 85%,
+            rgba(255, 255, 255, 0.5) 15%,
+            rgba(255, 255, 255, 0.7) 50%,
+            rgba(255, 255, 255, 0.5) 85%,
             transparent 100%);
 }
 
@@ -415,7 +415,7 @@ nav a{
     flex-wrap: wrap;
     flex-direction: row;
     width: 100%;
-    height: 1000px;
+    height: 1500px;
     gap: 20px;
 }
 .first-project-wrapper {
@@ -545,4 +545,74 @@ nav a{
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     transform: scale(1.1);
     backdrop-filter: blur(5px);
+}
+.third-project-wrapper {
+    perspective: 800px;
+    width: 50%;
+    margin-right: 50px;
+}
+.third-project-image{
+    transition: all ease 1s;
+    opacity: 0;
+    transform: scale(0.7) translateX(-50px) rotateY(-10deg);
+    padding: 30px;
+    box-sizing: border-box;
+    margin-top: 30px;
+    margin-left: 60px;
+    height: 400px;
+    width: 100%; 
+}
+.third-project-image img{
+    border-radius: 37px;
+    transform: rotateY(7deg);
+    box-shadow: 
+    0 0 20px rgba(240, 230, 245, 0.5),
+    0 0 40px rgba(235, 220, 240, 0.4),
+    0 0 75px rgba(200, 180, 220, 0.3),
+    0 0 105px rgba(150, 125, 180, 0.12);
+}
+.third-project-text{
+    opacity: 0;
+    transition: all ease 1s;
+    transform:scale(0.8) translateX(-100px);
+    text-align: justify;
+    display: flex;
+    align-items: center;
+    padding: 21px;
+    font-size: 20px;
+    font-family: 'Segoe UI';
+    box-sizing: border-box;
+    height: 400px;
+    width: 40%;
+    margin-top: 30px;
+}
+.third-project-image.animationImg {
+    transform: scale(1) translateX(0px) rotateY(7deg);
+    opacity: 1;
+}
+
+.third-project-text.animationText {
+    transform: scale(1) translateX(0px);
+    opacity: 1;
+}
+
+/*кастомный скролл*/
+body::-webkit-scrollbar {
+    width: 10px;   /* Ширина скролла */
+}
+
+body::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    margin: 10px 0;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: #ffffff;
+    border-radius: 10px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background: #9e9e9e;  
+    cursor: default;
 }
