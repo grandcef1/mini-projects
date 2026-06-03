@@ -71,38 +71,74 @@ hr.glass {
     gap: 30px;
 }
 .greeting{
-    background: #aa92c4;
-    border: 3px dotted #ffffff;
     transition: all ease 0.5s;
     box-sizing: border-box;
     font-size: 20px;
     font-family:'Segoe UI';
-    padding: 20px;
-    padding-left: 30px;
-    padding-right: 30px;
-    width: 900px;
-    text-align: justify;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    width: 100%;
     height: 450px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     border-radius: 35px;
     letter-spacing: 0.5px;
+    display: flex;           
+    flex-direction: row;     
+    gap: 15px;              
+}
+.greeting-text-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-radius: 70px 35px 35px 70px;
+    box-shadow: 
+    0 0 20px rgba(240, 230, 245, 0.5),
+    0 0 40px rgba(235, 220, 240, 0.4),
+    0 0 75px rgba(200, 180, 220, 0.3),
+    0 0 105px rgba(150, 125, 180, 0.12);
+    padding: 20px;
+    background: #aa92c4;
 }
 .greeting-avatar{
     background: #aa92c4;
-    border: 3px dotted #ffffff;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     flex-direction: row;
-    flex: 1;
-    height: 215px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    border-radius: 35px;
+    min-width: 350px;        
+    height: 200px;
+    flex-shrink: 0;         
+    box-shadow: 
+    0 0 20px rgba(240, 230, 245, 0.5),
+    0 0 40px rgba(235, 220, 240, 0.4),
+    0 0 75px rgba(200, 180, 220, 0.3),
+    0 0 105px rgba(150, 125, 180, 0.12);
+    border-radius: 35px 70px 70px 35px;
 }
-.greeting strong{
-    font-size: 32px;
+.greeting-strong{
+    font-size: 40px;
     letter-spacing: 0.5px;
-    font-weight: 500;
+    font-weight: 300;
+    display: flex;
+    justify-content: flex-start;
+    height: 50px;
+    margin-bottom: 25px;
+    padding-left: 15px;
+}
+
+.greeting-after-strong{
+    font-size: 22px;
+}
+.greeting-after-strong p{
+    display: flex;
+    justify-content: center;
+    border-bottom: 2px solid rgb(125, 104, 153);
+    border-left: 2px solid rgb(125, 104, 153);
+    position: relative;
+    border-radius: 25px;
+    margin: 8px 8px 11px 0; 
+    padding-left: 15px;
+    padding-right: 15px;
+    text-align: justify; 
 }
 .dotted {
     text-decoration: underline;
@@ -110,33 +146,31 @@ hr.glass {
 }
 .avatar{
     margin-left: 30px;
-    height: 180px;
-    width: 180px;
+    height: 150px;
+    width: 150px;
+
 }
 .avatar img{
     border-radius: 50%;
     filter:brightness(0.9);
     object-fit: cover;
-    object-position: 1px -40px;
+    object-position: 4px -35px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     transition: all ease 0.3s;
 }
-.greeting-strong{
-    flex: 1;
-    margin-bottom: 15px;
-}
 .avatar-text{
-    
     display: flex;
     justify-content: center;
     align-items: flex-start;
     flex-direction: column;
-    margin-left: 30px;
+    margin-left: 15px;
     font-family: "Montserrat";
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 500;
     flex: 1;
-    height: 215px;
+    height: 190px;
+    color: #2d2d2d;
+    padding-right: 15px;
 }
 .avatar-text small{
     font-size: 15px;
@@ -146,40 +180,34 @@ hr.glass {
 }
 .greeting-avatar-two{
     background: #aa92c4;
-    border: 3px dotted #ffffff;
     flex: 1;
-    height: 205px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    border-radius: 35px;
+    height: 150px;
     display: flex;
     flex-direction: row;
     align-items: center;
-}
-.row-avatars{
-    box-sizing: border-box;
-    flex-wrap: wrap;
-    display: flex;
-    flex-direction: column;
-    height: 450px;
-    flex: 1;
-    gap: 20px;
+    box-shadow: 
+    0 0 20px rgba(240, 230, 245, 0.5),
+    0 0 40px rgba(235, 220, 240, 0.4),
+    0 0 75px rgba(200, 180, 220, 0.3),
+    0 0 105px rgba(150, 125, 180, 0.12);
+    border-radius: 35px 70px 70px 35px;
 }
 .avatar-psu img{
-    margin-left: 65px;
+    margin-left: 40px;
 }
 .avatar-two-text{
     display: flex;
     justify-content: center;
     align-items: flex-start;
     flex-direction: column;
-    margin-left: 30px;
+    margin-left: 40px;
     font-family: "Montserrat";
     font-size: 25px;
     font-weight: 700;
     flex: 1;
-    height: 205px;
-    margin-left: 58px;
+    height: 190px;
     letter-spacing: 2px;
+    color: #2d2d2d;
 }
 .stack{
     display: flex;
@@ -203,7 +231,6 @@ hr.glass {
 }
 .stack-icons{
     background: #aa92c4;
-    border: 3px dotted #ffffff;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
@@ -211,17 +238,24 @@ hr.glass {
     padding-top: 50px;
     width: 500px;
     height: 380px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 
+    0 0 20px rgba(240, 230, 245, 0.5),
+    0 0 40px rgba(235, 220, 240, 0.4),
+    0 0 75px rgba(200, 180, 220, 0.3),
+    0 0 105px rgba(150, 125, 180, 0.12);
     border-radius: 35px;
     gap: 40px;
 }
 .stack-text{
     background: #aa92c4;
-    border: 3px dotted #ffffff;
     box-sizing: border-box;
     flex: 1;
     height: 380px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 
+    0 0 20px rgba(240, 230, 245, 0.5),
+    0 0 40px rgba(235, 220, 240, 0.4),
+    0 0 75px rgba(200, 180, 220, 0.3),
+    0 0 105px rgba(150, 125, 180, 0.12);
     border-radius: 35px;
     padding: 20px;
     padding-left: 40px;
@@ -287,8 +321,11 @@ hr.glass {
 }
 .codewars-card{
     background: #aa92c4;
-    border: 3px dotted #ffffff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 
+    0 0 20px rgba(240, 230, 245, 0.5),
+    0 0 40px rgba(235, 220, 240, 0.4),
+    0 0 75px rgba(200, 180, 220, 0.3),
+    0 0 105px rgba(150, 125, 180, 0.12);
     border-radius: 35px;
     display: flex;
     justify-content: flex-start;
@@ -343,8 +380,11 @@ hr.glass {
 }
 .efset-card{
     background: #aa92c4;
-    border: 3px dotted #ffffff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 
+    0 0 20px rgba(240, 230, 245, 0.5),
+    0 0 40px rgba(235, 220, 240, 0.4),
+    0 0 75px rgba(200, 180, 220, 0.3),
+    0 0 105px rgba(150, 125, 180, 0.12);
     border-radius: 35px;
     display: flex;
     justify-content: flex-start;
