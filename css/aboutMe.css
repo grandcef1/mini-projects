@@ -138,7 +138,9 @@ hr.glass {
     margin: 8px 8px 11px 0; 
     padding-left: 15px;
     padding-right: 15px;
+    padding-bottom: 5px;
     text-align: justify; 
+    font-size: 22px;
 }
 .dotted {
     text-decoration: underline;

@@ -142,10 +142,8 @@ greetingCard.addEventListener('click', function () {
 let calculatorBtn = document.querySelector('.back-card-calculator');
 let converterBtn = document.querySelector('.back-card-converter');
 let ToDoBtn = document.querySelector('.back-card-todo');
+let TimerBtn = document.querySelector('.back-card-timer');
 
-let calcWind = document.getElementById('calculatorWind');
-let converterWind = document.getElementById('converterWind');
-let ToDoWind = document.getElementById('ToDoWind');
 
 calculatorBtn.addEventListener('click', function (event) {
     event.stopPropagation();
@@ -154,10 +152,15 @@ calculatorBtn.addEventListener('click', function (event) {
 
 converterBtn.addEventListener('click', function (event) {
     event.stopPropagation();
-    location.href = 'calculator.html?mode=converter';  // С параметром
+    location.href = 'calculator.html?mode=converter';  
 });
 
 ToDoBtn.addEventListener('click', function (event) {
     event.stopPropagation();
     location.href = 'calculator.html?mode=ToDoList';
+});
+
+TimerBtn.addEventListener('click', function (event) {
+    event.stopPropagation();
+    location.href = 'calculator.html?mode=timer';
 });

@@ -32,6 +32,7 @@
                 <div id="Math">Калькулятор</div>
                 <div id="Converter">Конвертер валют</div>
                 <div id="ToDoList">Список задач</div>
+                <div id="Timer">Таймер</div>
             </nav>
         </div>
 
@@ -96,7 +97,8 @@
                                         src="icons/filter.png" alt="Фильтер" width="20px" height="20px"></span>
                             </div>
                             <div class="columns" style="border-radius: 5px;">Дата<span class="filter-icon-date"><img
-                                        src="icons/oldestToNewest.png" alt="Фильтер" width="20px" height="20px"></span></div>
+                                        src="icons/oldestToNewest.png" alt="Фильтер" width="20px" height="20px"></span>
+                            </div>
                         </div>
 
                         <div class="rows-container">
@@ -116,6 +118,42 @@
                     </div>
                 </div>
             </div>
+
+            <!--Окно таймера-->
+            <div class="calculatorWind" id="timerWind" style="position: absolute; top: 0; left: 0;">
+                <div class="Timer">
+                    <div class="timerDiv">
+                        <div class="btnCancel">Стоп</div>
+                        <div class="timerCounter">00:01:00</div>
+                        <div class="btnStart">Старт</div>
+                    </div>
+                    <div class="timerBtns">
+                        <div class="changeModeBtn">Режим</div>
+                        <div class="setTimeContainer">
+                            <div class="hours">
+                                <div class="formDiv">
+                                    <input type="number" id="hoursInput" min="0" max="23" value="0" step="1">
+                                </div>
+                                <span>ч.</span>
+                            </div>
+                            <div class="minutes">
+                                <div class="formDiv">
+                                    <input type="number" id="minutesInput" min="0" max="59" value="1" step="1">
+                                </div>
+                                <span>мин.</span>
+                            </div>
+                            <div class="seconds">
+                                <div class="formDiv">
+                                    <input type="number" id="secondsInput" min="0" max="59" value="0" step="1">
+                                </div>
+                                <span>сек.</span>
+                            </div>
+                        </div>
+                        <div class="confirmBtn">Применить</div>
+                    </div>
+                </div>
+            </div>
+
             <!--Окно калькулятора-->
             <div class="calculatorWind" id="calculatorWind">
                 <div class="Math">

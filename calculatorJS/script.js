@@ -25,6 +25,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+
+    //загрузка задач в окне список задач
+    let tasks = loadTasks();
+    renderTasks(tasks);
     //Проверка параметров
     const urlParams = new URLSearchParams(window.location.search);
     const mode = urlParams.get('mode');
@@ -43,6 +47,10 @@ document.addEventListener('DOMContentLoaded', function () {
         ToDoWind.style.opacity = '0';
         ToDoWind.style.transform = 'scale(0.9) translateY(15px)';
 
+        timerWind.style.display = 'none';
+        timerWind.style.opacity = '0';
+        timerWind.style.transform = 'scale(0.9) translateY(15px)';
+
         document.getElementById('mainString').textContent = 'Конвертер валют';
     }
     if (mode === 'ToDoList') {
@@ -59,11 +67,34 @@ document.addEventListener('DOMContentLoaded', function () {
         converterWind.style.opacity = '0';
         converterWind.style.transform = 'scale(0.9) translateY(15px)';
 
+        timerWind.style.display = 'none';
+        timerWind.style.opacity = '0';
+        timerWind.style.transform = 'scale(0.9) translateY(15px)';
+
         document.getElementById('mainString').textContent = 'Список задач';
     }
 
-    let tasks = loadTasks();
-    renderTasks(tasks);
+    if (mode === 'timer') {
+        // Переключаем на конвертер
+        timerWind.style.display = 'flex';
+        timerWind.style.opacity = '1';
+        timerWind.style.transform = 'scale(1) translateY(0)';
+
+        calcWind.style.display = 'none';
+        calcWind.style.opacity = '0';
+        calcWind.style.transform = 'scale(0.9) translateY(15px)';
+
+        converterWind.style.display = 'none';
+        converterWind.style.opacity = '0';
+        converterWind.style.transform = 'scale(0.9) translateY(15px)';
+
+        ToDoWind.style.display = 'none';
+        ToDoWind.style.opacity = '0';
+        ToDoWind.style.transform = 'scale(0.9) translateY(15px)';
+
+        document.getElementById('mainString').textContent = 'Таймер';
+    }
+
 
     // Обработчик клика на строки
     choosingRowElement = document.querySelector('.choosingRow');
@@ -439,10 +470,12 @@ function hideAlert() {
 let mathTab = document.getElementById('Math');
 let converterTab = document.getElementById('Converter');
 let ToDoTab = document.getElementById('ToDoList');
+let TimerTab = document.getElementById('Timer');
 
 let calcWind = document.getElementById('calculatorWind');
 let converterWind = document.getElementById('converterWind');
 let ToDoWind = document.getElementById('ToDoWind');
+let timerWind = document.getElementById('timerWind');
 
 
 
@@ -459,10 +492,14 @@ ToDoWind.style.opacity = '0';
 ToDoWind.style.transform = 'scale(0.9) translateY(15px)';
 ToDoWind.style.display = 'none';
 
+timerWind.style.opacity = '0';
+timerWind.style.transform = 'scale(0.9) translateY(15px)';
+timerWind.style.display = 'none';
+
 
 // Функция для переключения с анимацией
 function switchToWindow(showWind) {
-    const allWindows = [calcWind, converterWind, ToDoWind];
+    const allWindows = [calcWind, converterWind, ToDoWind, timerWind];
 
     allWindows.forEach(win => {
         if (win !== showWind && win.style.display !== 'none') {
@@ -508,6 +545,13 @@ ToDoTab.addEventListener('click', function () {
     if (ToDoWind.style.display !== 'flex') {
         switchToWindow(ToDoWind);
         document.getElementById('mainString').textContent = 'Список задач';
+    }
+});
+//Обработчик для "Таймер"
+TimerTab.addEventListener('click', function () {
+    if (timerWind.style.display !== 'flex') {
+        switchToWindow(timerWind);
+        document.getElementById('mainString').textContent = 'Таймер';
     }
 });
 
@@ -688,8 +732,8 @@ function renderTasks(tasks) {
 //функция сокращения стркои для choosingRow
 function cutText(text) {
     let result = text;
-    if (text.length > 25) {
-        result = text.slice(0, 24) + '...';
+    if (text.length > 34) {
+        result = text.slice(0, 33) + '...';
         return result;
     } else return result;
 }
@@ -807,7 +851,6 @@ dropdownMenu.querySelectorAll('.dropdown-item').forEach(item => {
 
         let newStatus = this.getAttribute('data-status');
 
-        // ИСПОЛЬЗУЕМ editingTask вместо currentSelectedTask
 
         let tasksArray = loadTasks();
         let task = tasksArray.find(t => t.id === editingTask.id);
@@ -816,10 +859,8 @@ dropdownMenu.querySelectorAll('.dropdown-item').forEach(item => {
             task.status = newStatus;
             saveTasks(tasksArray);
 
-            // Обновляем editingTask
             editingTask = task;
 
-            // Обновляем currentSelectedTask если он совпадает
             if (currentSelectedTask && currentSelectedTask.id === task.id) {
                 currentSelectedTask = task;
             }
@@ -877,10 +918,8 @@ modalEditBtn.addEventListener('click', function () {
         saveTasks(tasksArray);
         renderTasks(tasksArray);
 
-        // Обновляем editingTask
         editingTask = task;
 
-        // Обновляем currentSelectedTask если он совпадает
         if (currentSelectedTask && currentSelectedTask.id === task.id) {
             currentSelectedTask = task;
             if (choosingRowElement) {
@@ -969,3 +1008,43 @@ function sortByDate() {
 }
 
 filterSpanDate.addEventListener('click', sortByDate);
+
+
+// Функция для ограничения значения в input
+function clampNumberInput(inputElement) {
+    const min = parseInt(inputElement.min) || 0;
+    const max = parseInt(inputElement.max) || 59;
+    
+    inputElement.addEventListener('input', function() {
+        let value = parseInt(this.value);
+        
+        // Если ввели не число или пустоту
+        if (isNaN(value)) {
+            this.value = min;
+            return;
+        }
+        
+        // Ограничиваем значение
+        if (value > max) {
+            this.value = max;
+        }
+        if (value < min) {
+            this.value = min;
+        }
+    });
+    
+    // Дополнительно: при потере фокуса тоже проверяем
+    inputElement.addEventListener('blur', function() {
+        let value = parseInt(this.value);
+        if (isNaN(value)) {
+            this.value = min;
+        }
+        if (value > max) this.value = max;
+        if (value < min) this.value = min;
+    });
+}
+
+// Применяем ко всем полям
+clampNumberInput(document.getElementById('hoursInput'));
+clampNumberInput(document.getElementById('minutesInput'));
+clampNumberInput(document.getElementById('secondsInput'));
