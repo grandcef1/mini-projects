@@ -126,9 +126,24 @@
                         <div class="btnCancel">Стоп</div>
                         <div class="timerCounter">00:01:00</div>
                         <div class="btnStart">Старт</div>
+                        <div class="btnReset" style="display: none;">Сбросить</div>
                     </div>
                     <div class="timerBtns">
-                        <div class="changeModeBtn">Режим</div>
+                        <div class="custom-dropdown-timer">
+                            <button class="changeModeBtn" id="modeDropdownBtn">
+                                Режим <span class="arrow">▼</span>
+                            </button>
+                            <div class="dropdown-menu-timer" id="modeDropdownMenu">
+                                <div class="dropdown-item-timer" data-mode="Таймер">
+                                    <span class="status-icon" style="margin-right: 1px;margin-left: 1px;">1</span>
+                                    Таймер
+                                </div>
+                                <div class="dropdown-item-timer" data-mode="Секундомер">
+                                    <span class="status-icon">2</span>
+                                    Секундомер
+                                </div>
+                            </div>
+                        </div>
                         <div class="setTimeContainer">
                             <div class="hours">
                                 <div class="formDiv">
@@ -149,42 +164,67 @@
                                 <span>сек.</span>
                             </div>
                         </div>
-                        <div class="confirmBtn">Применить</div>
+                        <div class="confrimAndInfoContainer">
+                            <div class="confirmBtn">Применить</div>
+                            <div class="infoContainer">
+                                <div id="infoTimer"><img src="icons/INFO.png" width="45px" height="45px"></div>
+                            </div>
+                        </div>
+                        <div class="CirclesContainer">
+                            <div class="TableWind-Timer">
+                                <!-- Заголовки (первая строка) -->
+                                <div class="row-timer">
+                                    <div class="columns" style="border-radius: 5px;">Круг</div>
+                                    <div class="columns" style="border-radius: 5px;">Время</div>
+                                    <div class="columns" style="border-radius: 5px;">Общее время</div>
+                                </div>
+
+                                <div class="rows-container-timer">
+                                    <div class="row-timer">
+                                        <div class="columns" style="border-radius: 5px;">1</div>
+                                        <div class="columns" style="border-radius: 5px;">00:00:80</div>
+                                        <div class="columns" style="border-radius: 5px;">00:00:80</div>
+                                    </div>
+
+                                
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <!--Окно калькулятора-->
-            <div class="calculatorWind" id="calculatorWind">
-                <div class="Math">
-                    <div id="result">
-                        <span id="resultText"></span>
-                    </div>
-                    <div class="operators" id="clear">CE</div>
-                    <div id="one">1</div>
-                    <div id="two">2</div>
-                    <div id="three">3</div>
-                    <div class="operators" id="equality">=</div>
-                    <div class="operators" id="leftBracket">(</div>
-                    <div id="four">4</div>
-                    <div id="five">5</div>
-                    <div id="six">6</div>
-                    <div class="operators" id="divide">&divide;</div>
-                    <div class="operators" id="rightBracket">)</div>
-                    <div id="seven">7</div>
-                    <div id="eight">8</div>
-                    <div id="nine">9</div>
-                    <div class="operators" id="times">&times;</div>
-                    <div class="operators" id="comma">,</div>
-                    <div class="operators" id="plus">+</div>
-                    <div id="zero">0</div>
-                    <div class="operators" id="minus">-</div>
-                    <div class='operators' id='infoMath'><img src="icons/INFO.png" width="45px" height="45px"></div>
-                </div>
-            </div>
-
-
         </div>
+
+        <!--Окно калькулятора-->
+        <div class="calculatorWind" id="calculatorWind">
+            <div class="Math">
+                <div id="result">
+                    <span id="resultText"></span>
+                </div>
+                <div class="operators" id="clear">CE</div>
+                <div id="one">1</div>
+                <div id="two">2</div>
+                <div id="three">3</div>
+                <div class="operators" id="equality">=</div>
+                <div class="operators" id="leftBracket">(</div>
+                <div id="four">4</div>
+                <div id="five">5</div>
+                <div id="six">6</div>
+                <div class="operators" id="divide">&divide;</div>
+                <div class="operators" id="rightBracket">)</div>
+                <div id="seven">7</div>
+                <div id="eight">8</div>
+                <div id="nine">9</div>
+                <div class="operators" id="times">&times;</div>
+                <div class="operators" id="comma">,</div>
+                <div class="operators" id="plus">+</div>
+                <div id="zero">0</div>
+                <div class="operators" id="minus">-</div>
+                <div class='operators' id='infoMath'><img src="icons/INFO.png" width="45px" height="45px"></div>
+            </div>
+        </div>
+
+
+    </div>
     </div>
 
     <!--Модальное окно добавления задачи ToDoList-->

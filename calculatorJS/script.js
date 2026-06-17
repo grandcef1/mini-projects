@@ -5,6 +5,8 @@ let editingTask = null;
 let originalTask = null;
 
 document.addEventListener('DOMContentLoaded', function () {
+
+
     const alertBox = document.getElementById('customAlert');
     const closeBtn = document.getElementById('alertCloseBtn');
 
@@ -954,30 +956,30 @@ let filterSpanStatus = document.querySelector('.filter-icon-status');
 let isSorted = false;
 let isSortedFromUncompleted = false;
 
-function sortByStatus(){
+function sortByStatus() {
     let tasks = loadTasks();
     let arrOfCompleted = tasks.filter((t) => t.status == 'Выполнено');
     let arrOfInProgress = tasks.filter((t) => t.status == 'В процессе');
     let arrOfUncompleted = tasks.filter((t) => t.status == 'Не выполнено');
-    if (isSorted === false){
-        let resultArr = [...arrOfUncompleted,...arrOfInProgress,...arrOfCompleted];
+    if (isSorted === false) {
+        let resultArr = [...arrOfUncompleted, ...arrOfInProgress, ...arrOfCompleted];
         isSorted = true;
         isSortedFromUncompleted = true;
         filterIconImg.src = 'icons/oldestToNewest.png';
         renderTasks(resultArr);
-    } else if(isSortedFromUncompleted === true){
-        let resultArr = [...arrOfCompleted,...arrOfInProgress,...arrOfUncompleted];
+    } else if (isSortedFromUncompleted === true) {
+        let resultArr = [...arrOfCompleted, ...arrOfInProgress, ...arrOfUncompleted];
         isSortedFromUncompleted = false;
         filterIconImg.src = 'icons/oldestToNewest.png';
         renderTasks(resultArr);
-    } else if(isSortedFromUncompleted === false){
-        let resultArr = [...arrOfUncompleted,...arrOfInProgress,...arrOfCompleted];
+    } else if (isSortedFromUncompleted === false) {
+        let resultArr = [...arrOfUncompleted, ...arrOfInProgress, ...arrOfCompleted];
         isSortedFromUncompleted = true;
         filterIconImg.src = 'icons/oldestToNewest.png';
         renderTasks(resultArr);
     }
 }
-filterSpanStatus.addEventListener('click',() => {sortByStatus()});
+filterSpanStatus.addEventListener('click', () => { sortByStatus() });
 
 //обработчик для кнопки фильтра дат
 let filterSpanDate = document.querySelector('.filter-icon-date');
@@ -986,12 +988,12 @@ let isDateSortedAscending = true; // По умолчанию от старых �
 
 function sortByDate() {
     let tasks = loadTasks();
-    
+
     function parseDate(dateStr) {
         let parts = dateStr.split('.');
         return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
     }
-    
+
     if (isDateSortedAscending) {
         // от новых к старым (по убыванию)
         let resultArr = tasks.sort((a, b) => parseDate(b.date) - parseDate(a.date));
@@ -1014,17 +1016,33 @@ filterSpanDate.addEventListener('click', sortByDate);
 function clampNumberInput(inputElement) {
     const min = parseInt(inputElement.min) || 0;
     const max = parseInt(inputElement.max) || 59;
-    
-    inputElement.addEventListener('input', function() {
-        let value = parseInt(this.value);
-        
-        // Если ввели не число или пустоту
+
+    inputElement.addEventListener('input', function () {
+        let rawValue = this.value;
+
+        // Убираем ведущие нули, кроме одного (если число 0)
+        if (rawValue.length > 1 && rawValue.startsWith('0')) {
+            // Оставляем только последний символ
+            this.value = rawValue.replace(/^0+/, '');
+            if (this.value === '') this.value = '0';
+            rawValue = this.value;
+        }
+
+
+        if (rawValue === '' || rawValue === '-') {
+            this.value = min;
+            return;
+        }
+
+        let value = parseInt(rawValue);
+
+        // Если ввели не число
         if (isNaN(value)) {
             this.value = min;
             return;
         }
-        
-        // Ограничиваем значение
+
+
         if (value > max) {
             this.value = max;
         }
@@ -1032,9 +1050,17 @@ function clampNumberInput(inputElement) {
             this.value = min;
         }
     });
-    
-    // Дополнительно: при потере фокуса тоже проверяем
-    inputElement.addEventListener('blur', function() {
+
+
+    inputElement.addEventListener('blur', function () {
+        let rawValue = this.value;
+
+
+        if (rawValue.length > 1 && rawValue.startsWith('0')) {
+            this.value = rawValue.replace(/^0+/, '');
+            if (this.value === '') this.value = '0';
+        }
+
         let value = parseInt(this.value);
         if (isNaN(value)) {
             this.value = min;
@@ -1048,3 +1074,233 @@ function clampNumberInput(inputElement) {
 clampNumberInput(document.getElementById('hoursInput'));
 clampNumberInput(document.getElementById('minutesInput'));
 clampNumberInput(document.getElementById('secondsInput'));
+
+
+//ТАЙМЕР
+let btnStart = document.querySelector('.btnStart');
+let confirmBtn = document.querySelector('.confirmBtn');
+let btnReset = document.querySelector('.btnReset');
+let btnCancel = document.querySelector('.btnCancel');
+
+let inputHours = document.getElementById('hoursInput');
+let inputMinutes = document.getElementById('minutesInput');
+let inputSeconds = document.getElementById('secondsInput');
+let timerCounter = document.querySelector('.timerCounter');
+
+let isRunning = false;
+let timerId = null;
+let leftSeconds = 0;
+
+
+//обработчик для кнопки старт
+btnStart.addEventListener('click', function () {
+
+    let arrOfHoursMinsSecs = timerCounter.textContent.split(':');
+    let hours = +arrOfHoursMinsSecs[0];
+    let minutes = +arrOfHoursMinsSecs[1];
+    let seconds = +arrOfHoursMinsSecs[2];
+
+    leftSeconds = (hours * 3600) + (minutes * 60) + seconds;
+
+    if (leftSeconds <= 0) {
+        showAlert('Ошибка: введите значения!');
+        return;
+    }
+
+    isRunning = true;
+    showResetButton();
+
+    timerId = setInterval(() => {
+        // Сначала вычитаем секунду
+        leftSeconds--;
+
+        if (leftSeconds <= 0) {
+            clearInterval(timerId);
+            isRunning = false;
+            btnStart.style.cursor = 'pointer';
+            showAlert('Дзынь - дзынь! Время закончилось', '✅');
+            playSoundAlarm();
+            timerCounter.textContent = '00:00:00';
+            showStartButton();
+            return;
+        }
+
+        // Потом отображаем
+        let h = Math.floor(leftSeconds / 3600);
+        let m = Math.floor((leftSeconds % 3600) / 60);
+        let s = leftSeconds % 60;
+
+        timerCounter.textContent =
+            `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+
+    }, 1000);
+});
+
+//обработчик для кнопки применить
+let timerCounterBeforeChange = '00:01:00';
+confirmBtn.addEventListener('click', function () {
+    if (isRunning) {
+        showAlert('Сначала остановите таймер!');
+        return;
+    }
+    if (btnReset.style.display === 'flex') {
+        showAlert('Сначала остановите таймер!');
+        return;
+    }
+    let hours = Number(inputHours.value);
+    let minutes = Number(inputMinutes.value);
+    let seconds = Number(inputSeconds.value);
+
+    if (hours.toString().length == 1) {
+        hours = '0' + hours;
+    }
+    if (minutes.toString().length == 1) {
+        minutes = '0' + minutes;
+    }
+    if (seconds.toString().length == 1) {
+        seconds = '0' + seconds;
+    }
+
+    timerCounter.textContent = `${hours}:${minutes}:${seconds}`;
+    timerCounterBeforeChange = timerCounter.textContent;
+});
+
+//обработчик для кнопки стоп
+btnCancel.addEventListener('click', function () {
+    if (isRunning && timerId) {
+        clearInterval(timerId);
+        timerId = null;
+        isRunning = false;
+        btnStart.style.cursor = 'pointer';
+        showStartButton();
+    } else {
+        showAlert('Ошибка: отсчёт не запущен!', '⚠️');
+    }
+});
+
+//обработчик для кнопки сбросить
+btnReset.addEventListener('click', function () {
+    resetTimer();
+    timerCounterBeforeChange = '00:00:00'
+});
+
+//Звук по окнчанию таймера
+function playSoundAlarm() {
+    const audio = new Audio('sounds/alarm.mp3');
+    audio.volume = 0.8;
+
+    audio.play().catch(error => {
+        console.log('Ошибка воспроизведения:', error);
+    });
+}
+
+// Функция переключения кнопок
+function showStartButton() {
+    btnStart.style.display = 'flex';
+    btnReset.style.display = 'none';
+}
+
+function showResetButton() {
+    btnStart.style.display = 'none';
+    btnReset.style.display = 'flex';
+}
+
+// Функция сброса таймера
+function resetTimer() {
+    clearInterval(timerId);
+    timerId = null;
+    isRunning = false;
+    leftSeconds = 0;
+    timerCounter.textContent = '00:00:00';
+    showStartButton();
+}
+// Выпадающее меню для таймера
+let modeDropdownBtn = document.getElementById('modeDropdownBtn');
+let modeDropdownMenu = document.getElementById('modeDropdownMenu');
+let modeArrow = modeDropdownBtn.querySelector('.arrow');
+
+// Открытие/закрытие dropdown для таймера
+modeDropdownBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    modeDropdownMenu.classList.toggle('show');
+    modeArrow.classList.toggle('open');
+});
+
+// Закрытие при клике вне
+document.addEventListener('click', function (e) {
+    if (!modeDropdownBtn.contains(e.target) && !modeDropdownMenu.contains(e.target)) {
+        modeDropdownMenu.classList.remove('show');
+        modeArrow.classList.remove('open');
+    }
+});
+
+
+
+
+//обработчик для кнопки инфо таймер
+let infoTimer = document.getElementById('infoTimer');
+infoTimer.addEventListener('click', () => {
+    showAlert('✦ Возможности:\n' +
+        '   • Таймер (обратный отсчёт)\n' +
+        '   • Секундомер (прямой отсчёт)\n' +
+        '   • Установка часов, минут, секунд\n\n' +
+        '✦ Ограничения:\n' +
+        '   • Часы: 0–23, минуты/секунды: 0–59\n' +
+        '   • Поля заблокированы во время работы\n\n' +
+        '✦ Примечания:\n' +
+        '   • Звуковой сигнал при окончании\n' +
+        '   • Уведомление при завершении\n' +
+        '   • Автоисправление некорректных значений\n\n' +
+        '✦ Особенности:\n' +
+        '   • Интуитивно понятные кнопки\n' +
+        '   • Визуальное отображение оставшегося времени', 'ⓘ')
+})
+
+//функция отображения текущего режима
+let isTimer = true;
+function updateSelectedModeInMenu() {
+    if (isTimer) {
+        let dropdownItemTimer = document.querySelector('[data-mode="Таймер"]');
+        let dropdownItemSecundomer = document.querySelector('[data-mode="Секундомер"]');
+        dropdownItemTimer.classList.add('selected');
+        dropdownItemSecundomer.classList.remove('selected');
+    }
+    else {
+        let dropdownItemSecundomer = document.querySelector('[data-mode="Секундомер"]');
+        let dropdownItemTimer = document.querySelector('[data-mode="Таймер"]');
+        dropdownItemSecundomer.classList.add('selected');
+        dropdownItemTimer.classList.remove('selected');
+    }
+}
+updateSelectedModeInMenu();
+
+//логика переключения режимов
+let dropdownMenuTimer = document.querySelector('.custom-dropdown-timer');
+dropdownMenuTimer.querySelectorAll('.dropdown-item-timer').forEach(item => {
+    item.addEventListener('click', function (e) {
+        e.stopPropagation();
+
+        let newMode = this.getAttribute('data-mode');
+        let setTimeContainer = document.querySelector('.setTimeContainer');
+        let confirmBtn = document.querySelector('.confirmBtn');
+        let CirclesContainer = document.querySelector('.CirclesContainer');
+        if (newMode === 'Секундомер') {
+            setTimeContainer.style.display = 'none';
+            confirmBtn.style.display = 'none';
+            CirclesContainer.style.display = 'flex';
+            isTimer = false;
+            updateSelectedModeInMenu()
+            timerCounter.textContent = '00:00:00';
+        } 
+        else {
+            setTimeContainer.style.display = 'flex';
+            confirmBtn.style.display = 'flex';
+            CirclesContainer.style.display = 'none';
+            isTimer = true;
+            updateSelectedModeInMenu()
+            timerCounter.textContent = timerCounterBeforeChange;
+        }
+
+
+    });
+});

@@ -1189,6 +1189,12 @@ nav div:hover {
     font-size: 20px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     border: 3px solid #ffffff;
+    transition: all 0.25s ease;
+}
+.btnCancel:hover {
+    background: #EF5350;
+    cursor: pointer;
+    transform: scale(1.05);
 }
 .timerCounter{
     border-radius: 50%;
@@ -1220,6 +1226,12 @@ nav div:hover {
     font-size: 20px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     border: 3px solid #ffffff;
+    transition: all 0.25s ease;
+}
+.btnStart:hover {
+    background: #68e36c;
+    cursor: pointer;
+    transform: scale(1.05);
 }
 .timerBtns{
     height: 40%;
@@ -1231,6 +1243,8 @@ nav div:hover {
     border: 4px solid #ffffff;
     border-radius: 15px 15px 50px 50px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: all ease 0.2s;
+    background: rgba(255, 255, 255, 0.08);
 }
 .changeModeBtn{
     display: flex;
@@ -1244,6 +1258,13 @@ nav div:hover {
     font-weight: 400;
     font-size: 17px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.25s ease;
+    border: none;
+}
+.changeModeBtn:hover {
+    background: #9B7FD8;
+    cursor: pointer;
+    transform: scale(1.05);
 }
 .setTimeContainer{
     display: flex;
@@ -1268,6 +1289,12 @@ nav div:hover {
     font-weight: 400;
     font-size: 17px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.25s ease;
+}
+.confirmBtn:hover {
+    background: #A07FEA;
+    cursor: pointer;
+    transform: scale(1.05);
 }
 .hours{
     display: flex;
@@ -1323,16 +1350,214 @@ nav div:hover {
     outline: none;
     transition: all 0.25s ease;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-    
-    /* Убираем стрелки в Firefox */
-    -moz-appearance: textfield;
 }
 
-/* Убираем стрелки в Chrome, Safari, Edge */
 .setTimeContainer input::-webkit-inner-spin-button,
 .setTimeContainer input::-webkit-outer-spin-button {
     -webkit-appearance: none;
     appearance: none;
     display: none;
     margin: 0;
+}
+
+.btnReset{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    background: #6f6f6f;
+    font-family: "Montserrat";
+    font-weight: 400;
+    font-size: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 3px solid #ffffff;
+    transition: all 0.25s ease;
+}
+.btnReset:hover{
+    background: #b5b5b5;
+    cursor: pointer;
+    transform: scale(1.05);
+}
+.changeModeBtn .arrow{
+    font-size: 15px;
+    margin-left: 5px;
+}
+
+.custom-dropdown-timer{
+    position: relative;
+    display: inline-block;
+    
+}
+.dropdown-menu-timer {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: -15px;
+    margin-top: 5px;
+    background: #AF98CE;
+    border: 2px solid #5a3c98;
+    border-radius: 10px;
+    min-width: 180px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    overflow: hidden;
+    font-family: 'Segoe UI';
+}
+
+.dropdown-menu-timer.show {
+    display: block;
+    animation: dropdownFade 0.2s ease;
+}
+.dropdown-item-timer {
+    padding: 12px 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: "Lexend Giga", sans-serif;
+    font-size: 14px;
+    color: white;
+}
+
+.dropdown-item-timer:hover {
+    background: #e0d0f5;
+    border-radius: 5px;
+}
+
+.dropdown-item-timer.selected {
+    background: #5a3c98;
+    color: white;
+    border: 2px solid #ffffff;
+    border-radius: 13px;
+}
+
+.dropdown-item-timer.selected .status-icon {
+    filter: brightness(0) invert(1);
+}
+
+.status-icon {
+    font-size: 16px;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: #ddd;
+    margin: 5px 0;
+}
+
+.confrimAndInfoContainer .infoContainer{
+    position: absolute;
+    right: 60px;
+    bottom: 87px;
+}
+#infoTimer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all ease 0.2s;
+
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+#infoTimer:hover {
+    transform: scale(1.05);
+    background: #6b4e8e;
+    box-shadow: 0 0 30px 1px rgba(0, 0, 0, 0.30);
+}
+.CirclesContainer{
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 390px;
+    height: 150px;
+    border-radius: 20px;
+    gap: 20px;
+    background: transparent;
+    box-sizing: border-box;
+}
+.tableWithCircles{
+    display: grid;
+    width: 100%;
+    height: 100%;
+    background: #B09AD0;
+    border-radius: 20px;
+    grid-template-columns: 2fr 4fr 4fr;
+    border: 2px solid black;
+}
+
+.row-timer {
+    display: grid;
+    grid-template-columns: 1fr 3fr 3fr;  
+    width: 100%;
+    flex-shrink: 0; 
+    transition: all 0.2s ease;
+    min-width: 0;
+    box-sizing: border-box;
+}
+.TableWind-Timer {
+    border: 3px solid #ffffff;
+    border-radius: 30px;
+    overflow: hidden;
+    font-family: 'Segoe UI';
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    justify-content: flex-start;  
+    text-align: right;
+}
+.TableWind-Timer > .row-timer:first-child .columns {
+    background: rgba(90, 60, 152, 0.5);
+    font-weight: bold;
+    font-size: 14px;
+    border-bottom: 3px solid #f5edff;
+    border-right:3px solid rgba(109, 79, 169, 0.301);
+}
+.TableWind-Timer > .row-timer:first-child {
+    cursor: default;
+    pointer-events: none; 
+}
+
+.row-timer .columns:last-child {
+    border-right: none;
+}
+.rows-container-timer{
+    height: 100%;
+    max-height: 100%; 
+    border-radius: 0px;
+    background: #ffffff15;
+    overflow-y: auto;
+    overflow-x: hidden; 
+    max-height: 100%;
+}
+
+.rows-container-timer::-webkit-scrollbar {
+    width: 8px;   
+}
+
+.rows-container-timer::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    margin: 10px 0;
+}
+
+.rows-container-timer::-webkit-scrollbar-thumb {
+    background: #5a3c98;
+    border-radius: 10px;
+}
+
+.rows-container-timer::-webkit-scrollbar-thumb:hover {
+    background: #7d5db8;  
+    cursor: default;
 }
