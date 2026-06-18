@@ -1241,13 +1241,15 @@ let infoTimer = document.getElementById('infoTimer');
 infoTimer.addEventListener('click', () => {
     showAlert('✦ Возможности:\n' +
         '   • Таймер (обратный отсчёт)\n' +
+        '   • Установка часов, минут, секунд\n' +
         '   • Секундомер (прямой отсчёт)\n' +
-        '   • Установка часов, минут, секунд\n\n' +
+        '   • Фиксация кругов с отображением времени\n\n' +
         '✦ Ограничения:\n' +
         '   • Часы: 0–23, минуты/секунды: 0–59\n' +
-        '   • Поля заблокированы во время работы\n\n' +
+        '   • Поля заблокированы во время работы\n' +
+        '   • Секундомер не конвертирует минуты в часы\n\n' +
         '✦ Примечания:\n' +
-        '   • Звуковой сигнал при окончании\n' +
+        '   • Звуковой сигнал при окончании таймера\n' +
         '   • Уведомление при завершении\n' +
         '   • Автоисправление некорректных значений\n\n' +
         '✦ Особенности:\n' +
@@ -1340,8 +1342,9 @@ dropdownMenuTimer.querySelectorAll('.dropdown-item-timer').forEach(item => {
 let isSecundomerOn = false;
 let btnStartSecundomer = document.querySelector('.btnStartSecundomer');
 let SecundomerId = null;
-let pausedElapsed = 0; 
+let pausedElapsed = 0;
 let startTime = null;
+let elapsed = 0;
 
 btnStartSecundomer.addEventListener('click', function () {
     let btnResetSecundomer = document.querySelector('.btnResetSecundomer');
@@ -1359,7 +1362,7 @@ btnStartSecundomer.addEventListener('click', function () {
     startTime = Date.now() - pausedElapsed;
 
     SecundomerId = setInterval(() => {
-        let elapsed = Date.now() - startTime;
+        elapsed = Date.now() - startTime;
         let ms = Math.floor((elapsed % 1000) / 10);
         let sec = Math.floor(elapsed / 1000) % 60;
         let min = Math.floor(elapsed / 60000);
@@ -1408,6 +1411,79 @@ function ResetSecundomer() {
     btnResetSecundomer.style.display = 'none';
     btnCancelSecundomer.style.display = 'flex';
 }
-btnResetSecundomer.addEventListener('click',function(){
+btnResetSecundomer.addEventListener('click', function () {
     ResetSecundomer();
+    arrOfCircles = [];
+    currentNumberOfCircle = 0;
+    renderCircles();
 });
+
+//обработчик дял кнопки круг
+let circleBtn = document.querySelector('.btnCircle');
+let arrOfCircles = [];
+let currentNumberOfCircle = 0;
+circleBtn.addEventListener('click', function () {
+    if (arrOfCircles.length == 0) {
+        currentNumberOfCircle = 1;
+        let newCircle = [currentNumberOfCircle, elapsed, elapsed];
+        formattingCircleTime(newCircle);
+        arrOfCircles.push(newCircle);
+        renderCircles();
+    } else {
+        currentNumberOfCircle += 1;
+        let previousTime = unformatTime(arrOfCircles[arrOfCircles.length - 1][2]);
+        let newCircle = [currentNumberOfCircle, (elapsed - previousTime), elapsed];
+        formattingCircleTime(newCircle);
+        arrOfCircles.push(newCircle);
+        renderCircles();
+    }
+});
+//функция отображения кругов в таблице
+function renderCircles() {
+    let rowsContainerTimer = document.querySelector('.rows-container-timer');
+    rowsContainerTimer.innerHTML = '';
+    if (arrOfCircles.length === 0){
+        return;
+    }
+    for (let i = (arrOfCircles.length - 1); i >= 0 ; i--) {
+        let row = document.createElement('div');
+        row.className = 'row-timer';
+
+
+        row.innerHTML = `
+            <div class="columns" style="border-radius: 5px;">${arrOfCircles[i][0]}</div>
+            <div class="columns" style="border-radius: 5px;">${arrOfCircles[i][1]}</div>
+            <div class="columns" style="border-radius: 5px;">${arrOfCircles[i][2]}</div>
+        `;
+
+        rowsContainerTimer.appendChild(row);
+    }
+}
+//функция форматирования времени в массиве кругов
+function formattingCircleTime(circle) {
+    // Форматируем время круга (индекс 1)
+    let ms1 = Math.floor((circle[1] % 1000) / 10);
+    let sec1 = Math.floor(circle[1] / 1000) % 60;
+    let min1 = Math.floor(circle[1] / 60000);
+    circle[1] = `${String(min1).padStart(2, '0')}:${String(sec1).padStart(2, '0')}.${String(ms1).padStart(2, '0')}`;
+    
+    // Форматируем общее время (индекс 2)
+    let ms2 = Math.floor((circle[2] % 1000) / 10);
+    let sec2 = Math.floor(circle[2] / 1000) % 60;
+    let min2 = Math.floor(circle[2] / 60000);
+    circle[2] = `${String(min2).padStart(2, '0')}:${String(sec2).padStart(2, '0')}.${String(ms2).padStart(2, '0')}`;
+}
+
+//функцию разформатирования строки в милисекунды
+function unformatTime(timeString) {
+    let parts = timeString.split(':');
+    let minutes = parseInt(parts[0], 10) || 0;
+
+    let secMsParts = parts[1].split('.');
+    let seconds = parseInt(secMsParts[0], 10) || 0;
+    let hundredths = parseInt(secMsParts[1], 10) || 0; 
+    
+    let totalMs = (minutes * 60000) + (seconds * 1000) + (hundredths * 10);
+    
+    return totalMs;
+}
