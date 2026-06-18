@@ -1561,3 +1561,83 @@ nav div:hover {
     background: #7d5db8;  
     cursor: default;
 }
+.btnStartSecundomer{
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    background: #3EBC44;
+    font-family: "Montserrat";
+    font-weight: 400;
+    cursor: pointer;
+    font-size: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 3px solid #ffffff;
+    transition: all 0.25s ease;
+}
+.btnStartSecundomer:hover {
+    background: #68e36c;
+    cursor: pointer;
+    transform: scale(1.05);
+}
+.btnCancelSecundomer{
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    background: #D42624;
+    font-family: "Montserrat";
+    cursor: pointer;
+    font-weight: 400;
+    font-size: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 3px solid #ffffff;
+    transition: all 0.25s ease;
+}
+.btnCancelSecundomer:hover {
+    background: #EF5350;
+    cursor: pointer;
+    transform: scale(1.05);
+}
+.btnCircle{
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    background: #6f6f6f;
+    font-family: "Montserrat";
+    font-weight: 400;
+    cursor: pointer;
+    font-size: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 3px solid #ffffff;
+    transition: all 0.25s ease;
+}
+.btnCircle:hover{
+    background: #b5b5b5;
+    cursor: pointer;
+    transform: scale(1.05);
+}
+.btnResetSecundomer{
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    background: #6f6f6f;
+    font-family: "Montserrat";
+    font-weight: 400;
+    cursor: pointer;
+    font-size: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 3px solid #ffffff;
+    transition: all 0.25s ease;
+}
+.btnResetSecundomer:hover {
+    background: #b5b5b5;
+    cursor: pointer;
+    transform: scale(1.05);
+}

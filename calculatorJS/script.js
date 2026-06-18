@@ -1111,7 +1111,6 @@ btnStart.addEventListener('click', function () {
     showResetButton();
 
     timerId = setInterval(() => {
-        // Сначала вычитаем секунду
         leftSeconds--;
 
         if (leftSeconds <= 0) {
@@ -1285,22 +1284,130 @@ dropdownMenuTimer.querySelectorAll('.dropdown-item-timer').forEach(item => {
         let confirmBtn = document.querySelector('.confirmBtn');
         let CirclesContainer = document.querySelector('.CirclesContainer');
         if (newMode === 'Секундомер') {
+            if (isRunning) {
+                resetTimer();
+            }
             setTimeContainer.style.display = 'none';
             confirmBtn.style.display = 'none';
             CirclesContainer.style.display = 'flex';
             isTimer = false;
             updateSelectedModeInMenu()
             timerCounter.textContent = '00:00:00';
-        } 
+            //меняем кнопку старта для таймера на кнопку старта секундомера
+            let btnStartTimer = document.querySelector('.btnStart');
+            let btnStartSecundomer = document.querySelector('.btnStartSecundomer');
+            let btnCancelSecundomer = document.querySelector('.btnCancelSecundomer');
+            let btnCancelTimer = document.querySelector('.btnCancel');
+            btnStartTimer.style.display = 'none';
+            btnCancelTimer.style.display = 'none';
+            btnStartSecundomer.style.display = 'flex';
+            btnCancelSecundomer.style.display = 'flex';
+            timerCounter.style.fontVariantNumeric = 'tabular-nums';
+        }
         else {
+            if (isSecundomerOn) {
+                clearInterval(SecundomerId);
+                SecundomerId = null;
+                isSecundomerOn = false;
+                timerCounter.textContent = '00:00:00';
+            }
             setTimeContainer.style.display = 'flex';
             confirmBtn.style.display = 'flex';
             CirclesContainer.style.display = 'none';
             isTimer = true;
             updateSelectedModeInMenu()
             timerCounter.textContent = timerCounterBeforeChange;
+            //возвращаем кнопку старта для таймера
+            //меняем кнопку старта для таймера на кнопку старта секундомера
+            let btnStartTimer = document.querySelector('.btnStart');
+            let btnStartSecundomer = document.querySelector('.btnStartSecundomer');
+            let btnCancelSecundomer = document.querySelector('.btnCancelSecundomer');
+            let btnCancelTimer = document.querySelector('.btnCancel');
+            let btnCircle = document.querySelector('.btnCircle');
+            btnStartTimer.style.display = 'flex';
+            btnCancelTimer.style.display = 'flex';
+            btnStartSecundomer.style.display = 'none';
+            btnCancelSecundomer.style.display = 'none';
+            btnCircle.style.display = 'none';
+            timerCounter.style.fontVariantNumeric = 'normal';
         }
 
 
     });
+});
+
+//обработчик для кнопки старт для секундомера
+let isSecundomerOn = false;
+let btnStartSecundomer = document.querySelector('.btnStartSecundomer');
+let SecundomerId = null;
+let pausedElapsed = 0; 
+let startTime = null;
+
+btnStartSecundomer.addEventListener('click', function () {
+    let btnResetSecundomer = document.querySelector('.btnResetSecundomer');
+    let btnCancelSecundomer = document.querySelector('.btnCancelSecundomer');
+    let btnCircle = document.querySelector('.btnCircle');
+    let btnStartSecundomer = document.querySelector('.btnStartSecundomer');
+    btnCircle.style.display = 'flex';
+    btnStartSecundomer.style.display = 'none';
+    btnResetSecundomer.style.display = 'none';
+    btnCancelSecundomer.style.display = 'flex';
+
+    isSecundomerOn = true;
+
+    // Запоминаем время старта с учётом уже прошедшего времени
+    startTime = Date.now() - pausedElapsed;
+
+    SecundomerId = setInterval(() => {
+        let elapsed = Date.now() - startTime;
+        let ms = Math.floor((elapsed % 1000) / 10);
+        let sec = Math.floor(elapsed / 1000) % 60;
+        let min = Math.floor(elapsed / 60000);
+
+        document.querySelector('.timerCounter').textContent =
+            `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}.${String(ms).padStart(2, '0')}`;
+    }, 10);
+});
+
+//обработчик для кнопки стоп для секундомера
+let btnCancelSecundomer = document.querySelector('.btnCancelSecundomer');
+btnCancelSecundomer.addEventListener('click', function () {
+    if (isSecundomerOn && SecundomerId) {
+        clearInterval(SecundomerId);
+        SecundomerId = null;
+        isSecundomerOn = false;
+        pausedElapsed = Date.now() - startTime;
+
+        let btnStartSecundomer = document.querySelector('.btnStartSecundomer');
+        let btnCircle = document.querySelector('.btnCircle');
+        btnStartSecundomer.style.display = 'flex';
+        btnCircle.style.display = 'none';
+    } else {
+        showAlert('Ошибка: отсчёт не запущен!', '⚠️');
+        return;
+    }
+    let btnResetSecundomer = document.querySelector('.btnResetSecundomer');
+    let btnCancelSecundomer = document.querySelector('.btnCancelSecundomer');
+    btnResetSecundomer.style.display = 'flex';
+    btnCancelSecundomer.style.display = 'none'
+});
+
+
+
+//логика для кнопки сброса секундомера
+let btnResetSecundomer = document.querySelector('.btnResetSecundomer');
+function ResetSecundomer() {
+    clearInterval(SecundomerId);
+    SecundomerId = null;
+    isSecundomerOn = false;
+    timerCounter.textContent = '00:00:00';
+    pausedElapsed = 0;
+
+    let btnResetSecundomer = document.querySelector('.btnResetSecundomer');
+    let btnCancelSecundomer = document.querySelector('.btnCancelSecundomer');
+    btnResetSecundomer.style.display = 'none';
+    btnCancelSecundomer.style.display = 'flex';
+}
+btnResetSecundomer.addEventListener('click',function(){
+    ResetSecundomer();
 });
