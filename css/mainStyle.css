@@ -635,3 +635,52 @@ body::-webkit-scrollbar-thumb:hover {
     background: #9e9e9e;  
     cursor: default;
 }
+
+.fourth-project-wrapper {
+    perspective: 800px;
+    width: 50%;
+}
+.fourth-project-image{
+    transition: all ease 1s;
+    opacity: 0;
+    transform: scale(0.7) translateX(-50px) rotateY(10deg);
+    padding: 30px;
+    box-sizing: border-box;
+    margin-top: 30px;
+    height: 400px;
+    width: 100%; 
+}
+.fourth-project-image img{
+    border-radius: 33px;
+    filter: contrast(1.2) brightness(0.9) saturate(1.15);
+    box-shadow: 
+    0 0 20px rgba(240, 230, 245, 0.5),
+    0 0 40px rgba(235, 220, 240, 0.4),
+    0 0 75px rgba(200, 180, 220, 0.3),
+    0 0 105px rgba(150, 125, 180, 0.12);
+}
+.fourth-project-text{
+    transition: all ease 1s;
+    opacity: 0;
+    transform:scale(0.8) translateX(100px);
+    box-sizing: border-box;
+    margin-left: 60px;
+    text-align: justify;
+    display: flex;
+    align-items: center;
+    padding: 21px;
+    font-size: 20px;
+    font-family: 'Segoe UI';
+    box-sizing: border-box;
+    height: 400px;
+    width: 40%;
+    margin-top: 30px;
+}
+.fourth-project-image.animationImg{
+    transform: scale(1) translateX(0px) rotateY(-7deg);
+    opacity: 1;
+}
+.fourth-project-text.animationText{
+    transform: scale(1) translateX(0px);
+    opacity: 1;
+}

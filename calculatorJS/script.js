@@ -4,8 +4,18 @@ let choosingRowElement = null;
 let editingTask = null;
 let originalTask = null;
 
+let timerCircle = null;
+let FULL_DASH = 0;
+
 document.addEventListener('DOMContentLoaded', function () {
 
+
+    timerCircle = document.getElementById('timer-circle');
+    FULL_DASH = 2 * Math.PI * 94;
+    if (timerCircle) {
+        timerCircle.style.strokeDasharray = FULL_DASH;
+        timerCircle.style.strokeDashoffset = '0';
+    }
 
     const alertBox = document.getElementById('customAlert');
     const closeBtn = document.getElementById('alertCloseBtn');
@@ -135,6 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
 
 let buttonBack = document.getElementById('back-arrow');
 document.addEventListener('click', function (event) {
@@ -1085,54 +1096,103 @@ let btnCancel = document.querySelector('.btnCancel');
 let inputHours = document.getElementById('hoursInput');
 let inputMinutes = document.getElementById('minutesInput');
 let inputSeconds = document.getElementById('secondsInput');
-let timerCounter = document.querySelector('.timerCounter');
+let timerCounter = document.getElementById('timerDisplay');
 
 let isRunning = false;
 let timerId = null;
-let leftSeconds = 0;
+let pausedRemainingMs = 0;
+totalSeconds =  (Number(inputHours.value) * 3600) +
+                (Number(inputMinutes.value) * 60) +
+                Number(inputSeconds.value);
 
+function updateTimerCircle(secondsLeft, totalSeconds) {
+    if (!timerCircle) return;
+    if (totalSeconds <= 0 || secondsLeft <= 0) {
+        timerCircle.style.strokeDashoffset = FULL_DASH;
+        return;
+    }
+    const progress = secondsLeft / totalSeconds;
+    const offset = FULL_DASH * (1 - progress);
+    timerCircle.style.strokeDashoffset = -offset;
+
+}
+
+
+//сброс круга в полное состояние
+function resetTimerCircle() {
+    if (!timerCircle) return;
+    timerCircle.style.strokeDashoffset = '0';
+    timerCircle.style.stroke = '#5a3c98';
+}
 
 //обработчик для кнопки старт
 btnStart.addEventListener('click', function () {
 
-    let arrOfHoursMinsSecs = timerCounter.textContent.split(':');
-    let hours = +arrOfHoursMinsSecs[0];
-    let minutes = +arrOfHoursMinsSecs[1];
-    let seconds = +arrOfHoursMinsSecs[2];
+    let arr = timerCounter.textContent.split(':');
+    let leftSeconds = (+arr[0] * 3600) + (+arr[1] * 60) + (+arr[2]);
 
-    leftSeconds = (hours * 3600) + (minutes * 60) + seconds;
-
-    if (leftSeconds <= 0) {
-        showAlert('Ошибка: введите значения!');
+    // ✅ Проверка: если время на дисплее 00:00:00 и нет сохранённого прогресса
+    if (leftSeconds <= 0 && pausedRemainingMs <= 0) {
+        showAlert('Пожалуйста введите значения!');
         return;
     }
+
+    // ✅ Если это новый запуск (не после паузы)
+    if (pausedRemainingMs === 0) {
+        totalSeconds = leftSeconds; // Сохраняем полное время
+        pausedRemainingMs = totalSeconds * 1000;
+    }
+
+    const initialRemainingMs = pausedRemainingMs;
+    const totalTimeMs = totalSeconds * 1000;
 
     isRunning = true;
     showResetButton();
 
-    timerId = setInterval(() => {
-        leftSeconds--;
+    const startTime = Date.now();
 
-        if (leftSeconds <= 0) {
-            clearInterval(timerId);
-            isRunning = false;
-            btnStart.style.cursor = 'pointer';
-            showAlert('Дзынь - дзынь! Время закончилось', '✅');
-            playSoundAlarm();
-            timerCounter.textContent = '00:00:00';
-            showStartButton();
-            return;
-        }
+    function tick() {
+        if (!isRunning) return;
 
-        // Потом отображаем
-        let h = Math.floor(leftSeconds / 3600);
-        let m = Math.floor((leftSeconds % 3600) / 60);
-        let s = leftSeconds % 60;
+        const elapsed = Date.now() - startTime;
+        const remainingMs = Math.max(0, initialRemainingMs - elapsed);
+
+        const progress = remainingMs / totalTimeMs;
+        timerCircle.style.strokeDashoffset = -FULL_DASH * (1 - progress);
+
+        const sec = Math.ceil(remainingMs / 1000);
+        let h = Math.floor(sec / 3600);
+        let m = Math.floor((sec % 3600) / 60);
+        let s = sec % 60;
 
         timerCounter.textContent =
             `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 
-    }, 1000);
+        if (remainingMs <= 0) {
+            isRunning = false;
+            pausedRemainingMs = 0;
+            resetTimerCircle();
+            showAlert('Дзынь - дзынь! Время закончилось', '✅');
+            playSoundAlarm();
+            showStartButton();
+            
+            // ✅ Берём значения из полей ввода как ЧИСЛА
+            let h = Number(inputHours.value);
+            let m = Number(inputMinutes.value);
+            let s = Number(inputSeconds.value);
+            
+            totalSeconds = (h * 3600) + (m * 60) + s; // ✅ Обновляем totalSeconds
+            timerCounterBeforeChange = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`; // ✅ Обновляем сохранённое значение
+
+            timerCounter.textContent = timerCounterBeforeChange;
+            return;
+        }
+
+        pausedRemainingMs = remainingMs;
+        timerId = requestAnimationFrame(tick);
+    }
+
+    timerId = requestAnimationFrame(tick);
 });
 
 //обработчик для кнопки применить
@@ -1142,35 +1202,25 @@ confirmBtn.addEventListener('click', function () {
         showAlert('Сначала остановите таймер!');
         return;
     }
-    if (btnReset.style.display === 'flex') {
-        showAlert('Сначала остановите таймер!');
-        return;
-    }
-    let hours = Number(inputHours.value);
-    let minutes = Number(inputMinutes.value);
-    let seconds = Number(inputSeconds.value);
 
-    if (hours.toString().length == 1) {
-        hours = '0' + hours;
-    }
-    if (minutes.toString().length == 1) {
-        minutes = '0' + minutes;
-    }
-    if (seconds.toString().length == 1) {
-        seconds = '0' + seconds;
-    }
+    let h = Number(inputHours.value);
+    let m = Number(inputMinutes.value);
+    let s = Number(inputSeconds.value);
 
-    timerCounter.textContent = `${hours}:${minutes}:${seconds}`;
-    timerCounterBeforeChange = timerCounter.textContent;
+    totalSeconds = h * 3600 + m * 60 + s;
+    pausedRemainingMs = 0; // ✅ Сбрасываем, чтобы при старте бралось новое время с дисплея
+
+    timerCounterBeforeChange = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`; // ✅ Сохраняем для переключения режимов
+    timerCounter.textContent = timerCounterBeforeChange;
+
+    resetTimerCircle();
 });
 
 //обработчик для кнопки стоп
 btnCancel.addEventListener('click', function () {
     if (isRunning && timerId) {
-        clearInterval(timerId);
-        timerId = null;
+        cancelAnimationFrame(timerId);
         isRunning = false;
-        btnStart.style.cursor = 'pointer';
         showStartButton();
     } else {
         showAlert('Ошибка: отсчёт не запущен!', '⚠️');
@@ -1179,8 +1229,20 @@ btnCancel.addEventListener('click', function () {
 
 //обработчик для кнопки сбросить
 btnReset.addEventListener('click', function () {
-    resetTimer();
-    timerCounterBeforeChange = '00:00:00'
+    cancelAnimationFrame(timerId);
+    isRunning = false;
+    
+    let h = Number(inputHours.value);
+    let m = Number(inputMinutes.value);
+    let s = Number(inputSeconds.value);
+    
+    totalSeconds = (h * 3600) + (m * 60) + s;
+    pausedRemainingMs = totalSeconds * 1000;
+    timerCounterBeforeChange = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    
+    resetTimerCircle();
+    showStartButton();
+    timerCounter.textContent = timerCounterBeforeChange;
 });
 
 //Звук по окнчанию таймера
@@ -1204,14 +1266,18 @@ function showResetButton() {
     btnReset.style.display = 'flex';
 }
 
-// Функция сброса таймера
+// функция сброса таймера
 function resetTimer() {
-    clearInterval(timerId);
+    if (timerId) {
+        cancelAnimationFrame(timerId);
+    }
     timerId = null;
     isRunning = false;
     leftSeconds = 0;
+    pausedRemainingMs = 0;
     timerCounter.textContent = '00:00:00';
     showStartButton();
+    resetTimerCircle();
 }
 // Выпадающее меню для таймера
 let modeDropdownBtn = document.getElementById('modeDropdownBtn');
@@ -1295,6 +1361,9 @@ dropdownMenuTimer.querySelectorAll('.dropdown-item-timer').forEach(item => {
             isTimer = false;
             updateSelectedModeInMenu()
             timerCounter.textContent = '00:00:00';
+            if (timerVisualContainer) {
+                timerVisualContainer.classList.add('secundomer-mode');
+            }
             //меняем кнопку старта для таймера на кнопку старта секундомера
             let btnStartTimer = document.querySelector('.btnStart');
             let btnStartSecundomer = document.querySelector('.btnStartSecundomer');
@@ -1312,6 +1381,9 @@ dropdownMenuTimer.querySelectorAll('.dropdown-item-timer').forEach(item => {
                 SecundomerId = null;
                 isSecundomerOn = false;
                 timerCounter.textContent = '00:00:00';
+                arrOfCircles = [];
+                currentNumberOfCircle = 0;
+                renderCircles();
             }
             setTimeContainer.style.display = 'flex';
             confirmBtn.style.display = 'flex';
@@ -1319,6 +1391,9 @@ dropdownMenuTimer.querySelectorAll('.dropdown-item-timer').forEach(item => {
             isTimer = true;
             updateSelectedModeInMenu()
             timerCounter.textContent = timerCounterBeforeChange;
+            if (timerVisualContainer) {
+                timerVisualContainer.classList.remove('secundomer-mode');
+            }
             //возвращаем кнопку старта для таймера
             //меняем кнопку старта для таймера на кнопку старта секундомера
             let btnStartTimer = document.querySelector('.btnStart');
@@ -1326,12 +1401,15 @@ dropdownMenuTimer.querySelectorAll('.dropdown-item-timer').forEach(item => {
             let btnCancelSecundomer = document.querySelector('.btnCancelSecundomer');
             let btnCancelTimer = document.querySelector('.btnCancel');
             let btnCircle = document.querySelector('.btnCircle');
+            let btnResetSecundomer = document.querySelector('.btnResetSecundomer');
             btnStartTimer.style.display = 'flex';
             btnCancelTimer.style.display = 'flex';
             btnStartSecundomer.style.display = 'none';
             btnCancelSecundomer.style.display = 'none';
             btnCircle.style.display = 'none';
+            btnResetSecundomer.style.display = 'none';
             timerCounter.style.fontVariantNumeric = 'normal';
+            resetTimerCircle();
         }
 
 
@@ -1442,10 +1520,10 @@ circleBtn.addEventListener('click', function () {
 function renderCircles() {
     let rowsContainerTimer = document.querySelector('.rows-container-timer');
     rowsContainerTimer.innerHTML = '';
-    if (arrOfCircles.length === 0){
+    if (arrOfCircles.length === 0) {
         return;
     }
-    for (let i = (arrOfCircles.length - 1); i >= 0 ; i--) {
+    for (let i = (arrOfCircles.length - 1); i >= 0; i--) {
         let row = document.createElement('div');
         row.className = 'row-timer';
 
@@ -1466,7 +1544,7 @@ function formattingCircleTime(circle) {
     let sec1 = Math.floor(circle[1] / 1000) % 60;
     let min1 = Math.floor(circle[1] / 60000);
     circle[1] = `${String(min1).padStart(2, '0')}:${String(sec1).padStart(2, '0')}.${String(ms1).padStart(2, '0')}`;
-    
+
     // Форматируем общее время (индекс 2)
     let ms2 = Math.floor((circle[2] % 1000) / 10);
     let sec2 = Math.floor(circle[2] / 1000) % 60;
@@ -1481,9 +1559,9 @@ function unformatTime(timeString) {
 
     let secMsParts = parts[1].split('.');
     let seconds = parseInt(secMsParts[0], 10) || 0;
-    let hundredths = parseInt(secMsParts[1], 10) || 0; 
-    
+    let hundredths = parseInt(secMsParts[1], 10) || 0;
+
     let totalMs = (minutes * 60000) + (seconds * 1000) + (hundredths * 10);
-    
+
     return totalMs;
 }

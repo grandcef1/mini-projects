@@ -1641,3 +1641,49 @@ nav div:hover {
     cursor: pointer;
     transform: scale(1.05);
 }
+
+
+/* Контейнер для таймера */
+.timer-visual-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    /* Белое свечение */
+    box-shadow: 
+        0 0 20px rgba(240, 230, 245, 0.5),
+        0 0 40px rgba(235, 220, 240, 0.4),
+        0 0 75px rgba(200, 180, 220, 0.3),
+        0 0 105px rgba(150, 125, 180, 0.12);
+    background: #9B7FD8; /* Фиолетовый фон */
+}
+
+/* SVG */
+.timer-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Текст времени */
+.timer-visual-container .timerCounter {
+    position: relative;
+    z-index: 2;
+    background: transparent;
+    box-shadow: none;
+    width: auto;
+    height: auto;
+    font-size: 36px;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Режим секундомера - скрываем ТОЛЬКО SVG, свечение остаётся */
+.timer-visual-container.secundomer-mode .timer-svg {
+    display: none;
+}
