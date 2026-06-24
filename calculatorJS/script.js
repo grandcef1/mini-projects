@@ -46,7 +46,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const mode = urlParams.get('mode');
 
     if (mode === 'converter') {
-        // Переключаем на конвертер
         converterWind.style.display = 'flex';
         converterWind.style.opacity = '1';
         converterWind.style.transform = 'scale(1) translateY(0)';
@@ -63,10 +62,13 @@ document.addEventListener('DOMContentLoaded', function () {
         timerWind.style.opacity = '0';
         timerWind.style.transform = 'scale(0.9) translateY(15px)';
 
+        musicPlayerWind.style.display = 'none';
+        musicPlayerWind.style.opacity = '0';
+        musicPlayerWind.style.transform = 'scale(0.9) translateY(15px)';
+
         document.getElementById('mainString').textContent = 'Конвертер валют';
     }
     if (mode === 'ToDoList') {
-        // Переключаем на конвертер
         ToDoWind.style.display = 'flex';
         ToDoWind.style.opacity = '1';
         ToDoWind.style.transform = 'scale(1) translateY(0)';
@@ -83,11 +85,14 @@ document.addEventListener('DOMContentLoaded', function () {
         timerWind.style.opacity = '0';
         timerWind.style.transform = 'scale(0.9) translateY(15px)';
 
+        musicPlayerWind.style.display = 'none';
+        musicPlayerWind.style.opacity = '0';
+        musicPlayerWind.style.transform = 'scale(0.9) translateY(15px)';
+
         document.getElementById('mainString').textContent = 'Список задач';
     }
 
     if (mode === 'timer') {
-        // Переключаем на конвертер
         timerWind.style.display = 'flex';
         timerWind.style.opacity = '1';
         timerWind.style.transform = 'scale(1) translateY(0)';
@@ -104,7 +109,35 @@ document.addEventListener('DOMContentLoaded', function () {
         ToDoWind.style.opacity = '0';
         ToDoWind.style.transform = 'scale(0.9) translateY(15px)';
 
+        musicPlayerWind.style.display = 'none';
+        musicPlayerWind.style.opacity = '0';
+        musicPlayerWind.style.transform = 'scale(0.9) translateY(15px)';
+
         document.getElementById('mainString').textContent = 'Таймер';
+    }
+
+    if (mode === 'music') {
+        musicPlayerWind.style.display = 'flex';
+        musicPlayerWind.style.opacity = '1';
+        musicPlayerWind.style.transform = 'scale(1) translateY(0)';
+
+        ToDoWind.style.display = 'none';
+        ToDoWind.style.opacity = '0';
+        ToDoWind.style.transform = 'scale(0.9) translateY(15px)';
+
+        calcWind.style.display = 'none';
+        calcWind.style.opacity = '0';
+        calcWind.style.transform = 'scale(0.9) translateY(15px)';
+
+        converterWind.style.display = 'none';
+        converterWind.style.opacity = '0';
+        converterWind.style.transform = 'scale(0.9) translateY(15px)';
+
+        timerWind.style.display = 'none';
+        timerWind.style.opacity = '0';
+        timerWind.style.transform = 'scale(0.9) translateY(15px)';
+
+        document.getElementById('mainString').textContent = 'Музыкальный плеер';
     }
 
 
@@ -484,11 +517,13 @@ let mathTab = document.getElementById('Math');
 let converterTab = document.getElementById('Converter');
 let ToDoTab = document.getElementById('ToDoList');
 let TimerTab = document.getElementById('Timer');
+let musicPlayerTab = document.getElementById('musicPlayer');
 
 let calcWind = document.getElementById('calculatorWind');
 let converterWind = document.getElementById('converterWind');
 let ToDoWind = document.getElementById('ToDoWind');
 let timerWind = document.getElementById('timerWind');
+let musicPlayerWind = document.getElementById('musicPlayerWind');
 
 
 
@@ -509,10 +544,14 @@ timerWind.style.opacity = '0';
 timerWind.style.transform = 'scale(0.9) translateY(15px)';
 timerWind.style.display = 'none';
 
+musicPlayerWind.style.opacity = '0';
+musicPlayerWind.style.transform = 'scale(0.9) translateY(15px)';
+musicPlayerWind.style.display = 'none';
+
 
 // Функция для переключения с анимацией
 function switchToWindow(showWind) {
-    const allWindows = [calcWind, converterWind, ToDoWind, timerWind];
+    const allWindows = [calcWind, converterWind, ToDoWind, timerWind, musicPlayerWind];
 
     allWindows.forEach(win => {
         if (win !== showWind && win.style.display !== 'none') {
@@ -567,6 +606,15 @@ TimerTab.addEventListener('click', function () {
         document.getElementById('mainString').textContent = 'Таймер';
     }
 });
+//Обработчик для "Музыкальный плеер"
+musicPlayer.addEventListener('click', function () {
+    if (musicPlayerWind.style.display !== 'flex') {
+        switchToWindow(musicPlayerWind);
+        document.getElementById('mainString').textContent = 'Музыкальный плеер';
+    }
+});
+
+
 
 //Обьект хранящий курсы валют
 let currencyRates = {};
@@ -1101,9 +1149,9 @@ let timerCounter = document.getElementById('timerDisplay');
 let isRunning = false;
 let timerId = null;
 let pausedRemainingMs = 0;
-totalSeconds =  (Number(inputHours.value) * 3600) +
-                (Number(inputMinutes.value) * 60) +
-                Number(inputSeconds.value);
+totalSeconds = (Number(inputHours.value) * 3600) +
+    (Number(inputMinutes.value) * 60) +
+    Number(inputSeconds.value);
 
 function updateTimerCircle(secondsLeft, totalSeconds) {
     if (!timerCircle) return;
@@ -1175,12 +1223,12 @@ btnStart.addEventListener('click', function () {
             showAlert('Дзынь - дзынь! Время закончилось', '✅');
             playSoundAlarm();
             showStartButton();
-            
+
             // ✅ Берём значения из полей ввода как ЧИСЛА
             let h = Number(inputHours.value);
             let m = Number(inputMinutes.value);
             let s = Number(inputSeconds.value);
-            
+
             totalSeconds = (h * 3600) + (m * 60) + s; // ✅ Обновляем totalSeconds
             timerCounterBeforeChange = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`; // ✅ Обновляем сохранённое значение
 
@@ -1231,15 +1279,15 @@ btnCancel.addEventListener('click', function () {
 btnReset.addEventListener('click', function () {
     cancelAnimationFrame(timerId);
     isRunning = false;
-    
+
     let h = Number(inputHours.value);
     let m = Number(inputMinutes.value);
     let s = Number(inputSeconds.value);
-    
+
     totalSeconds = (h * 3600) + (m * 60) + s;
     pausedRemainingMs = totalSeconds * 1000;
     timerCounterBeforeChange = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-    
+
     resetTimerCircle();
     showStartButton();
     timerCounter.textContent = timerCounterBeforeChange;

@@ -111,7 +111,7 @@ nav a{
     top: 25px;
     left: -50px;
     background: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #7d6899 100%);
-    min-width: 200px;
+    min-width: 230px;
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
     padding: 10px;
     border-radius: 30px;
@@ -264,7 +264,7 @@ nav a{
     padding-left: 30px;
     padding-top: 5px;
     padding-right: 200px;
-    font-size: 22px;
+    font-size: 20px;
 
     opacity: 0;
     animation: fadeRight 0.8s ease forwards;
@@ -354,7 +354,7 @@ nav a{
 }
 .back-card-calculator{
     position: relative;
-    transition: all ease 0.15s;
+    transition: all ease 0.2s;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -365,12 +365,12 @@ nav a{
     background: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #9a83b5 100%);
 }
 .back-card-calculator:hover{
-    transform: scale(1.1);
+    transform: scale(1.15);
     z-index: 10;
 }
 .back-card-todo{
     position: relative;
-    transition: all ease 0.15s;
+    transition: all ease 0.2s;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -381,12 +381,12 @@ nav a{
     background: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #9a83b5 100%);
 }
 .back-card-todo:hover{
-    transform: scale(1.1);
+    transform: scale(1.15);
     z-index: 10;
 }
 .back-card-converter{
     position: relative;
-    transition: all ease 0.15s;
+    transition: all ease 0.2s;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -397,12 +397,12 @@ nav a{
     background: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #9a83b5 100%);
 }
 .back-card-converter:hover{
-    transform: scale(1.1);
+    transform: scale(1.15);
     z-index: 10;
 }
 .back-card-timer{
     position: relative;
-    transition: all ease 0.15s;
+    transition: all ease 0.2s;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -413,7 +413,23 @@ nav a{
     background: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #9a83b5 100%);
 }
 .back-card-timer:hover{
-    transform: scale(1.1);
+    transform: scale(1.15);
+    z-index: 10;
+}
+.back-card-music{
+    position: relative;
+    transition: all ease 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 80px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 30px;
+    background: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #9a83b5 100%);
+}
+.back-card-music:hover{
+    transform: scale(1.15);
     z-index: 10;
 }
 .glass-two{

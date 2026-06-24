@@ -152,6 +152,7 @@ let calculatorBtn = document.querySelector('.back-card-calculator');
 let converterBtn = document.querySelector('.back-card-converter');
 let ToDoBtn = document.querySelector('.back-card-todo');
 let TimerBtn = document.querySelector('.back-card-timer');
+let musicPlayerBtn = document.querySelector('.back-card-music');
 
 
 calculatorBtn.addEventListener('click', function (event) {
@@ -172,4 +173,12 @@ ToDoBtn.addEventListener('click', function (event) {
 TimerBtn.addEventListener('click', function (event) {
     event.stopPropagation();
     location.href = 'calculator.html?mode=timer';
+});
+TimerBtn.addEventListener('click', function (event) {
+    event.stopPropagation();
+    location.href = 'calculator.html?mode=timer';
+});
+musicPlayerBtn.addEventListener('click', function (event) {
+    event.stopPropagation();
+    location.href = 'calculator.html?mode=music';
 });
