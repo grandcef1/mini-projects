@@ -211,16 +211,27 @@
             <!--Окно Музыкального плеера-->
             <div class="calculatorWind" id="musicPlayerWind" style="position: absolute; top: 0; left: 0;">
                 <div class="musicPlayerWind">
-                    <div class="tracksWind"></div>
+                    <div class="tracksWind">
+                        <div class="loadTrackContainer">
+                            <div class="loadIcon"><img src="icons/addTrack.png" id="loadTrackBtn" alt="Добавить+"
+                                    width="70px" height="70px"></div>
+                            <div class="loadText">Загрузить трек</div>
+                        </div>
+                    </div>
                     <div class="controlPanel">
                         <div class="controlPanelOne">
-                            <div class="choosingTracksBtn"><img src="icons/choosingTrack.png" alt="Выбор трека" width="40px" height="40px"></div>
-                            <div class="shuffleBtn"><img src="icons/randomTrack.png" alt="Случайный" width="40px" height="40px"></div>
+                            <div class="choosingTracksBtn"><img src="icons/choosingTrack.png" alt="Выбор трека"
+                                    width="35px" height="35px"></div>
+                            <div class="shuffleBtn"><img src="icons/randomTrack.png" alt="Случайный" width="35px"
+                                    height="35px"></div>
                         </div>
                         <div class="controlPanelTwo">
-                            <div class="previousTrackBtn"><img src="icons/previousTrack.png" alt="Предыдущий" width="50px" height="50px"></div>
-                            <div class="playBtn"><img src="icons/playTrack.png" alt="Воспроизведение" width="50px" height="50px"></div>
-                            <div class="nextTrackBtn"><img src="icons/nextTrack.png" alt="Следующий" width="50px" height="50px"></div>
+                            <div class="previousTrackBtn"><img src="icons/previousTrack.png" alt="Предыдущий"
+                                    width="50px" height="50px"></div>
+                            <div class="playBtn"><img src="icons/playTrack.png" alt="Воспроизведение" width="50px"
+                                    height="50px"></div>
+                            <div class="nextTrackBtn"><img src="icons/nextTrack.png" alt="Следующий" width="50px"
+                                    height="50px"></div>
                         </div>
                     </div>
                 </div>
@@ -295,6 +306,27 @@
                     </div>
                 </div>
                 <div class="btnDelete" onclick="cancelEditBtn()">Отмена</div>
+            </div>
+        </div>
+    </div>
+    <!--Модальное окно добавление трека-->
+    <div class="modalOverlayMusic" id="modalOverlayMusic">
+        <div class="modalContainerMusic">
+            <!-- Drop зона -->
+            <div class="drop-zone-music" id="dropZoneMusic">
+                <div class="drop-icon"><img src="icons/musicIcon.png" width="75px" height="75px"></div>
+                <div class="drop-text">Перетащите аудиофайлы сюда</div>
+                <div class="drop-subtext">или кликните для выбора</div>
+                <input type="file" id="musicFileInput" accept=".mp3,.wav,.ogg,.flac" multiple style="display: none;">
+            </div>
+
+            <!-- Список файлов -->
+            <div class="music-file-list" id="musicFileList"></div>
+
+            <!-- Кнопки -->
+            <div class="musicBtns">
+                <div class="btnConfirm" id="modalMusicConfirmBtn">Подтвердить</div>
+                <div class="btnClose" onclick="closeModalMusic()">Закрыть</div>
             </div>
         </div>
     </div>

@@ -1699,6 +1699,9 @@ nav div:hover {
     border-radius: 35px 35px 8px 8px;
     border: 3px solid #ffffff;
     background: #ffffff2d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .controlPanel{
     display: grid;
@@ -1731,6 +1734,7 @@ nav div:hover {
 .choosingTracksBtn:hover{
     background: #ffffff2c;
     transform: scale(1.1);
+    cursor: pointer
 }
 .shuffleBtn{
     width: 65px;
@@ -1743,7 +1747,8 @@ nav div:hover {
 }
 .shuffleBtn:hover{
     background: #ffffff2c;
-    transform: scale(1.1); 
+    transform: scale(1.1);
+    cursor: pointer 
 }
 .previousTrackBtn{
     width: 65px;
@@ -1758,7 +1763,8 @@ nav div:hover {
 }
 .previousTrackBtn:hover{
     background: #ffffff2c;
-    transform: scale(1.1); 
+    transform: scale(1.1);
+    cursor: pointer 
 }
 .playBtn{
     width: 100px;
@@ -1774,7 +1780,8 @@ nav div:hover {
 }
 .playBtn:hover{
     background: #6b4dae;
-    transform: scale(1.05); 
+    transform: scale(1.05);
+    cursor: pointer 
 }
 .nextTrackBtn{
     box-sizing: border-box;
@@ -1790,4 +1797,252 @@ nav div:hover {
 .nextTrackBtn:hover{
     background: #ffffff2c;
     transform: scale(1.1); 
+    cursor: pointer;
+}
+.loadTrackContainer{
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    height: 150px;
+}
+.loadIcon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 90px;
+}
+.loadIcon img{
+    transition: all ease-in-out 0.2s;
+    opacity: 0.8;
+}
+.loadIcon img:hover{
+    transform: scale(1.1);
+    opacity: 1;
+    cursor: pointer;
+}
+.loadText{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 60px;
+    font-family: 'Segoe UI';
+    font-size: 20px;
+    font-weight: 500;
+    color: #7a7a8c;
+}
+
+.modalOverlayMusic {
+    pointer-events: auto;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    backdrop-filter: blur(5px);
+    filter: contrast(1.2);
+    visibility: hidden; 
+    opacity: 0; 
+    width: 550px;
+    height: 450px;
+    background: linear-gradient(135deg, #b8a2cc 0%, #a38fc0 30%, #9a83b5 70%, #8b76a6 100%);
+    border: 5px solid #ffffff;
+    border-radius: 50px;
+    transition: all ease 0.5s;
+    box-shadow: 0px 0px 25px 10px rgba(0, 0, 0, 0.2);
+}
+
+.modalOverlayMusic.show {
+    visibility: visible;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.modalContainerMusic {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: 25px;
+    gap: 15px;
+}
+.drop-zone-music {
+    flex: 1;
+    border: 3px dashed #5a3c98;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    min-height: 200px;
+    gap: 10px;
+}
+
+.drop-zone-music:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #8a6fc4;
+}
+
+.drop-zone-music.dragover {
+    background: rgba(90, 60, 152, 0.2);
+    border-color: #3a1c78;
+    transform: scale(1.02);
+}
+
+.drop-zone-music .drop-icon {
+    font-size: 64px;
+    opacity: 0.7;
+    user-select: none;
+}
+
+.drop-zone-music .drop-text {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 18px;
+    color: #2e1a47;
+    font-weight: 500;
+    user-select: none;
+}
+
+.drop-zone-music .drop-subtext {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+    color: #5a4a6a;
+    user-select: none;
+}
+
+/* Список загруженных файлов */
+.music-file-list {
+    max-height: 150px;
+    overflow-y: auto;
+    padding: 5px;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.music-file-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.music-file-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.music-file-list::-webkit-scrollbar-thumb {
+    background: #5a3c98;
+    border-radius: 10px;
+}
+
+.music-file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    margin: 4px 0;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+    color: #2e1a47;
+    transition: all 0.2s ease;
+}
+
+.music-file-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.music-file-item .file-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 10px;
+}
+
+.music-file-item .file-size {
+    color: #5a4a6a;
+    font-size: 12px;
+    margin-right: 10px;
+}
+
+.music-file-item .file-remove {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #c63533;
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.music-file-item .file-remove:hover {
+    background: #ef5350;
+    transform: scale(1.1);
+}
+
+/* Кнопки в модальном окне */
+.musicBtns {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding-top: 10px;
+}
+
+.btnConfirm {
+    transition: all ease 0.3s;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 20px;
+    display: flex;
+    width: 150px;
+    height: 50px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    background: #6b4dae;
+    color: white;
+    border: 2px solid #ffffff;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    user-select: none;
+}
+
+.btnConfirm:hover {
+    transform: scale(1.05);
+    background: #7d62bb;
+    box-shadow: 0 0 30px 1px rgba(0, 0, 0, 0.30);
+}
+
+.btnClose {
+    transition: all ease 0.3s;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 20px;
+    display: flex;
+    width: 150px;
+    height: 50px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    background: #c63533;
+    color: white;
+    border: 2px solid #ffffff;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    user-select: none;
+}
+
+.btnClose:hover {
+    transform: scale(1.05);
+    background: #ef5350;
+    box-shadow: 0 0 30px 1px rgba(0, 0, 0, 0.30);
 }
