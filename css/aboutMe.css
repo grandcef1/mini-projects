@@ -156,7 +156,7 @@ hr.glass {
     border-radius: 50%;
     filter:brightness(0.9);
     object-fit: cover;
-    object-position: 4px -35px;
+    object-position: 0px -15px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     transition: all ease 0.3s;
 }

@@ -163,6 +163,7 @@ nav a{
     padding-left: 30px;
     background: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #7d6899 100%);
 }
+
 .greeting-two{
     display: flex;
     flex-direction: column;
@@ -699,4 +700,62 @@ body::-webkit-scrollbar-thumb:hover {
 .fourth-project-text.animationText{
     transform: scale(1) translateX(0px);
     opacity: 1;
+}
+@media (max-width: 1295px) {
+    .lexend-giga-h1{
+        width: 500px;
+    }
+    .greeting-four p{
+        width: 470px;
+        height: 150px;
+    }
+    .main{
+        height: 155%;
+    }
+}
+@media (max-width: 1440px) {
+    
+    .greeting-four p{
+        width: 700px;
+        height: 150px;
+    }
+    .first-project-image img{
+        height: 90%;
+        width: 90%; 
+    }
+    .second-project-image img{
+        height: 90%;
+        width: 90%; 
+    }
+    .third-project-image img{
+        height: 90%;
+        width: 90%; 
+    }
+    .fourth-project-image img{
+        height: 90%;
+        width: 90%; 
+    }
+}
+@media (max-width: 1370px) {
+    
+    .greeting-four p{
+        width: 600px;
+        height: 150px;
+    }
+    
+    .greeting-card{
+        width: 600px;
+        height: 65px;
+        flex-grow: 0; 
+        flex-shrink: 0; 
+        margin-top: 25px;
+    }
+    .back-card div{
+        width: 55px;
+        height: 55px;
+    }
+    .back-card img{
+        width: 38px;
+        height: 38px;
+    }
 }
