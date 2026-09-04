@@ -150,6 +150,7 @@ nav a{
     cursor: pointer;
 }
 .greeting{
+    box-sizing: border-box;
     border: 5px dotted #ffffff;
     position: relative;
     display: flex;
@@ -181,6 +182,10 @@ nav a{
     padding: 20px;
     box-sizing: border-box;
     gap: 20px;
+    transition: all 0.6s ease-in-out;
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
 }
 .greeting-images{
     width: 100%;
@@ -255,7 +260,7 @@ nav a{
     position: absolute;
     background: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #7d6899 100%);
     font-family: 'Segoe UI';
-    width: 1030px;
+    width: 1000px;
     height: 385px;
     border-radius: 60px;
     top: 655px;
@@ -701,18 +706,6 @@ body::-webkit-scrollbar-thumb:hover {
     transform: scale(1) translateX(0px);
     opacity: 1;
 }
-@media (max-width: 1295px) {
-    .lexend-giga-h1{
-        width: 500px;
-    }
-    .greeting-four p{
-        width: 470px;
-        height: 150px;
-    }
-    .main{
-        height: 155%;
-    }
-}
 @media (max-width: 1440px) {
     
     .greeting-four p{
@@ -757,5 +750,76 @@ body::-webkit-scrollbar-thumb:hover {
     .back-card img{
         width: 38px;
         height: 38px;
+    }
+}
+@media (max-width: 1295px) {
+    .lexend-giga-h1{
+        width: 500px;
+    }
+    .greeting-four p{
+        height: 150px;
+    }
+    .main{
+        height: 155%;
+    }
+}
+@media (max-width: 1270px) {
+    .greeting-four p{
+        width: 600px;
+    }
+    .greeting-two{
+        width: 400px;
+    }
+    .greeting-card{
+        width: 600px;
+        height: 65px;
+        flex-grow: 0; 
+        flex-shrink: 0; 
+        margin-top: 25px;
+    }
+}
+@media (max-width: 1195px) {
+    .greeting-two {
+        width: 300px;
+        opacity: 0;
+        visibility: hidden;
+    }
+    .greeting-card{
+        width: 600px;
+        height: 65px;
+        flex-grow: 0; 
+        flex-shrink: 0; 
+        margin-top: 25px;
+    }
+    .lexend-giga-h1{
+        width: auto;
+    }
+    .greeting-four p{
+        width: auto;
+        height: auto;
+    }
+    .greeting-card{
+        width: 740px;
+        height: 100px;
+        margin-top: 0px;
+    }
+    
+    /* Обнуляем предыдущие размеры */
+    .greeting{
+        width: calc(100% - 80px);
+        box-sizing: border-box;
+    }
+    .greeting-three,
+    .greeting-four {
+        width: calc(100% - 120px);
+        box-sizing: border-box;
+    }
+    
+    /* Выравниваем все блоки по левому краю */
+    .greeting {
+        margin-left: 10px;
+        margin-right: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
     }
 }
