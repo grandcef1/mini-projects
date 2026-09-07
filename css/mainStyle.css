@@ -5,18 +5,21 @@
     font-style: normal;
     font-display: swap;
 }
-#Montserrat{
+
+#Montserrat {
     margin-left: 25px;
     font-family: "Montserrat";
     font-weight: 400;
     letter-spacing: 1px;
 }
+
 .lexend-giga-h1 {
     font-family: "Lexend Giga", sans-serif;
     font-optical-sizing: auto;
     font-weight: 500;
     font-style: normal;
 }
+
 body, html {
     top: 0;
     width: 100%;
@@ -24,6 +27,7 @@ body, html {
     overflow-x: hidden;  
     scroll-behavior: smooth;
 }
+
 p {
     margin: 15px 0;
 }
@@ -32,15 +36,15 @@ p {
     position: relative;
     padding-top: 40px;
     display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
+    flex-direction: column; 
+    align-items: flex-start; 
     width: 100%;
-    height: 150%;
+    min-height: 100vh; 
     margin-left: 10px;
     margin-right: 10px;
-    flex: 1;              
-    min-height: 0; 
-    padding-left: 50px;       
+    padding-left: 50px;  
+    padding-bottom: 40px;     
+    gap: 40px;
 }
 
 .main-header {
@@ -84,7 +88,7 @@ h1 {
     margin: 0px;
     line-height: 0.7;
     font-size: 50px;
-    font-family:'Segoe UI';
+    font-family: 'Segoe UI';
     letter-spacing: 7px;
 }
 
@@ -94,8 +98,13 @@ nav {
     display: flex;
     font-size: 22px;
     gap: 100px;
+    margin-left: 20px
 }
-nav a{
+.aboutMeRef {
+    display: flex;
+    align-items: center;
+}
+nav a {
     font-size: 20px;
 }
 
@@ -120,7 +129,8 @@ nav a{
     transform: translateY(-10px) translateX(15px);
     transition: all 0.2s ease;
 }
-.dropdown-content ol{
+
+.dropdown-content ol {
     font-size: 20px;
 }
 
@@ -149,14 +159,17 @@ nav a{
     color: rgb(224, 23, 157);
     cursor: pointer;
 }
-.greeting{
+
+
+.greeting {
     box-sizing: border-box;
     border: 5px dotted #ffffff;
     position: relative;
     display: flex;
     z-index: 1;
     align-items: flex-end;
-    width: 1000px;
+    width: 100%;
+    max-width: 1000px; 
     height: 350px;
     border-radius: 50px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -165,14 +178,13 @@ nav a{
     background: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #7d6899 100%);
 }
 
-.greeting-two{
+.greeting-two {
     display: flex;
     flex-direction: column;
     z-index: 10;
     position: absolute;
-    right:125px;
+    right: 125px;
     top: 60px;  
-    display: flex;
     width: 475px;
     height: auto;              
     min-height: 600px;
@@ -187,7 +199,8 @@ nav a{
     visibility: visible;
     transform: translateX(0);
 }
-.greeting-images{
+
+.greeting-images {
     width: 100%;
     height: 290px;
     flex-shrink: 0;
@@ -196,35 +209,35 @@ nav a{
     overflow: hidden;        
     position: relative;       
 }
-#particles-js{
+
+#particles-js {
     background: linear-gradient(135deg, #2d1b4e 0%, #1a0f2e 50%, #0d0619 100%);
 }
+
 #vanta-fog {
     background: #0d0619;
 }
-.greeting-three{
+
+.greeting-three {
     border: 5px dotted #ffffff;
     box-sizing: border-box;
     letter-spacing: 2px;
     font-size: 16px;
     font-family: 'Segoe UI';
-    position: absolute;
-    top: 433px;
-    left: 50px;
     display: flex;
     flex-direction: column;
     z-index: 1;
-    width: 1000px;
-    height: 200px;
+    width: 100%;
+    max-width: 1000px; 
+    height: auto; 
+    min-height: 200px;
     border-radius: 45px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    padding-bottom: 20px;
-    padding-left: 30px;
-    padding-top: 5px;
-    padding-right: 125px;
+    padding: 20px 125px 20px 30px; 
     background: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #7d6899 100%);
 }
-.greeting-three h2{
+
+.greeting-three h2 {
     font-weight: 350;
     font-size: 24px;
     margin-left: 25px;
@@ -233,10 +246,12 @@ nav a{
     display: inline-block;
     letter-spacing: 2px;
 }
-.greeting-three ul li{
+
+.greeting-three ul li {
     padding-left: 10px;
     font-size: 20px;
 }
+
 #css-animation {
     background: #1a0f2e;
     opacity: 0;
@@ -245,31 +260,25 @@ nav a{
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
-.greeting-four{
+
+
+.greeting-four {
     border: 5px dotted #ffffff;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    position: absolute;
     background: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #7d6899 100%);
     font-family: 'Segoe UI';
-    width: 1000px;
-    height: 385px;
+    width: 100%;
+    max-width: 1000px; 
+    height: auto; 
+    min-height: 385px;
     border-radius: 60px;
-    top: 655px;
-    left: 50px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    padding-bottom: 28px;
-    padding-left: 30px;
-    padding-top: 5px;
-    padding-right: 200px;
+    padding: 20px 200px 28px 30px; 
     font-size: 20px;
 
     opacity: 0;
@@ -277,6 +286,7 @@ nav a{
     animation-delay: 0.7s;
     animation-duration: 1.7s;
 }
+
 @keyframes fadeRight {
     from {
         opacity: 0;
@@ -287,7 +297,8 @@ nav a{
         transform: translateY(0);
     }
 }
-.greeting-four h2{
+
+.greeting-four h2 {
     margin-left: 18px;
     margin-right: 20px;
     margin-bottom: 0px;
@@ -295,19 +306,24 @@ nav a{
     letter-spacing: 1px;
     font-weight: 650;
 }
-.greeting-four ul li{
+
+.greeting-four ul li {
     padding-left: 10px;
     font-size: 20px;
 }
-.greeting-four p{
+
+.greeting-four p {
     text-align: justify;
     margin-left: 20px;
     letter-spacing: 1px;
 }
-.greeting-four a{
+
+.greeting-four a {
     text-decoration: underline;
 }
-.greeting-card{
+
+
+.greeting-card {
     transition: transform 0.9s;
     transform-style: preserve-3d;
     perspective: 1000px;
@@ -324,7 +340,8 @@ nav a{
     flex-grow: 1;
     background: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #9a83b5 100%);
 }
-.face-card{
+
+.face-card {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -333,9 +350,10 @@ nav a{
     position: absolute;
     width: 100%;
     height: 100%;
-    backface-visibility: hidden
+    backface-visibility: hidden;
 }
-.back-card{
+
+.back-card {
     overflow: visible;
     display: flex;
     justify-content: center;
@@ -343,10 +361,10 @@ nav a{
     gap: 20px;
     border-radius: 40px;
     box-shadow: 
-    0 0 20px rgba(240, 230, 245, 0.5),
-    0 0 40px rgba(235, 220, 240, 0.4),
-    0 0 75px rgba(200, 180, 220, 0.3),
-    0 0 105px rgba(150, 125, 180, 0.12);
+        0 0 20px rgba(240, 230, 245, 0.5),
+        0 0 40px rgba(235, 220, 240, 0.4),
+        0 0 75px rgba(200, 180, 220, 0.3),
+        0 0 105px rgba(150, 125, 180, 0.12);
     position: absolute;
     width: 100%;
     height: 100%;
@@ -354,11 +372,17 @@ nav a{
     transform: rotateY(180deg);
     background: #9a83b5;
 }
-.greeting-card-rotate{
+
+.greeting-card-rotate {
     border-radius: 40px;
     transform: rotateY(180deg);
 }
-.back-card-calculator{
+
+.back-card-calculator,
+.back-card-todo,
+.back-card-converter,
+.back-card-timer,
+.back-card-music {
     position: relative;
     transition: all ease 0.2s;
     display: flex;
@@ -370,75 +394,17 @@ nav a{
     border-radius: 30px;
     background: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #9a83b5 100%);
 }
-.back-card-calculator:hover{
+
+.back-card-calculator:hover,
+.back-card-todo:hover,
+.back-card-converter:hover,
+.back-card-timer:hover,
+.back-card-music:hover {
     transform: scale(1.15);
     z-index: 10;
 }
-.back-card-todo{
-    position: relative;
-    transition: all ease 0.2s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 80px;
-    height: 80px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    border-radius: 30px;
-    background: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #9a83b5 100%);
-}
-.back-card-todo:hover{
-    transform: scale(1.15);
-    z-index: 10;
-}
-.back-card-converter{
-    position: relative;
-    transition: all ease 0.2s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 80px;
-    height: 80px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    border-radius: 30px;
-    background: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #9a83b5 100%);
-}
-.back-card-converter:hover{
-    transform: scale(1.15);
-    z-index: 10;
-}
-.back-card-timer{
-    position: relative;
-    transition: all ease 0.2s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 80px;
-    height: 80px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    border-radius: 30px;
-    background: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #9a83b5 100%);
-}
-.back-card-timer:hover{
-    transform: scale(1.15);
-    z-index: 10;
-}
-.back-card-music{
-    position: relative;
-    transition: all ease 0.2s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 80px;
-    height: 80px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    border-radius: 30px;
-    background: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #9a83b5 100%);
-}
-.back-card-music:hover{
-    transform: scale(1.15);
-    z-index: 10;
-}
-.glass-two{
+
+.glass-two {
     border: none;
     height: 2px;
     background: linear-gradient(90deg,
@@ -447,9 +413,10 @@ nav a{
             rgba(255, 255, 255, 0.7) 50%,
             rgba(255, 255, 255, 0.5) 85%,
             transparent 100%);
-    
 }
-.main-two{
+
+
+.main-two {
     position: relative;
     padding-top: 50px;
     display: flex;
@@ -459,105 +426,118 @@ nav a{
     height: 1500px;
     gap: 20px;
 }
-.first-project-wrapper {
+
+.first-project-wrapper,
+.second-project-wrapper,
+.third-project-wrapper,
+.fourth-project-wrapper {
     perspective: 800px;
     width: 50%;
+}
+
+.first-project-wrapper,
+.third-project-wrapper {
     margin-right: 50px;
 }
-.first-project-image{
+
+.first-project-image,
+.second-project-image,
+.third-project-image,
+.fourth-project-image {
     transition: all ease 1s;
     opacity: 0;
-    transform: scale(0.7) translateX(-50px) rotateY(-10deg);
     padding: 30px;
     box-sizing: border-box;
     margin-top: 30px;
-    margin-left: 60px;
     height: 400px;
     width: 100%; 
 }
-.first-project-image img{
+
+.first-project-image,
+.third-project-image {
+    transform: scale(0.7) translateX(-50px) rotateY(-10deg);
+    margin-left: 60px;
+}
+
+.second-project-image,
+.fourth-project-image {
+    transform: scale(0.7) translateX(-50px) rotateY(10deg);
+}
+
+.first-project-image img,
+.third-project-image img {
     filter: contrast(1.2);
     border-radius: 30px;
     transform: rotateY(7deg);
     box-shadow: 
-    0 0 20px rgba(240, 230, 245, 0.5),
-    0 0 40px rgba(235, 220, 240, 0.4),
-    0 0 75px rgba(200, 180, 220, 0.3),
-    0 0 105px rgba(150, 125, 180, 0.12);
+        0 0 20px rgba(240, 230, 245, 0.5),
+        0 0 40px rgba(235, 220, 240, 0.4),
+        0 0 75px rgba(200, 180, 220, 0.3),
+        0 0 105px rgba(150, 125, 180, 0.12);
 }
-.first-project-text{
+
+.second-project-image img,
+.fourth-project-image img {
+    border-radius: 33px;
+    filter: contrast(1.2) brightness(0.9) saturate(1.15);
+    box-shadow: 
+        0 0 20px rgba(240, 230, 245, 0.5),
+        0 0 40px rgba(235, 220, 240, 0.4),
+        0 0 75px rgba(200, 180, 220, 0.3),
+        0 0 105px rgba(150, 125, 180, 0.12);
+}
+
+.first-project-text,
+.second-project-text,
+.third-project-text,
+.fourth-project-text {
     opacity: 0;
     transition: all ease 1s;
-    transform:scale(0.8) translateX(-100px);
+    box-sizing: border-box;
     text-align: justify;
     display: flex;
     align-items: center;
     padding: 21px;
     font-size: 20px;
     font-family: 'Segoe UI';
-    box-sizing: border-box;
     height: 400px;
     width: 40%;
     margin-top: 30px;
 }
 
-.second-project-wrapper {
-    perspective: 800px;
-    width: 50%;
+.first-project-text,
+.third-project-text {
+    transform: scale(0.8) translateX(-100px);
 }
-.second-project-image{
-    transition: all ease 1s;
-    opacity: 0;
-    transform: scale(0.7) translateX(-50px) rotateY(10deg);
-    padding: 30px;
-    box-sizing: border-box;
-    margin-top: 30px;
-    height: 400px;
-    width: 100%; 
-}
-.second-project-image img{
-    border-radius: 33px;
-    filter: contrast(1.2) brightness(0.9) saturate(1.15);
-    box-shadow: 
-    0 0 20px rgba(240, 230, 245, 0.5),
-    0 0 40px rgba(235, 220, 240, 0.4),
-    0 0 75px rgba(200, 180, 220, 0.3),
-    0 0 105px rgba(150, 125, 180, 0.12);
-}
-.second-project-text{
-    transition: all ease 1s;
-    opacity: 0;
-    transform:scale(0.8) translateX(100px);
-    box-sizing: border-box;
+
+.second-project-text,
+.fourth-project-text {
+    transform: scale(0.8) translateX(100px);
     margin-left: 60px;
-    text-align: justify;
-    display: flex;
-    align-items: center;
-    padding: 21px;
-    font-size: 20px;
-    font-family: 'Segoe UI';
-    box-sizing: border-box;
-    height: 400px;
-    width: 40%;
-    margin-top: 30px;
 }
-.first-project-image.animationImg{
+
+.first-project-image.animationImg,
+.third-project-image.animationImg {
     transform: scale(1) translateX(0px) rotateY(7deg);
     opacity: 1;
 }
-.first-project-text.animationText{
-    transform: scale(1) translateX(0px);
-    opacity: 1;
-}
-.second-project-image.animationImg{
+
+.second-project-image.animationImg,
+.fourth-project-image.animationImg {
     transform: scale(1) translateX(0px) rotateY(-7deg);
     opacity: 1;
 }
-.second-project-text.animationText{
+
+.first-project-text.animationText,
+.second-project-text.animationText,
+.third-project-text.animationText,
+.fourth-project-text.animationText {
     transform: scale(1) translateX(0px);
     opacity: 1;
 }
-.scroll-top-btn{
+
+
+.scroll-top-btn {
     opacity: 0;
     z-index: 9999;
     transition: all ease 0.2s;
@@ -571,7 +551,8 @@ nav a{
     padding-top: 1px;
     pointer-events: auto;
 }
-.top-arrow{
+
+.top-arrow {
     z-index: 3;
     display: flex;
     margin-left: 30px;
@@ -582,64 +563,16 @@ nav a{
     border-bottom: 3px solid rgba(0, 0, 0, 0.5);
     transform: rotate(135deg);
 }
-.scroll-top-btn:hover{
+
+.scroll-top-btn:hover {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     transform: scale(1.1);
     backdrop-filter: blur(5px);
 }
-.third-project-wrapper {
-    perspective: 800px;
-    width: 50%;
-    margin-right: 50px;
-}
-.third-project-image{
-    transition: all ease 1s;
-    opacity: 0;
-    transform: scale(0.7) translateX(-50px) rotateY(-10deg);
-    padding: 30px;
-    box-sizing: border-box;
-    margin-top: 30px;
-    margin-left: 60px;
-    height: 400px;
-    width: 100%; 
-}
-.third-project-image img{
-    border-radius: 37px;
-    transform: rotateY(7deg);
-    box-shadow: 
-    0 0 20px rgba(240, 230, 245, 0.5),
-    0 0 40px rgba(235, 220, 240, 0.4),
-    0 0 75px rgba(200, 180, 220, 0.3),
-    0 0 105px rgba(150, 125, 180, 0.12);
-}
-.third-project-text{
-    opacity: 0;
-    transition: all ease 1s;
-    transform:scale(0.8) translateX(-100px);
-    text-align: justify;
-    display: flex;
-    align-items: center;
-    padding: 21px;
-    font-size: 20px;
-    font-family: 'Segoe UI';
-    box-sizing: border-box;
-    height: 400px;
-    width: 40%;
-    margin-top: 30px;
-}
-.third-project-image.animationImg {
-    transform: scale(1) translateX(0px) rotateY(7deg);
-    opacity: 1;
-}
 
-.third-project-text.animationText {
-    transform: scale(1) translateX(0px);
-    opacity: 1;
-}
 
-/*кастомный скролл*/
 body::-webkit-scrollbar {
-    width: 10px;   /* Ширина скролла */
+    width: 10px;
 }
 
 body::-webkit-scrollbar-track {
@@ -658,119 +591,63 @@ body::-webkit-scrollbar-thumb:hover {
     cursor: default;
 }
 
-.fourth-project-wrapper {
-    perspective: 800px;
-    width: 50%;
-}
-.fourth-project-image{
-    transition: all ease 1s;
-    opacity: 0;
-    transform: scale(0.7) translateX(-50px) rotateY(10deg);
-    padding: 30px;
-    box-sizing: border-box;
-    margin-top: 30px;
-    height: 400px;
-    width: 100%; 
-}
-.fourth-project-image img{
-    border-radius: 33px;
-    filter: contrast(1.2) brightness(0.9) saturate(1.15);
-    box-shadow: 
-    0 0 20px rgba(240, 230, 245, 0.5),
-    0 0 40px rgba(235, 220, 240, 0.4),
-    0 0 75px rgba(200, 180, 220, 0.3),
-    0 0 105px rgba(150, 125, 180, 0.12);
-}
-.fourth-project-text{
-    transition: all ease 1s;
-    opacity: 0;
-    transform:scale(0.8) translateX(100px);
-    box-sizing: border-box;
-    margin-left: 60px;
-    text-align: justify;
-    display: flex;
-    align-items: center;
-    padding: 21px;
-    font-size: 20px;
-    font-family: 'Segoe UI';
-    box-sizing: border-box;
-    height: 400px;
-    width: 40%;
-    margin-top: 30px;
-}
-.fourth-project-image.animationImg{
-    transform: scale(1) translateX(0px) rotateY(-7deg);
-    opacity: 1;
-}
-.fourth-project-text.animationText{
-    transform: scale(1) translateX(0px);
-    opacity: 1;
-}
+
 @media (max-width: 1440px) {
-    
-    .greeting-four p{
+    .greeting-four p {
         width: 700px;
         height: 150px;
     }
-    .first-project-image img{
-        height: 90%;
-        width: 90%; 
-    }
-    .second-project-image img{
-        height: 90%;
-        width: 90%; 
-    }
-    .third-project-image img{
-        height: 90%;
-        width: 90%; 
-    }
-    .fourth-project-image img{
+    .first-project-image img,
+    .second-project-image img,
+    .third-project-image img,
+    .fourth-project-image img {
         height: 90%;
         width: 90%; 
     }
 }
+
 @media (max-width: 1370px) {
-    
-    .greeting-four p{
+    .greeting-four p {
         width: 600px;
         height: 150px;
     }
-    
-    .greeting-card{
+    .greeting-card {
         width: 600px;
         height: 65px;
         flex-grow: 0; 
         flex-shrink: 0; 
         margin-top: 25px;
     }
-    .back-card div{
+    .back-card div {
         width: 55px;
         height: 55px;
     }
-    .back-card img{
+    .back-card img {
         width: 38px;
         height: 38px;
     }
 }
+
 @media (max-width: 1295px) {
-    .lexend-giga-h1{
+    .lexend-giga-h1 {
         width: 500px;
     }
-    .greeting-four p{
+    .greeting-four p {
         height: 150px;
     }
-    .main{
-        height: 155%;
+    .main {
+        min-height: auto; 
     }
 }
+
 @media (max-width: 1270px) {
-    .greeting-four p{
+    .greeting-four p {
         width: 600px;
     }
-    .greeting-two{
+    .greeting-two {
         width: 400px;
     }
-    .greeting-card{
+    .greeting-card {
         width: 600px;
         height: 65px;
         flex-grow: 0; 
@@ -778,48 +655,104 @@ body::-webkit-scrollbar-thumb:hover {
         margin-top: 25px;
     }
 }
+
 @media (max-width: 1195px) {
     .greeting-two {
         width: 300px;
         opacity: 0;
         visibility: hidden;
     }
-    .greeting-card{
-        width: 600px;
-        height: 65px;
-        flex-grow: 0; 
-        flex-shrink: 0; 
-        margin-top: 25px;
-    }
-    .lexend-giga-h1{
+    .lexend-giga-h1 {
         width: auto;
     }
-    .greeting-four p{
-        width: auto;
+    .greeting-four p {
+        width: 95%;
         height: auto;
     }
-    .greeting-card{
-        width: 740px;
-        height: 100px;
-        margin-top: 0px;
+    .greeting-card {
+        width: 95%;
+        height: auto;
+        min-height: 60px;
     }
     
-    /* Обнуляем предыдущие размеры */
-    .greeting{
-        width: calc(100% - 80px);
-        box-sizing: border-box;
-    }
+    .greeting,
     .greeting-three,
     .greeting-four {
-        width: calc(100% - 120px);
-        box-sizing: border-box;
+        width: 90%;
+        max-width: none;
+        padding-right: 30px;
+    }
+}
+
+@media (max-width: 915px) {
+    .greeting-card {
+        height: 60px;
+    }
+}
+
+@media (max-width: 735px) {
+    .greeting-three {
+        height: auto;
+        min-height: unset;
+        padding: 20px 30px; 
+    }
+}
+
+@media (max-width: 715px) {
+    .greeting-four {
+        min-height: 420px;
+    }
+}
+@media (max-width: 700px) {
+    .main-header {
+        flex-direction: row;
+        align-items: center;  
+        justify-content: flex-start;
+        gap: 15px;              
+        padding: 15px 20px;
     }
     
-    /* Выравниваем все блоки по левому краю */
-    .greeting {
-        margin-left: 10px;
-        margin-right: 10px;
-        padding-left: 20px;
-        padding-right: 20px;
+    .dropdown-content {
+        min-width: 0;           
+        width: 200px;
+        height: auto;           
+        max-height: 250px;      
+        overflow-y: auto;       
+        left: -100px;     
+        top: 45px;      
+    }
+    
+    .main-header nav {
+        font-size: 15px;
+        gap: 80px;     
+        margin-left: 30px;
+    }
+    
+    .dropdown-content ol,
+    .dropdown-content li {
+        font-size: 15px;
+    }
+    
+    .main-header nav a {
+        font-size: 20px;
+        line-height: 1.2;   
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 675px) {
+    .greeting-four {
+        height: auto; 
+        min-height: 440px; 
+        padding: 20px 30px; 
+    }
+
+    .greeting-four p {
+        margin-bottom: 5px; 
+        margin-top: 10px;   
+    }
+    
+    .greeting-card {
+        margin-top: 15px; 
     }
 }
