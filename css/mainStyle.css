@@ -689,7 +689,102 @@ body::-webkit-scrollbar-thumb:hover {
         height: 60px;
     }
 }
+@media (max-width: 830px) {
+    .main-two {
+        flex-direction: column;  
+        height: auto;            
+        gap: 10px;               
+        padding-top: 20px;
+    }
+    .first-project-image,
+    .second-project-image,
+    .third-project-image,
+    .fourth-project-image {
+        width: 100%;
+        padding-left: 10px;
+        padding-right: 10px; 
+        transform: none;
+    }
 
+    .first-project-wrapper,
+    .second-project-wrapper,
+    .third-project-wrapper,
+    .fourth-project-wrapper {
+        width: 80%;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .first-project-text,
+    .second-project-text,
+    .third-project-text,
+    .fourth-project-text {
+        width: 80%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .first-project-image,
+    .second-project-image,
+    .third-project-image,
+    .fourth-project-image {
+        margin-left: auto;
+        margin-right: auto;
+        height: auto;         
+        opacity: 1;  
+        transform: none;
+        opacity: 0;
+    }
+
+    .first-project-text,
+    .second-project-text,
+    .third-project-text,
+    .fourth-project-text {
+        margin-left: auto;   
+        margin-right: auto;
+        height: auto;      
+        min-height: auto;
+        display: block;      
+        text-align: center;  
+    }
+
+    
+    .first-project-image img,
+    .second-project-image img,
+    .third-project-image img,
+    .fourth-project-image img {
+        transform: none;
+        perspective: none; 
+        display: block;      
+        margin: 0 auto;
+    }
+
+    .first-project-image.animationImg,
+    .second-project-image.animationImg,
+    .third-project-image.animationImg,
+    .fourth-project-image.animationImg {
+        transform: none;
+        opacity: 1;
+    }
+
+    .first-project-wrapper { order: 1; }
+    .first-project-text    { order: 2; }
+
+    
+    .second-project-wrapper { order: 3; }  
+    .second-project-text    { order: 4; }  
+
+    
+    .third-project-wrapper { order: 5; }
+    .third-project-text    { order: 6; }
+
+    
+    .fourth-project-wrapper { order: 7; }  
+    .fourth-project-text    { order: 8; }
+
+}
 @media (max-width: 735px) {
     .greeting-three {
         height: auto;
