@@ -180,10 +180,15 @@ hr.glass {
 .avatar img:hover{
     transform: scale(1.05);
 }
+.greeting-avatar-col{
+    display: flex; 
+    gap: 10px; 
+    flex-direction: column;
+}
 .greeting-avatar-two{
     background: #aa92c4;
     flex: 1;
-    height: 150px;
+    height: 200px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -507,4 +512,34 @@ hr.glass {
     height: 100px;
     justify-content: center;
     align-items: center;
+}
+@media (max-width: 1235px){
+    .greeting{
+        height: auto;
+        flex-direction: column;
+    }
+    
+    .greeting-text-content{
+        height: auto;
+        min-width: 200px;
+    }
+    .greeting-avatar{
+        height: auto;
+        border-radius: 70px 70px 70px 70px;
+    }
+    .greeting-avatar-two{
+        height: auto;
+        border-radius: 70px 70px 70px 70px;
+    }
+
+}
+@media (max-width: 740px){
+    .greeting-strong{
+        font-size: 35px;
+    }
+}
+@media (max-width: 670px){
+    .greeting-strong{
+        font-size: 31px;
+    }
 }
