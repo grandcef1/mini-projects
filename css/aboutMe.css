@@ -68,6 +68,7 @@ hr.glass {
     padding-right: 29px;
     padding-left: 30px;
     width: 100%;
+    height: auto;
     gap: 30px;
 }
 .greeting{
@@ -326,6 +327,7 @@ hr.glass {
 .stack-text strong{
     font-size: 18px;
 }
+
 .codewars-card{
     background: #aa92c4;
     box-shadow: 
@@ -353,6 +355,8 @@ hr.glass {
     transform: scale(1.4);
 }
 .codewars-title{
+    display: flex;
+    align-items: center;
     font-family: "Montserrat";
     font-size: 40px;
     font-weight: 400;
@@ -513,6 +517,76 @@ hr.glass {
     justify-content: center;
     align-items: center;
 }
+@media (max-width: 1475px){
+    .stack{
+        height: auto;
+        min-width: 200px;
+    }
+    .stack-text{
+        min-width: 200px;
+        height: auto;
+        min-height: 375px;
+        order: 1;
+    }
+    .stack-icons{
+        justify-content: center;
+        width: auto;
+        height: auto;
+        flex-direction: row;
+        order: 2;
+        padding-top: 20px;
+    }
+    .stack-module{
+        flex-direction: column;
+        height: auto;
+    }
+    .codewars-card{
+        min-height: 200px;
+        height: auto;
+    }
+    .efset-card{
+        min-height: 200px;
+        height: auto;
+    }
+}
+@media (max-width: 1250px){
+    .codewars-info{
+        font-size: 25px;
+    }
+    .codewars-title{
+        font-size: 25px;
+    }
+    .codewars-avatar{
+        width: 100px;
+        height: 100px;
+    }
+    .codewars-avatar img{
+        width: 100px;
+        height: 100px;
+    }
+    .codewars-card{
+        gap: 5px;
+    }
+    
+
+    .efset-info{
+        font-size: 25px;
+    }
+    .efset-title{
+        font-size: 25px;
+    }
+    .efset-avatar{
+        width: 100px;
+        height: 100px;
+    }
+    .efset-avatar img{
+        width: 100px;
+        height: 100px;
+    }
+    .efset-card{
+        gap: 5px;
+    }
+}
 @media (max-width: 1235px){
     .greeting{
         height: auto;
@@ -533,9 +607,86 @@ hr.glass {
     }
 
 }
+@media (max-width: 1010px){
+    .plans-module span{
+        font-size: 20px;
+    }
+}
+@media (max-width: 960px) {
+    .stack-text {
+        height: auto;
+        min-height: 0;
+    }
+
+    .stack-text-content {
+        height: auto;
+    }
+}
+@media (max-width: 940px){
+    .codewars-info{
+        gap: 15px;
+    }
+    .efset-info{
+        gap: 15px;
+    }
+}
+@media (max-width: 812px){
+    .icons-one img{
+        width: 80px;
+        height: 80px;
+    }
+    .icons-two img{
+        width: 80px;
+        height: 80px;
+    }
+}
+@media (max-width: 765px){
+    .codewars-info{
+        font-size: 20px;
+    }
+    .codewars-title{
+        font-size: 18px;
+    }
+    .codewars-avatar{
+        width: 70px;
+        height: 70px;
+    }
+    .codewars-avatar img{
+        width: 70px;
+        height: 70px;
+    }
+
+    .efset-info{
+        font-size: 20px;
+    }
+    .efset-title{
+        font-size: 20px;
+    }
+    .efset-avatar{
+        width: 70px;
+        height: 70px;
+    }
+    .efset-avatar img{
+        width: 70px;
+        height: 70px;
+    }
+}
+@media (max-width: 750px){
+    .plans-module span{
+        font-size: 17px;
+    }
+}
 @media (max-width: 740px){
     .greeting-strong{
         font-size: 35px;
+    }
+}
+@media (max-width: 700px){
+    .codewars-info{
+        margin-right: 10px;
+    }
+    .efset-info{
+        margin-right: 10px;
     }
 }
 @media (max-width: 670px){
