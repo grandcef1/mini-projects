@@ -1958,3 +1958,38 @@ document.addEventListener('drop', function(e) {
     e.preventDefault();
 });
 
+//Обработчик события для бургер меню
+
+let burgerMenu = document.querySelector('.burger-menu');
+let containerNav = document.querySelector('.containerNav');
+let burgerMenuImg = document.getElementById('burger-menu-img');
+let isBurgerOpen = false;
+
+burgerMenu.addEventListener('click', function() {
+    containerNav.style.animation = 'BurgerFadeIn 0.3s ease';
+    if (isBurgerOpen) {
+        burgerMenuImg.src = 'icons/burger-menu-icon.png';
+        burgerMenu.width = '40px';  
+        burgerMenu.height = '40px'; 
+        containerNav.style.display = 'none';
+        isBurgerOpen = false;
+    } else {
+        burgerMenuImg.src = 'icons/close-burger-menu.png';
+        burgerMenu.width = '30px';  
+        burgerMenu.height = '30px'; 
+        containerNav.style.display = 'flex';
+        isBurgerOpen = true;
+    }
+});
+
+window.addEventListener('resize', function() {
+    if (window.innerWidth > 1165) {
+        // пустая строка потому что тогда удаляется инлайн стиль,у которого приоритет выше чем у обычного css
+        // и контейнер снова подчиняется css
+        containerNav.style.display = ''; 
+        isBurgerOpen = false; 
+        burgerMenuImg.src = 'icons/burger-menu-icon.png';
+        burgerMenu.style.width = '40px';
+        burgerMenu.style.height = '40px';
+    }
+});
