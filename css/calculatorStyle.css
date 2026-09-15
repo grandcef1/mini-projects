@@ -1175,6 +1175,7 @@ nav div:hover {
     border-top: 3px solid #ffffff;
     border-left: 3px solid #ffffff;
     border-right: 3px solid #ffffff;
+    transition: all ease 0.3s;
 }
 .btnCancel{
     display: flex;
@@ -1276,6 +1277,7 @@ nav div:hover {
     gap: 20px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     background: #A07FEA;
+    transition: all ease 0.3s;
 }
 .confirmBtn{
     display: flex;
@@ -2090,7 +2092,7 @@ nav div:hover {
         display: none;
         position: absolute;
         width: 360px;
-        height: 426px;
+        height: 435px;
         z-index: 100;
         left: 100px;
     }
@@ -2119,5 +2121,182 @@ nav div:hover {
         min-height: 329px;
     }
 }
-@media (max-width: 1070px){
+@media (max-width: 1100px){
+    .controlPanelOne{
+        min-width: 150px;
+    }
+    .playBtn{
+        width: 80px;
+        height: 80px;
+    }
+    .playBtn img{
+        width: 40px;
+        height: 40px;
+    }
+    .previousTrackBtn{
+        width: 50px;
+        height: 50px;
+    }
+    .previousTrackBtn img{
+        width: 40px;
+        height: 40px;
+    }
+
+    .nextTrackBtn{
+        width: 50px;
+        height: 50px;
+    }
+    .nextTrackBtn img{
+        width: 40px;
+        height: 40px;
+    }
+}
+@media (max-width: 1065px){
+    #infoTimer{
+        display: none;
+    }
+}
+@media (max-width: 875px){
+    .btnContainer{
+        gap: 5px;
+    }
+    .btnAdd{
+        font-size: 10px;
+        width: 80px;
+    }
+    .btnDelete{
+        font-size: 10px;
+        width: 80px;
+    }
+    .modalOverlay{
+    width: 600px;
+    height: 190px;
+    }
+    .modalContainer{
+        width: 600px;
+        height: 190px;
+    }
+    .modalOverlayEdit{
+    width: 600px;
+    height: 190px;
+    }
+    .modalContainerEdit{
+        width: 600px;
+        height: 190px;
+    }
+    .dropdown-btn{
+        justify-content: center;
+        font-size: 10px;
+    }
+    .choosingRow{
+        padding: 5px;
+        margin-right: 5px;
+    }
+}
+@media (max-width: 845px){
+    .Montserrat-h1{
+        font-size: 40px;
+    }
+    .controlPanelOne{
+        min-width: 100px;
+    }
+    .choosingTracksBtn{
+        width: 50px;
+        height: 50px;
+    }
+    .choosingTracksBtn img{
+        width: 40px;
+        height: 40px;
+    }
+    .shuffleBtn{
+        width: 50px;
+        height: 50px;
+    }
+    .shuffleBtn img{
+        width: 40px;
+        height: 40px;
+    }
+    .playBtn{
+        width: 60px;
+        height: 60px;
+    }
+    .playBtn img{
+        width: 30px;
+        height: 30px;
+    }
+    .previousTrackBtn{
+        width: 40px;
+        height: 40px;
+    }
+    .previousTrackBtn img{
+        width: 30px;
+        height: 30px;
+    }
+
+    .nextTrackBtn{
+        width: 40px;
+        height: 40px;
+    }
+    .nextTrackBtn img{
+        width: 30px;
+        height: 30px;
+    }
+}
+@media (max-width: 830px){
+    .changeModeBtn{
+        font-size: 15px;
+        width: 100px;
+    }
+    .setTimeContainer{
+        width: 150px;
+    }
+    .setTimeContainer span{
+        font-size: 12px;
+    }
+    .confirmBtn{
+        font-size: 15px;
+        width: 100px;
+    }
+    .timerBtns{
+        gap: 40px;
+    }
+    .timerDiv{
+        gap: 8px;
+    }
+    .btnCancel{
+        width: 100px;
+        height: 100px;
+    }
+    .btnStart{
+        width: 100px;
+        height: 100px;
+    }
+}
+@media (max-width: 750px){
+    .loadIcon{
+        width: 340px;
+    }
+    .loadText{
+        width: 340px;
+    }
+    #loadTrackBtn{
+        width: 60px;
+        height: 60px;
+    }
+    .choosingTracksBtn{
+        width: 40px;
+        height: 40px;
+    }
+    .choosingTracksBtn img{
+        width: 30px;
+        height: 30px;
+    }
+    .shuffleBtn{
+        width: 40px;
+        height: 40px;
+    }
+    .shuffleBtn img{
+        width: 30px;
+        height: 30px;
+    }
 }

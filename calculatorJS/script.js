@@ -665,6 +665,8 @@ infoConverter.addEventListener('click', () => {
         '   • CNY — Китайский юань', 'ⓘ')
 });
 
+
+//ТАЙМЕР
 //Обработчик для кнопки Info Todo
 let infoBtnTodo = document.getElementById('infoTodo');
 infoBtnTodo.addEventListener('click', () => {
@@ -792,12 +794,26 @@ function renderTasks(tasks) {
 
 //функция сокращения стркои для choosingRow
 function cutText(text) {
-    let result = text;
-    if (text.length > 34) {
-        result = text.slice(0, 33) + '...';
-        return result;
-    } else return result;
+        if (!text) return '';
+        // для адаптивности: если ширина меньше 900px, лимит 8 символов, иначе 35
+        const limit = window.innerWidth < 900 ? 5 : 35;
+        
+        if (text.length > limit) {
+            return text.slice(0, limit) + '...';
+        }
+        return text;
 }
+
+let resizeTimeout;
+window.addEventListener('resize', function() {
+    clearTimeout(resizeTimeout);
+    
+    resizeTimeout = setTimeout(() => {
+        if (currentSelectedTask) {
+            choosingRowElement.textContent = `Выбрано: ${cutText(currentSelectedTask.text)}`;
+        }
+    }, 150);
+});
 
 //функция получения задачи по ее айди
 function getTaskById(taskId) {
