@@ -520,10 +520,16 @@ hr.glass {
 @media (max-width: 1475px){
     .stack{
         height: auto;
-        min-width: 200px;
+        min-width: 420px;
+    }
+    .glass{
+        min-width: 420px;
+    }
+    .main-header{
+        min-width: 420px;
     }
     .stack-text{
-        min-width: 200px;
+        min-width: 420px;
         height: auto;
         min-height: 375px;
         order: 1;
@@ -543,10 +549,12 @@ hr.glass {
     .codewars-card{
         min-height: 200px;
         height: auto;
+        min-width: 420px;
     }
     .efset-card{
         min-height: 200px;
         height: auto;
+        min-width: 420px;
     }
 }
 @media (max-width: 1250px){
@@ -595,15 +603,17 @@ hr.glass {
     
     .greeting-text-content{
         height: auto;
-        min-width: 200px;
+        min-width: 356px;
     }
     .greeting-avatar{
         height: auto;
         border-radius: 70px 70px 70px 70px;
+        min-width: 420px;
     }
     .greeting-avatar-two{
         height: auto;
         border-radius: 70px 70px 70px 70px;
+        min-width: 420px;
     }
 
 }
@@ -692,5 +702,41 @@ hr.glass {
 @media (max-width: 670px){
     .greeting-strong{
         font-size: 31px;
+    }
+}
+@media (max-width: 470px){
+    .greeting-strong strong{
+        font-size: 20px;
+        font-weight: 700;
+        margin-top: 10px;
+    }
+    .greeting-strong{
+        margin-bottom: 40px;
+    }
+    .main-header h1{
+        font-size: 25px;
+    }
+    .main{
+        width: 100%;
+    }
+    .stack-icons{
+        min-width: 420px;
+    }
+    .icons-one img{
+        width: 50px;
+        height: 50px;
+    }
+    .icons-two img{
+        width: 50px;
+        height: 50px;
+    }
+    .plans-module{
+        min-width: 420px;
+    }
+    .plans-h1{
+        min-width: 420px;
+    }
+    .plans-module span{
+        font-size: 14px;
     }
 }

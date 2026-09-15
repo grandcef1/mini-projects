@@ -1980,6 +1980,7 @@ let burgerMenu = document.querySelector('.burger-menu');
 let containerNav = document.querySelector('.containerNav');
 let burgerMenuImg = document.getElementById('burger-menu-img');
 let isBurgerOpen = false;
+let mainContent = document.querySelector('.main-content');
 
 burgerMenu.addEventListener('click', function() {
     containerNav.style.animation = 'BurgerFadeIn 0.3s ease';
