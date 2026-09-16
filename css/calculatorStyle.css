@@ -2470,123 +2470,394 @@ nav div:hover {
         padding: 0;
     }
 
-    /* Скрываем бургер-меню */
+    /* ===== ШАПКА ===== */
+    .containerSticky {
+        display: flex !important;
+        flex-direction: column;
+        position: relative !important;
+        flex-shrink: 0;
+        padding: 8px 6px !important;
+        width: 100%;
+        box-sizing: border-box;
+        overflow: visible;
+        background: transparent;
+    }
+
+    .header-wrapper {
+        margin-bottom: 6px;
+    }
+
+    h1 {
+        font-size: 24px !important;
+        letter-spacing: 3px !important;
+        line-height: 1 !important;
+    }
+
+    .Montserrat-h1 {
+        font-size: 24px !important;
+    }
+
+    .back-arrow {
+        width: 32px;
+        height: 32px;
+        left: 6px;
+    }
+
+    .back-arrow::before {
+        width: 8px;
+        height: 8px;
+    }
+
+    hr.glass {
+        margin: 4px 0 0 0;
+    }
+
     .burger-menu {
         display: none !important;
     }
 
-    /* Основной контент - вертикальный flex без масштабирования */
+    /* ===== ОСНОВНОЙ КОНТЕНТ ===== */
     .main-content {
         position: relative;
-        width: 100vw;
-        height: 100vh;
-        padding: 10px;
-        padding-left: 10px;
+        width: 100%;
+        flex: 1;
+        min-height: 0;
+        padding: 0 6px 10px 6px !important;
         display: flex;
         flex-direction: column;
         gap: 10px;
         box-sizing: border-box;
         overflow: hidden;
-        transform: none;
     }
 
-    /* Навигация сверху - занимает всю ширину, высота по содержимому */
+    .main-content>* {
+        flex: 0 0 auto;
+    }
+
+    /* ===== НАВИГАЦИЯ ===== */
     .containerNav {
         position: relative !important;
+        display: flex !important;
         width: 100% !important;
+        max-width: 100% !important;
         height: auto !important;
         min-width: 0 !important;
         min-height: 0 !important;
-        padding: 15px 10px !important;
+        padding: 8px 6px !important;
         box-sizing: border-box;
         flex-shrink: 0;
-        border-radius: 30px !important;
+        border-radius: 25px !important;
         border-width: 3px !important;
+        margin: 0 !important;
+        left: auto !important;
+        filter: none !important;
     }
 
-    /* Меню в строку */
     .navMenu {
         flex-direction: row !important;
         flex-wrap: wrap !important;
-        justify-content: space-around !important;
+        justify-content: center !important;
         align-items: center !important;
-        gap: 8px !important;
+        gap: 6px !important;
         width: 100%;
         height: auto;
+        filter: none !important;
     }
 
-    /* Кнопки навигации - адаптивные */
     nav div {
         width: auto !important;
-        min-width: 70px !important;
-        max-width: calc(50% - 8px) !important;
-        height: 40px !important;
-        font-size: 13px !important;
-        padding: 5px 10px !important;
+        min-width: 55px !important;
+        max-width: none !important;
+        height: 34px !important;
+        font-size: 11px !important;
+        padding: 4px 8px !important;
         flex: 1 1 auto;
         box-sizing: border-box;
+        border-radius: 12px !important;
     }
 
-    /* Окно проекта - занимает оставшееся пространство */
+    /* ===== ОКНА ПРОЕКТОВ ===== */
     .calculatorWind,
-    .ToDoWind,
-    .Converter {
+    .ToDoWind {
         position: relative !important;
         width: 100% !important;
+        max-width: 100% !important;
         flex: 1 1 auto !important;
         min-height: 0 !important;
         min-width: 0 !important;
-        padding: 15px !important;
+        padding: 10px !important;
         box-sizing: border-box;
-        border-radius: 30px !important;
+        border-radius: 25px !important;
         border-width: 3px !important;
         overflow: hidden;
+        height: auto !important;
+        margin: 0 !important;
+        filter: none !important;
     }
 
-    /* Шапка - скрываем на мобильных */
-    .containerSticky {
-        display: none;
+    .Converter {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 0 !important;
+        padding: 10px !important;
+        box-sizing: border-box;
+        margin: 0 !important;
     }
 
-    /* Адаптация калькулятора */
-    #result {
+    /* ===== ТАЙМЕР — ТОЛЬКО ТЕКСТОВЫЙ ОТСЧЁТ ===== */
+    .Timer {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
+        margin: 0 !important;
+        overflow: visible !important;
+    }
+
+    #infoTimer {
+        display: none !important;
+    }
+
+    .timerDiv {
+        flex-direction: column !important;
+        gap: 10px !important;
+        height: auto !important;
+        padding: 10px 0 !important;
+    }
+
+    .timer-svg {
+        display: none !important;
+    }
+
+    .timer-visual-container {
+        width: auto !important;
+        height: auto !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        padding: 10px 20px !important;
+    }
+
+    .timer-visual-container .timerCounter {
+        width: auto !important;
+        height: auto !important;
+        font-size: 48px !important;
+        font-weight: 400 !important;
+        color: #ffffff !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .timerCounter {
+        width: auto !important;
+        height: auto !important;
+        font-size: 48px !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        color: #ffffff !important;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .btnCancel,
+    .btnStart,
+    .btnReset,
+    .btnStartSecundomer,
+    .btnCancelSecundomer,
+    .btnCircle,
+    .btnResetSecundomer {
+        width: 60px !important;
+        height: 60px !important;
+        font-size: 12px !important;
+        border-width: 2px !important;
+    }
+
+    .timerBtns {
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        padding: 8px !important;
+        height: auto !important;
+        justify-content: center;
+        overflow: visible !important;
+    }
+
+    .changeModeBtn {
+        font-size: 11px !important;
+        width: 80px !important;
+        height: 30px !important;
+    }
+
+    .setTimeContainer {
+        width: 130px !important;
+        height: 60px !important;
+        gap: 4px !important;
+    }
+
+    .setTimeContainer input {
+        width: 35px !important;
+        height: 28px !important;
+        font-size: 14px !important;
+    }
+
+    .hours,
+    .minutes,
+    .seconds {
+        width: 40px !important;
+        font-size: 10px !important;
         height: 50px !important;
-        font-size: 22px !important;
+    }
+
+    .confirmBtn {
+        font-size: 11px !important;
+        width: 70px !important;
+        height: 28px !important;
+    }
+
+    /* ===== ТАБЛИЦА КРУГОВ — ОГРАНИЧЕНИЕ ВЫСОТЫ И ВЕРТИКАЛЬНЫЙ СКРОЛЛ ===== */
+    .CirclesContainer {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        max-height: 150px !important;
+        overflow: hidden !important;
+        flex-direction: column !important;
+    }
+
+    .tableWithCircles {
+        display: grid !important;
+        width: 100% !important;
+        height: 100% !important;
+        max-height: 100% !important;
+        background: #B09AD0 !important;
+        border-radius: 20px !important;
+        grid-template-columns: 2fr 4fr 4fr !important;
+        border: 2px solid black !important;
+        overflow: hidden !important;
+    }
+
+    .TableWind-Timer {
+        border: 3px solid #ffffff !important;
+        border-radius: 30px !important;
+        overflow: hidden !important;
+        font-family: 'Segoe UI' !important;
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        height: 100% !important;
+        max-height: 100% !important;
+        justify-content: flex-start !important;
+        text-align: right !important;
+    }
+
+    .rows-container-timer {
+        height: auto !important;
+        max-height: 100px !important;
+        border-radius: 0px !important;
+        background: #ffffff15 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+    }
+
+    .rows-container-timer::-webkit-scrollbar {
+        width: 6px !important;
+    }
+
+    .rows-container-timer::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-radius: 10px !important;
+        margin: 5px 0 !important;
+    }
+
+    .rows-container-timer::-webkit-scrollbar-thumb {
+        background: #5a3c98 !important;
+        border-radius: 10px !important;
+    }
+
+    .rows-container-timer::-webkit-scrollbar-thumb:hover {
+        background: #7d5db8 !important;
+        cursor: default !important;
+    }
+
+    /* ===== ВЫПАДАЮЩЕЕ МЕНЮ ТАЙМЕРА — ОТКРЫВАЕТСЯ ВВЕРХ ===== */
+    .custom-dropdown-timer {
+        position: relative !important;
+        z-index: 1000 !important;
+        overflow: visible !important;
+    }
+
+    .dropdown-menu-timer {
+        position: absolute !important;
+        bottom: 100% !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        margin-bottom: 8px !important;
+        margin-top: 0 !important;
+        top: auto !important;
+        min-width: 140px !important;
+        max-width: 90vw !important;
+        border-radius: 12px !important;
+        border-width: 2px !important;
+        padding: 4px !important;
+        z-index: 10000 !important;
+        overflow: hidden !important;
+    }
+
+    .dropdown-item-timer {
+        padding: 8px 10px !important;
+        font-size: 12px !important;
+        gap: 6px !important;
+    }
+
+    .dropdown-item-timer:hover {
+        border-radius: 6px !important;
+    }
+
+    .dropdown-item-timer.selected {
+        border-radius: 8px !important;
+        border-width: 1px !important;
+    }
+
+    /* ===== КАЛЬКУЛЯТОР ===== */
+    #result {
+        height: 45px !important;
+        font-size: 20px !important;
         border-radius: 12px !important;
     }
 
     .Math {
-        gap: 8px !important;
+        gap: 6px !important;
     }
 
     .Math div {
-        height: 45px !important;
-        font-size: 20px !important;
+        height: 40px !important;
+        font-size: 18px !important;
         border-radius: 12px !important;
-        width: calc((100% - 32px) / 5) !important;
+        width: calc((100% - 24px) / 5) !important;
         max-width: none !important;
     }
 
     .Math>* {
-        max-width: calc((100% - 32px) / 5) !important;
+        max-width: calc((100% - 24px) / 5) !important;
     }
 
     #empty {
-        width: calc((100% - 32px) / 5) !important;
-        height: 45px !important;
+        width: calc((100% - 24px) / 5) !important;
+        height: 40px !important;
     }
 
     #infoMath {
-        width: calc((100% - 32px) / 5) !important;
-        height: 45px !important;
+        width: calc((100% - 24px) / 5) !important;
+        height: 40px !important;
     }
 
-    /* Адаптация конвертера */
+    /* ===== КОНВЕРТЕР ===== */
     .ConvertationWinds {
         flex-direction: column !important;
         height: auto !important;
-        padding: 15px !important;
-        gap: 10px !important;
+        padding: 10px !important;
+        gap: 8px !important;
+        min-height: 0 !important;
     }
 
     .From,
@@ -2597,19 +2868,23 @@ nav div:hover {
 
     .From input,
     .To input {
-        font-size: 20px !important;
-        height: 35px !important;
+        font-size: 18px !important;
+        height: 30px !important;
     }
 
     .From select,
     .To select {
-        font-size: 12px !important;
-        padding: 5px 20px 5px 8px !important;
+        font-size: 11px !important;
+        padding: 4px 18px 4px 6px !important;
+    }
+
+    .iconExchange img {
+        transform: rotate(90deg);
     }
 
     .convert-btn {
-        font-size: 16px !important;
-        padding: 10px 30px !important;
+        font-size: 14px !important;
+        padding: 8px 24px !important;
         margin-top: 5px !important;
     }
 
@@ -2619,68 +2894,76 @@ nav div:hover {
     }
 
     #infoConverter {
-        width: 45px !important;
-        height: 45px !important;
+        width: 40px !important;
+        height: 40px !important;
     }
 
-    /* Адаптация ToDo */
+    /* ===== TODO ===== */
     .TasksWinds {
-        padding: 10px !important;
+        padding: 8px !important;
         gap: 5px !important;
     }
 
     .TableWind {
         height: auto !important;
         flex: 1 !important;
+        min-height: 0 !important;
     }
 
     .row {
         grid-template-columns: 2fr 1fr 0.5fr !important;
-        font-size: 12px !important;
-    }
-
-    .columns {
-        padding: 6px !important;
         font-size: 11px !important;
     }
 
+    .columns {
+        padding: 5px !important;
+        font-size: 10px !important;
+    }
+
     .buttonsPanel {
-        padding: 8px !important;
+        padding: 6px !important;
         grid-template-columns: 1fr !important;
-        gap: 8px !important;
+        gap: 6px !important;
     }
 
     .btnContainer {
         flex-wrap: wrap;
-        gap: 8px !important;
+        gap: 6px !important;
     }
 
     .btnAdd,
     .btnDelete {
-        width: 100px !important;
-        height: 40px !important;
-        font-size: 12px !important;
+        width: 90px !important;
+        height: 36px !important;
+        font-size: 11px !important;
     }
 
     .choosingRow {
-        padding: 5px !important;
-        font-size: 12px !important;
+        padding: 4px !important;
+        font-size: 11px !important;
     }
 
     #infoTodo {
-        width: 45px !important;
-        height: 45px !important;
+        width: 40px !important;
+        height: 40px !important;
     }
 
-    /* Модальные окна - адаптация */
+    .dropdown-btn {
+        justify-content: center;
+        font-size: 10px !important;
+        width: 140px !important;
+        height: 36px !important;
+    }
+
+    /* ===== МОДАЛЬНЫЕ ОКНА ===== */
     .modalOverlay,
     .modalOverlayEdit,
     .modalOverlayMusic {
         width: 95vw !important;
-        max-width: 400px !important;
+        max-width: 380px !important;
         height: auto !important;
-        min-height: 200px !important;
-        border-radius: 30px !important;
+        min-height: 180px !important;
+        border-radius: 25px !important;
         border-width: 3px !important;
     }
 
@@ -2689,48 +2972,115 @@ nav div:hover {
     .modalContainerMusic {
         width: 100% !important;
         height: auto !important;
-        padding: 15px !important;
+        padding: 12px !important;
     }
 
     .modalContainer textarea,
     .modalContainerEdit textarea {
-        font-size: 16px !important;
-        height: 100px !important;
+        font-size: 14px !important;
+        height: 80px !important;
     }
 
     .taskBtns,
     .musicBtns {
         flex-wrap: wrap;
-        gap: 10px !important;
-        padding: 10px !important;
+        gap: 8px !important;
+        padding: 8px !important;
     }
 
     .btnEdit,
     .btnConfirm,
     .btnClose {
-        width: 120px !important;
-        height: 40px !important;
-        font-size: 14px !important;
+        width: 110px !important;
+        height: 36px !important;
+        font-size: 13px !important;
     }
 
-    /* Кастомное уведомление */
+    /* ===== УВЕДОМЛЕНИЯ ===== */
     .custom-alert-content {
-        min-width: 280px !important;
-        padding: 20px !important;
+        min-width: 260px !important;
+        max-width: 90vw !important;
+        padding: 18px !important;
         border-radius: 20px !important;
     }
 
     .custom-alert-icon {
-        font-size: 40px !important;
+        font-size: 36px !important;
     }
 
     .custom-alert-message {
-        font-size: 14px !important;
-        padding-left: 20px !important;
+        font-size: 13px !important;
+        padding-left: 15px !important;
     }
 
     .custom-alert-btn {
+        font-size: 13px !important;
+        padding: 8px 24px !important;
+    }
+
+    /* ===== МУЗЫКАЛЬНЫЙ ПЛЕЕР ===== */
+    .musicPlayerWind {
+        gap: 6px !important;
+    }
+
+    .controlPanel {
+        grid-template-columns: 1fr !important;
+        gap: 6px !important;
+    }
+
+    .controlPanelOne {
+        min-width: 0 !important;
+        justify-content: center;
+        padding: 6px !important;
+        gap: 8px !important;
+    }
+
+    .controlPanelTwo {
+        justify-content: center;
+        padding: 6px !important;
+        gap: 10px !important;
+    }
+
+    .choosingTracksBtn,
+    .shuffleBtn {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .choosingTracksBtn img,
+    .shuffleBtn img {
+        width: 28px !important;
+        height: 28px !important;
+    }
+
+    .previousTrackBtn,
+    .nextTrackBtn {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .previousTrackBtn img,
+    .nextTrackBtn img {
+        width: 28px !important;
+        height: 28px !important;
+    }
+
+    .playBtn {
+        width: 56px !important;
+        height: 56px !important;
+    }
+
+    .playBtn img {
+        width: 28px !important;
+        height: 28px !important;
+    }
+
+    .loadIcon {
+        width: 100% !important;
+    }
+
+    .loadText {
+        width: 100% !important;
         font-size: 14px !important;
-        padding: 10px 30px !important;
     }
 }

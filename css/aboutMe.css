@@ -603,7 +603,8 @@ hr.glass {
     
     .greeting-text-content{
         height: auto;
-        min-width: 356px;
+        box-sizing: border-box;
+        min-width: 420px;
     }
     .greeting-avatar{
         height: auto;
