@@ -1661,8 +1661,7 @@ function closeModalMusic() {
     mainContent.style.pointerEvents = 'auto';
 }
 
-// === ОБРАБОТЧИК НА КНОПКУ ЗАГРУЗКИ (ГЛАВНЫЙ) ===
-loadTrackBtn 
+// === ОБРАБОТЧИК НА КНОПКУ ЗАГРУЗКИ (ГЛАВНЫЙ) === 
     loadTrackBtn.addEventListener('click', function(e) {
         e.stopPropagation();
         e.preventDefault();
@@ -1673,243 +1672,42 @@ loadTrackBtn
 closeBtnMusic.addEventListener('click', closeModalMusic);
 
 
-const DB_NAME = 'MusicPlayerDB';
-const STORE_NAME = 'tracks';
-const DB_VERSION = 1;
+// === ЗАГЛУШКИ ДЛЯ CLOUDINARY ===
+// Здесь тебе нужно будет реализовать логику работы с облаком
 
-function openDB() {
-    return new Promise((resolve, reject) => {
-        const request = indexedDB.open(DB_NAME, DB_VERSION);
-        
-        request.onupgradeneeded = function(e) {
-            const db = e.target.result;
-            if (!db.objectStoreNames.contains(STORE_NAME)) {
-                const store = db.createObjectStore(STORE_NAME, { 
-                    keyPath: 'id' 
-                });
-                store.createIndex('name', 'name', { unique: false });
-                store.createIndex('date', 'date', { unique: false });
-            }
-        };
-        
-        request.onsuccess = function(e) {
-            resolve(e.target.result);
-        };
-        
-        request.onerror = function(e) {
-            reject(e.target.error);
-        };
-    });
+// Функция загрузки треков в облако
+async function uploadTrackToCloud(file) {
+    // TODO: Реализовать загрузку файла в Cloudinary
+    // Возвращать объект с данными трека (url, name, size, duration, id)
+    console.log('Загрузка файла:', file.name);
+    return null;
 }
 
-// функция сохранения трека в базу данных
-async function saveTrackToDB(trackData) {
-    try {
-        const db = await openDB();
-        return new Promise((resolve, reject) => {
-            const transaction = db.transaction([STORE_NAME], 'readwrite');
-            const store = transaction.objectStore(STORE_NAME);
-            const request = store.add(trackData);
-            
-            request.onsuccess = () => resolve();
-            request.onerror = () => reject(request.error);
-        });
-    } catch (error) {
-        console.error('Ошибка сохранения:', error);
-        throw error;
-    }
+// Функция получения списка треков
+async function loadTracksFromCloud() {
+    // TODO: Реализовать получение списка треков
+    // Возвращать массив треков
+    console.log('Загрузка списка треков');
+    return [];
 }
 
-// загрузка всех треков из базы данных
-async function loadAllTracks() {
-    try {
-        const db = await openDB();
-        return new Promise((resolve, reject) => {
-            const transaction = db.transaction([STORE_NAME], 'readonly');
-            const store = transaction.objectStore(STORE_NAME);
-            const request = store.getAll();
-            
-            request.onsuccess = () => resolve(request.result || []);
-            request.onerror = () => reject(request.error);
-        });
-    } catch (error) {
-        console.error('Ошибка загрузки:', error);
-        return [];
-    }
+// Функция удаления трека
+async function deleteTrackFromCloud(trackId) {
+    // TODO: Реализовать удаление трека из облака
+    console.log('Удаление трека:', trackId);
 }
 
-// функция удаления трека из базы данных
-async function deleteTrackFromDB(trackId) {
-    try {
-        const db = await openDB();
-        return new Promise((resolve, reject) => {
-            const transaction = db.transaction([STORE_NAME], 'readwrite');
-            const store = transaction.objectStore(STORE_NAME);
-            const request = store.delete(trackId);
-            
-            request.onsuccess = () => resolve();
-            request.onerror = () => reject(request.error);
-        });
-    } catch (error) {
-        console.error('Ошибка удаления:', error);
-        throw error;
-    }
-}
-
-// функция получения информации об базе данных
-async function getStorageInfo() {
-    try {
-        const tracks = await loadAllTracks();
-        let totalSize = 0;
-        tracks.forEach(track => {
-            if (track.data) {
-                totalSize += track.data.byteLength || 0;
-            }
-        });
-        return {
-            count: tracks.length,
-            totalSize: totalSize,
-            totalSizeMB: (totalSize / (1024 * 1024)).toFixed(2)
-        };
-    } catch (error) {
-        console.error('Ошибка получения инфо:', error);
-        return { count: 0, totalSize: 0, totalSizeMB: '0' };
-    }
-}
-
-// функция добавление файлов в базу данных
-async function addFilesToDB(files) {
-    const MAX_FILE_SIZE = 50 * 1024 * 1024;
-    const ALLOWED_TYPES = ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/flac', 'audio/aac'];
-    let successCount = 0;
-    let errorCount = 0;
-    
-    for (const file of files) {
-        if (file.size > MAX_FILE_SIZE) {
-            showAlert(`Файл "${file.name}" слишком большой (${(file.size/1024/1024).toFixed(1)}MB > 50MB)`, '⚠️');
-            errorCount++;
-            continue;
-        }
-
-        if (!ALLOWED_TYPES.includes(file.type)) {
-            showAlert(`Файл "${file.name}" имеет неподдерживаемый формат`, '⚠️');
-            errorCount++;
-            continue;
-        }
-
-        try {
-            const arrayBuffer = await file.arrayBuffer();
-            
-            const trackData = {
-                id: Date.now() + '_' + Math.random().toString(36).substr(2, 9),
-                name: file.name,
-                size: file.size,
-                type: file.type,
-                data: arrayBuffer,
-                date: new Date().toISOString()
-            };
-            
-            await saveTrackToDB(trackData);
-            successCount++;
-        } catch (error) {
-            console.error(`Ошибка загрузки ${file.name}:`, error);
-            showAlert(`❌ Ошибка загрузки "${file.name}"`, '❌');
-            errorCount++;
-        }
-    }
-    
-    await renderMusicFileListDB();
-    
-    if (successCount > 0) {
-        const info = await getStorageInfo();
-        showAlert(`Загружено ${successCount} треков!\nВсего: ${info.count} треков (${info.totalSizeMB} MB)`, '✅');
-    }
-    if (errorCount > 0 && successCount === 0) {
-        showAlert(`Ошибка: файл не загружен!`, '⚠️');
-    }
-}
-
-async function renderMusicFileListDB() {
+// Функция отрисовки списка треков
+function renderMusicFileListDB() {
     if (!fileList) {
         return;
     }
     
-    fileList.innerHTML = '';
-    
-    const tracks = await loadAllTracks();
-    
-    if (tracks.length === 0) {
-        fileList.innerHTML = `
-            <div style="text-align: center; color: #5a4a6a; padding: 20px; font-family: Segoe UI;">
-                🎵 Нет загруженных треков
-            </div>
-        `;
-        return;
-    }
-
-    const info = await getStorageInfo();
-    
-    // Информационная строка
-    const infoRow = document.createElement('div');
-    infoRow.style.cssText = `
-        padding: 8px 12px;
-        font-family: 'Segoe UI', sans-serif;
-        font-size: 12px;
-        color: #5a4a6a;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-        display: flex;
-        justify-content: space-between;
-    `;
-    infoRow.innerHTML = `
-        <span> ${tracks.length} треков</span>
-        <span> ${info.totalSizeMB} MB</span>
-    `;
-    fileList.appendChild(infoRow);
-    
-    const sortedTracks = [...tracks].sort((a, b) => 
-        new Date(b.date) - new Date(a.date)
-    );
-    
-    sortedTracks.forEach(track => {
-        const item = document.createElement('div');
-        item.className = 'music-file-item';
-        
-        const sizeMB = (track.size / (1024 * 1024)).toFixed(1);
-        const sizeLabel = track.size > 1024 * 1024 
-            ? sizeMB + ' MB'
-            : (track.size / 1024).toFixed(1) + ' KB';
-        
-        const name = track.name.length > 30 ? track.name.slice(0, 27) + '...' : track.name;
-        
-        item.innerHTML = `
-            <span class="file-name">🎵 ${name}</span>
-            <span class="file-size">${sizeLabel}</span>
-            <button class="file-remove" data-id="${track.id}">✕</button>
-        `;
-        
-        item.querySelector('.file-remove').addEventListener('click', async function(e) {
-            e.stopPropagation();
-            if (confirm(`Удалить трек "${track.name}"?`)) {
-                await deleteTrackFromDB(track.id);
-                await renderMusicFileListDB();
-                showAlert(` Трек "${track.name}" успешно удалён!`, '🗑️');
-            }
-        });
-        
-        fileList.appendChild(item);
-    });
+    // TODO: Получить список треков и отрисовать их
+    fileList.innerHTML = '<div style="text-align: center; padding: 20px;">🎵 Список треков будет здесь</div>';
 }
 
-
-async function handleMusicFilesDB(files) {
-    if (files.length === 0) return;
-    await addFilesToDB(files);
-    if (fileInput) {
-        fileInput.value = '';
-    }
-}
-
-
+// Обработчик выбора файлов
 if (dropZone && fileInput) {
     // Клик для открытия диалога
     dropZone.addEventListener('click', function(e) {
@@ -1921,9 +1719,10 @@ if (dropZone && fileInput) {
     // Выбор файлов через диалог
     fileInput.addEventListener('change', function(e) {
         if (this.files && this.files.length > 0) {
-            handleMusicFilesDB(this.files);
+            // TODO: Обработать выбранные файлы
+            console.log('Выбрано файлов:', this.files.length);
+            this.value = '';
         }
-        this.value = '';
     });
 
     // Drag & Drop
@@ -1943,7 +1742,8 @@ if (dropZone && fileInput) {
         
         const files = e.dataTransfer.files;
         if (files && files.length > 0) {
-            handleMusicFilesDB(files);
+            // TODO: Обработать перетащенные файлы
+            console.log('Перетащено файлов:', files.length);
         }
     });
 
@@ -1954,13 +1754,7 @@ if (dropZone && fileInput) {
 
 if (modalConfirmBtn) {
     modalConfirmBtn.addEventListener('click', async function() {
-        const tracks = await loadAllTracks();
-        if (tracks.length === 0) {
-            showAlert('Пожалуйста, загрузите файлы!', '⚠️');
-            return;
-        }
-        const info = await getStorageInfo();
-        showAlert(`Загружено ${tracks.length} треков (${info.totalSizeMB} MB)`, '✅');
+        // TODO: Реализовать логику подтверждения
         closeModalMusic();
     });
 }
