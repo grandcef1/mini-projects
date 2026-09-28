@@ -794,20 +794,20 @@ function renderTasks(tasks) {
 
 //функция сокращения стркои для choosingRow
 function cutText(text) {
-        if (!text) return '';
-        // для адаптивности: если ширина меньше 900px, лимит 8 символов, иначе 35
-        const limit = window.innerWidth < 900 ? 5 : 35;
-        
-        if (text.length > limit) {
-            return text.slice(0, limit) + '...';
-        }
-        return text;
+    if (!text) return '';
+    // для адаптивности: если ширина меньше 900px, лимит 8 символов, иначе 35
+    const limit = window.innerWidth < 900 ? 5 : 35;
+
+    if (text.length > limit) {
+        return text.slice(0, limit) + '...';
+    }
+    return text;
 }
 
 let resizeTimeout;
-window.addEventListener('resize', function() {
+window.addEventListener('resize', function () {
     clearTimeout(resizeTimeout);
-    
+
     resizeTimeout = setTimeout(() => {
         if (currentSelectedTask) {
             choosingRowElement.textContent = `Выбрано: ${cutText(currentSelectedTask.text)}`;
@@ -1643,17 +1643,17 @@ const closeBtnMusic = document.querySelector('.btnClose');
 
 function openModalMusic() {
     const mainContent = document.querySelector('.main-content');
-    
+
     modalOverlayMusic.classList.add('show');
     mainContent.style.filter = 'blur(2px)';
     mainContent.style.pointerEvents = 'none';
-    
+
     renderMusicFileListDB();
 }
 
 function closeModalMusic() {
     const mainContent = document.querySelector('.main-content');
-    
+
     if (modalOverlayMusic) {
         modalOverlayMusic.classList.remove('show');
     }
@@ -1662,25 +1662,53 @@ function closeModalMusic() {
 }
 
 // === ОБРАБОТЧИК НА КНОПКУ ЗАГРУЗКИ (ГЛАВНЫЙ) === 
-    loadTrackBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        console.log('🎵 Клик по кнопке загрузки (img)');
-        openModalMusic();
-    });
+loadTrackBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+    console.log('🎵 Клик по кнопке загрузки (img)');
+    openModalMusic();
+});
 
 closeBtnMusic.addEventListener('click', closeModalMusic);
 
 
-// === ЗАГЛУШКИ ДЛЯ CLOUDINARY ===
-// Здесь тебе нужно будет реализовать логику работы с облаком
+//облако Cloudinary
+const cloudName = 'mddvc8xi';
+const uploadPreset = 'music_player_uploads';
+
+//Массив,где будут хранится перетащенные треки
+let pendingFiles = [];
 
 // Функция загрузки треков в облако
-async function uploadTrackToCloud(file) {
-    // TODO: Реализовать загрузку файла в Cloudinary
-    // Возвращать объект с данными трека (url, name, size, duration, id)
-    console.log('Загрузка файла:', file.name);
-    return null;
+async function uploadTrackToCloud(currentFile) {
+    console.log('Загрузка файла:', currentFile.name);
+    const formData = new FormData();
+    formData.append('file', currentFile);
+    formData.append('upload_preset', uploadPreset);
+    
+    
+    try {
+        const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/video/upload`, {
+            method: 'POST',
+            body: formData
+        });
+        if (!response.ok){
+            console.log('Сервер вернул ошибку:',response.status);
+            return null;
+        }
+        const data = await response.json();
+        console.log(data);
+        return {
+            url: data.secure_url,          
+            publicId: data.public_id,     // идентификатор для удаления
+            name: data.original_filename,         // имя трека
+            duration: data.duration,     // длительность в секундах
+            size: data.bytes         // размер в байтах
+        };
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
 }
 
 // Функция получения списка треков
@@ -1702,7 +1730,7 @@ function renderMusicFileListDB() {
     if (!fileList) {
         return;
     }
-    
+
     // TODO: Получить список треков и отрисовать их
     fileList.innerHTML = '<div style="text-align: center; padding: 20px;">🎵 Список треков будет здесь</div>';
 }
@@ -1710,40 +1738,41 @@ function renderMusicFileListDB() {
 // Обработчик выбора файлов
 if (dropZone && fileInput) {
     // Клик для открытия диалога
-    dropZone.addEventListener('click', function(e) {
+    dropZone.addEventListener('click', function (e) {
         if (e.target === dropZone || e.target.closest('.drop-zone-music')) {
             fileInput.click();
         }
     });
 
     // Выбор файлов через диалог
-    fileInput.addEventListener('change', function(e) {
+    fileInput.addEventListener('change', function (e) {
         if (this.files && this.files.length > 0) {
             // TODO: Обработать выбранные файлы
             console.log('Выбрано файлов:', this.files.length);
-            this.value = '';
+            pendingFiles = [...pendingFiles, ...Array.from(this.files)];
         }
     });
 
     // Drag & Drop
-    dropZone.addEventListener('dragover', function(e) {
+    dropZone.addEventListener('dragover', function (e) {
         e.preventDefault();
         this.classList.add('dragover');
     });
 
-    dropZone.addEventListener('dragleave', function(e) {
+    dropZone.addEventListener('dragleave', function (e) {
         e.preventDefault();
         this.classList.remove('dragover');
     });
 
-    dropZone.addEventListener('drop', function(e) {
+
+    dropZone.addEventListener('drop', function (e) {
         e.preventDefault();
         this.classList.remove('dragover');
-        
-        const files = e.dataTransfer.files;
-        if (files && files.length > 0) {
+
+        pendingFiles = [...pendingFiles, ...Array.from(e.dataTransfer.files)];
+        if (pendingFiles && pendingFiles.length > 0) {
             // TODO: Обработать перетащенные файлы
-            console.log('Перетащено файлов:', files.length);
+            console.log('Перетащено файлов:', pendingFiles.length);
         }
     });
 
@@ -1753,18 +1782,20 @@ if (dropZone && fileInput) {
 }
 
 if (modalConfirmBtn) {
-    modalConfirmBtn.addEventListener('click', async function() {
-        // TODO: Реализовать логику подтверждения
+    modalConfirmBtn.addEventListener('click', async function () {
+        for(let i = 0; i < pendingFiles.length;i++){
+            await uploadTrackToCloud(pendingFiles[i]);
+        }
         closeModalMusic();
     });
 }
 
 
-document.addEventListener('dragover', function(e) {
+document.addEventListener('dragover', function (e) {
     e.preventDefault();
 });
 
-document.addEventListener('drop', function(e) {
+document.addEventListener('drop', function (e) {
     e.preventDefault();
 });
 
@@ -1776,29 +1807,29 @@ let burgerMenuImg = document.getElementById('burger-menu-img');
 let isBurgerOpen = false;
 let mainContent = document.querySelector('.main-content');
 
-burgerMenu.addEventListener('click', function() {
+burgerMenu.addEventListener('click', function () {
     containerNav.style.animation = 'BurgerFadeIn 0.3s ease';
     if (isBurgerOpen) {
         burgerMenuImg.src = 'icons/burger-menu-icon.png';
-        burgerMenu.width = '40px';  
-        burgerMenu.height = '40px'; 
+        burgerMenu.width = '40px';
+        burgerMenu.height = '40px';
         containerNav.style.display = 'none';
         isBurgerOpen = false;
     } else {
         burgerMenuImg.src = 'icons/close-burger-menu.png';
-        burgerMenu.width = '30px';  
-        burgerMenu.height = '30px'; 
+        burgerMenu.width = '30px';
+        burgerMenu.height = '30px';
         containerNav.style.display = 'flex';
         isBurgerOpen = true;
     }
 });
 
-window.addEventListener('resize', function() {
+window.addEventListener('resize', function () {
     if (window.innerWidth > 1165) {
         // пустая строка потому что тогда удаляется инлайн стиль,у которого приоритет выше чем у обычного css
         // и контейнер снова подчиняется css
-        containerNav.style.display = ''; 
-        isBurgerOpen = false; 
+        containerNav.style.display = '';
+        isBurgerOpen = false;
         burgerMenuImg.src = 'icons/burger-menu-icon.png';
         burgerMenu.style.width = '40px';
         burgerMenu.style.height = '40px';
