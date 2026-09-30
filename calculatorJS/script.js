@@ -6,8 +6,26 @@ let originalTask = null;
 
 let timerCircle = null;
 let FULL_DASH = 0;
+let userID = initializeUser();
+
+    //Функция получения ID текущего пользователя
+    function initializeUser() {
+        if (localStorage.userID) {
+            return localStorage.userID;
+        } else {
+            const timestamp = Date.now();
+            const randomNum = Math.floor(Math.random() * 1000000);
+
+            const result = `${timestamp}${randomNum}`;
+            localStorage.userID = result;
+            return result;
+        }
+        
+    }
+
 
 document.addEventListener('DOMContentLoaded', function () {
+    tracks = loadTracksFromStorage();
     renderMusicFileListDB();
 
     timerCircle = document.getElementById('timer-circle');
@@ -1659,6 +1677,9 @@ function closeModalMusic() {
     }
     mainContent.style.filter = 'none';
     mainContent.style.pointerEvents = 'auto';
+
+    pendingFiles = [];
+    renderMusicFileListDB();
 }
 
 // === ОБРАБОТЧИК НА КНОПКУ ЗАГРУЗКИ (ГЛАВНЫЙ) === 
@@ -1707,6 +1728,7 @@ async function uploadTrackToCloud(currentFile) {
     const formData = new FormData();
     formData.append('file', currentFile);
     formData.append('upload_preset', uploadPreset);
+    formData.append('folder', `tracks/user_${userID}`);
 
 
     try {
@@ -1733,16 +1755,25 @@ async function uploadTrackToCloud(currentFile) {
     }
 }
 
+//Функция сохранения списка треов
+function saveTracksToStorage(){
+    let key = `tracks_user_${userID}`;
+    localStorage.setItem(`${key}`, JSON.stringify(tracks));
+}
+
 // Функция получения списка треков
-async function loadTracksFromCloud() {
-    // TODO: Реализовать получение списка треков
-    // Возвращать массив треков
+function loadTracksFromStorage() {
+    let key = `tracks_user_${userID}`;
     console.log('Загрузка списка треков');
+    let savedTracks = localStorage.getItem(`${key}`);
+    if (savedTracks) {
+        return JSON.parse(savedTracks);
+    }
     return [];
 }
 
 // Функция удаления трека
-async function deleteTrackFromCloud(trackId) {
+async function deleteTrackFromStorage(trackId) {
     // TODO: Реализовать удаление трека из облака
     console.log('Удаление трека:', trackId);
 }
@@ -1753,23 +1784,34 @@ function renderMusicFileListDB() {
         return;
     }
 
-    
-    if (tracks.length === 0) {
+    // Если ничего нет — показываем placeholder
+    if (tracks.length === 0 && pendingFiles.length === 0) {
         fileList.innerHTML = '<div style="text-align: center; padding: 20px; color: #5a4a6a;">🎵 Список треков пуст</div>';
         return;
     }
 
-    
     fileList.innerHTML = '';
 
-    
+    // 1. ожидающие загрузки
+    for (let i = 0; i < pendingFiles.length; i++) {
+        const file = pendingFiles[i];
+        fileList.innerHTML += `
+            <div class="music-file-item pending">
+                <div class="file-name"> ${file.name}</div>
+                <div class="file-size">• Ожидает загрузки ${formatFileSize(file.size)}</div>
+                <button class="file-remove" data-pending-index="${i}">✕</button>
+            </div>
+        `;
+    }
+
+    // 2. загруженные треки
     for (let i = 0; i < tracks.length; i++) {
         const track = tracks[i];
         fileList.innerHTML += `
             <div class="music-file-item">
                 <div class="file-name">🎵 ${track.name}</div>
                 <div class="file-size">${formatDuration(track.duration)} • ${formatFileSize(track.size)}</div>
-                <button class="file-remove" data-index="${i}">✕</button>
+                <button class="file-remove" data-track-index="${i}">✕</button>
             </div>
         `;
     }
@@ -1790,6 +1832,7 @@ if (dropZone && fileInput) {
             // TODO: Обработать выбранные файлы
             console.log('Выбрано файлов:', this.files.length);
             pendingFiles = [...pendingFiles, ...Array.from(this.files)];
+            renderMusicFileListDB();
         }
     });
 
@@ -1811,6 +1854,7 @@ if (dropZone && fileInput) {
 
         pendingFiles = [...pendingFiles, ...Array.from(e.dataTransfer.files)];
         if (pendingFiles && pendingFiles.length > 0) {
+            renderMusicFileListDB();
             // TODO: Обработать перетащенные файлы
             console.log('Перетащено файлов:', pendingFiles.length);
         }
@@ -1824,11 +1868,11 @@ if (dropZone && fileInput) {
 if (modalConfirmBtn) {
     modalConfirmBtn.addEventListener('click', async function () {
         showLoadingModal(0, pendingFiles.length);
-        
+
         for (let i = 0; i < pendingFiles.length; i++) {
             console.log(`Загрузка: ${i + 1} из ${pendingFiles.length}`);
             showLoadingModal(i + 1, pendingFiles.length);
-            
+
             const currentTrack = await uploadTrackToCloud(pendingFiles[i]);
             if (currentTrack !== null) {
                 tracks.push(currentTrack);
@@ -1836,13 +1880,14 @@ if (modalConfirmBtn) {
                 console.log(`Ошибка загрузки трека №${i + 1}`);
             }
         }
-        
+
         pendingFiles = [];
         hideLoadingModal();
-        
+
         if (tracks.length > 0) {
             showAlert(`Успешно загружено треков: ${tracks.length}`, '✓');
-            renderMusicFileListDB();   // ← ПРОСТО ВЫЗОВ ФУНКЦИИ!
+            renderMusicFileListDB();
+            saveTracksToStorage();
         } else {
             showAlert('Ошибка загрузки выбранных треков', '✗');
         }
