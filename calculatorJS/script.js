@@ -1676,8 +1676,30 @@ closeBtnMusic.addEventListener('click', closeModalMusic);
 const cloudName = 'mddvc8xi';
 const uploadPreset = 'music_player_uploads';
 
+
 //Массив,где будут хранится перетащенные треки
 let pendingFiles = [];
+
+//Массив где будут хранится обьекты треков
+let tracks = [];
+
+// Форматирование длительности из секунд в MM:SS
+function formatDuration(seconds) {
+    if (!seconds || isNaN(seconds)) return '0:00';
+
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+
+    return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+}
+
+// Форматирование размера из байтов в MB
+function formatFileSize(bytes) {
+    if (!bytes) return '0 MB';
+    const mb = bytes / (1024 * 1024);
+    return `${mb.toFixed(1)} MB`;
+}
+
 
 // Функция загрузки треков в облако
 async function uploadTrackToCloud(currentFile) {
@@ -1685,21 +1707,21 @@ async function uploadTrackToCloud(currentFile) {
     const formData = new FormData();
     formData.append('file', currentFile);
     formData.append('upload_preset', uploadPreset);
-    
-    
+
+
     try {
         const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/video/upload`, {
             method: 'POST',
             body: formData
         });
-        if (!response.ok){
-            console.log('Сервер вернул ошибку:',response.status);
+        if (!response.ok) {
+            console.log('Сервер вернул ошибку:', response.status);
             return null;
         }
         const data = await response.json();
         console.log(data);
         return {
-            url: data.secure_url,          
+            url: data.secure_url,
             publicId: data.public_id,     // идентификатор для удаления
             name: data.original_filename,         // имя трека
             duration: data.duration,     // длительность в секундах
@@ -1731,8 +1753,26 @@ function renderMusicFileListDB() {
         return;
     }
 
-    // TODO: Получить список треков и отрисовать их
-    fileList.innerHTML = '<div style="text-align: center; padding: 20px;">🎵 Список треков будет здесь</div>';
+    
+    if (tracks.length === 0) {
+        fileList.innerHTML = '<div style="text-align: center; padding: 20px; color: #5a4a6a;">🎵 Список треков пуст</div>';
+        return;
+    }
+
+    
+    fileList.innerHTML = '';
+
+    
+    for (let i = 0; i < tracks.length; i++) {
+        const track = tracks[i];
+        fileList.innerHTML += `
+            <div class="music-file-item">
+                <div class="file-name">🎵 ${track.name}</div>
+                <div class="file-size">${formatDuration(track.duration)} • ${formatFileSize(track.size)}</div>
+                <button class="file-remove" data-index="${i}">✕</button>
+            </div>
+        `;
+    }
 }
 
 // Обработчик выбора файлов
@@ -1783,10 +1823,29 @@ if (dropZone && fileInput) {
 
 if (modalConfirmBtn) {
     modalConfirmBtn.addEventListener('click', async function () {
-        for(let i = 0; i < pendingFiles.length;i++){
-            await uploadTrackToCloud(pendingFiles[i]);
+        showLoadingModal(0, pendingFiles.length);
+        
+        for (let i = 0; i < pendingFiles.length; i++) {
+            console.log(`Загрузка: ${i + 1} из ${pendingFiles.length}`);
+            showLoadingModal(i + 1, pendingFiles.length);
+            
+            const currentTrack = await uploadTrackToCloud(pendingFiles[i]);
+            if (currentTrack !== null) {
+                tracks.push(currentTrack);
+            } else {
+                console.log(`Ошибка загрузки трека №${i + 1}`);
+            }
         }
-        closeModalMusic();
+        
+        pendingFiles = [];
+        hideLoadingModal();
+        
+        if (tracks.length > 0) {
+            showAlert(`Успешно загружено треков: ${tracks.length}`, '✓');
+            renderMusicFileListDB();   // ← ПРОСТО ВЫЗОВ ФУНКЦИИ!
+        } else {
+            showAlert('Ошибка загрузки выбранных треков', '✗');
+        }
     });
 }
 
@@ -1798,6 +1857,21 @@ document.addEventListener('dragover', function (e) {
 document.addEventListener('drop', function (e) {
     e.preventDefault();
 });
+
+
+//Модальное окно ожидания
+const loadingMusicOverlay = document.getElementById('loadingOverlay');
+const loadingProgress = document.getElementById('loadingProgress');
+
+
+function showLoadingModal(current, total) {
+    loadingMusicOverlay.classList.add('show');
+    loadingProgress.textContent = `Загрузка: ${current} из ${total}.`;
+}
+
+function hideLoadingModal() {
+    loadingMusicOverlay.classList.remove('show');
+}
 
 //Обработчик события для бургер меню
 
