@@ -26,6 +26,7 @@ let userID = initializeUser();
 
 document.addEventListener('DOMContentLoaded', function () {
     tracks = loadTracksFromStorage();
+    renderMusicTrackListMain();
     renderMusicFileListDB();
 
     timerCircle = document.getElementById('timer-circle');
@@ -1658,6 +1659,10 @@ const fileList = document.getElementById('musicFileList');
 const modalConfirmBtn = document.getElementById('modalMusicConfirmBtn');
 const modalOverlayMusic = document.getElementById('modalOverlayMusic');
 const closeBtnMusic = document.querySelector('.btnClose');
+const loadIcon = document.querySelector('.loadIcon');
+const loadIconMini = document.getElementById('loadTrackMiniBtn');
+const tracksWind = document.querySelector('.tracksWind');
+const mainTracksList = document.querySelector('.main-tracks-list');
 
 function openModalMusic() {
     const mainContent = document.querySelector('.main-content');
@@ -1682,8 +1687,14 @@ function closeModalMusic() {
     renderMusicFileListDB();
 }
 
-// === ОБРАБОТЧИК НА КНОПКУ ЗАГРУЗКИ (ГЛАВНЫЙ) === 
 loadTrackBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+    console.log('🎵 Клик по кнопке загрузки (img)');
+    openModalMusic();
+});
+
+loadIconMini.addEventListener('click', function (e) {
     e.stopPropagation();
     e.preventDefault();
     console.log('🎵 Клик по кнопке загрузки (img)');
@@ -1778,7 +1789,7 @@ async function deleteTrackFromStorage(trackId) {
     console.log('Удаление трека:', trackId);
 }
 
-// Функция отрисовки списка треков
+// Функция отрисовки списка треков в модальном окне загрузки
 function renderMusicFileListDB() {
     if (!fileList) {
         return;
@@ -1814,6 +1825,41 @@ function renderMusicFileListDB() {
                 <button class="file-remove" data-track-index="${i}">✕</button>
             </div>
         `;
+    }
+}
+
+function renderMusicTrackListMain() {
+    if (!mainTracksList) {
+        console.error('mainTracksList не найден в DOM');
+        return;
+    }
+
+    mainTracksList.innerHTML = '';
+
+    const hasTracks = tracks.length > 0;
+
+     
+    tracksWind.classList.toggle('has-tracks', hasTracks);
+
+    if (hasTracks) {
+        loadTrackContainer.style.display = 'none';
+        mainTracksList.style.display = 'block';
+
+        for (let i = 0; i < tracks.length; i++) {
+            const track = tracks[i];
+            mainTracksList.innerHTML += `
+                <div class="main-track-item" data-track-index="${i}">
+                    <div class="track-name">🎵 ${track.name}</div>
+                    <div class="track-info">
+                        <div class="track-duration">${formatDuration(track.duration)}</div>
+                        <div class="track-menu">⋮</div>
+                    </div>
+                </div>
+            `;
+        }
+    } else {
+        loadTrackContainer.style.display = 'flex';
+        mainTracksList.style.display = 'none';    
     }
 }
 
@@ -1887,7 +1933,9 @@ if (modalConfirmBtn) {
         if (tracks.length > 0) {
             showAlert(`Успешно загружено треков: ${tracks.length}`, '✓');
             renderMusicFileListDB();
+            renderMusicTrackListMain();
             saveTracksToStorage();
+
         } else {
             showAlert('Ошибка загрузки выбранных треков', '✗');
         }

@@ -1808,8 +1808,150 @@ nav div:hover {
     border: 3px solid #ffffff;
     background: #ffffff2d;
     display: flex;
-    justify-content: center;
+    justify-content: center;    
+    align-items: center;        
+}
+
+/* если есть треки меняем flex свойства*/
+.tracksWind.has-tracks {
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+.main-tracks-list {
+    width: 100%;
+    height: 100%;                  
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 15px;
+    box-sizing: border-box;
+    display: none;    
+}
+
+.main-tracks-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.main-tracks-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+}
+
+.main-tracks-list::-webkit-scrollbar-thumb {
+    background: rgba(90, 60, 152, 0.6);
+    border-radius: 3px;
+}
+
+.main-tracks-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(90, 60, 152, 0.8);
+}
+
+/* Контейнер одного трека */
+.main-track-item {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.main-track-item:last-child {
+    margin-bottom: 0;
+}
+
+.main-track-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.25);
+    transform: translateX(3px);
+}
+
+/* Название трека */
+.main-track-item .track-name {
+    flex: 1;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 15px;
+}
+
+/* Правая часть: длительность + три точки */
+.main-track-item .track-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+/* Длительность трека */
+.main-track-item .track-duration {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+    font-weight: 400;
+}
+
+/* Три точки (меню) */
+.main-track-item .track-menu {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 1;
+    padding: 5px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    user-select: none;
+}
+
+.main-track-item .track-menu:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 845px) {
+    .main-track-item {
+        padding: 10px 12px;
+    }
+    
+    .main-track-item .track-name {
+        font-size: 13px;
+    }
+    
+    .main-track-item .track-duration {
+        font-size: 11px;
+    }
+    
+    .main-track-item .track-menu {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 750px) {
+    .main-tracks-list {
+        padding: 8px;
+    }
+    
+    .main-track-item {
+        padding: 8px 10px;
+        margin-bottom: 6px;
+    }
+    
+    .main-track-item .track-name {
+        font-size: 12px;
+    }
+    
+    .main-track-item .track-duration {
+        font-size: 10px;
+    }
 }
 
 .controlPanel {
@@ -1832,6 +1974,16 @@ nav div:hover {
     align-items: center;
     padding-left: 10px;
     gap: 20px;
+}
+
+.controlPanelTwoContainer{
+    display: flex;
+    flex: 1;
+    height: 100%;
+    justify-content: flex-end;
+    padding-right: 10px;
+    align-items: center;
+    gap: 10px;
 }
 
 .choosingTracksBtn {
@@ -1921,6 +2073,29 @@ nav div:hover {
     cursor: pointer;
 }
 
+#infoMusicPlayer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all ease 0.2s;
+
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+#infoMusicPlayer:hover {
+    transform: scale(1.05);
+    background: #6b4e8e;
+    box-shadow: 0 0 30px 1px rgba(0, 0, 0, 0.30);
+}
+
 .loadTrackContainer {
     display: flex;
     flex-direction: column;
@@ -1934,6 +2109,25 @@ nav div:hover {
     align-items: center;
     width: 100%;
     height: 90px;
+}
+
+.loadIconMini {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 50px;
+}
+
+.loadIconMini img {
+    transition: all ease-in-out 0.2s;
+    opacity: 0.8;
+}
+
+.loadIconMini img:hover {
+    transform: scale(1.1);
+    opacity: 1;
+    cursor: pointer;
 }
 
 .loadIcon img {
