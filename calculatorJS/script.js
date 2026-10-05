@@ -1701,6 +1701,30 @@ loadIconMini.addEventListener('click', function (e) {
     openModalMusic();
 });
 
+//обработчик для модального окна(удаление треков)
+fileList.addEventListener('click', function (event) {
+    const removeButton = event.target.closest('.file-remove');
+    
+    if (!removeButton) {
+        return;
+    }
+    
+    const trackIndex = removeButton.getAttribute('data-track-index');
+    const pendingIndex = removeButton.getAttribute('data-pending-index');
+
+    if(trackIndex != null){
+        tracks.splice(trackIndex, 1);
+    saveTracksToStorage();
+    renderMusicTrackListMain();
+    showAlert('Аудиозапись успешно удалена!','✔');
+    } else {
+        pendingFiles.splice(pendingIndex, 1);
+    }
+
+    renderMusicFileListDB();
+    
+});
+
 closeBtnMusic.addEventListener('click', closeModalMusic);
 
 
