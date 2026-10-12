@@ -8,20 +8,20 @@ let timerCircle = null;
 let FULL_DASH = 0;
 let userID = initializeUser();
 
-    //Функция получения ID текущего пользователя
-    function initializeUser() {
-        if (localStorage.userID) {
-            return localStorage.userID;
-        } else {
-            const timestamp = Date.now();
-            const randomNum = Math.floor(Math.random() * 1000000);
+//Функция получения ID текущего пользователя
+function initializeUser() {
+    if (localStorage.userID) {
+        return localStorage.userID;
+    } else {
+        const timestamp = Date.now();
+        const randomNum = Math.floor(Math.random() * 1000000);
 
-            const result = `${timestamp}${randomNum}`;
-            localStorage.userID = result;
-            return result;
-        }
-        
+        const result = `${timestamp}${randomNum}`;
+        localStorage.userID = result;
+        return result;
     }
+
+}
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -1663,6 +1663,12 @@ const loadIcon = document.querySelector('.loadIcon');
 const loadIconMini = document.getElementById('loadTrackMiniBtn');
 const tracksWind = document.querySelector('.tracksWind');
 const mainTracksList = document.querySelector('.main-tracks-list');
+const audioPlayer = document.getElementById('audioPlayer');
+audioPlayer.crossOrigin = 'anonymous';
+const playBtn = document.querySelector('.playBtn');
+const previousTrackBtn = document.querySelector('.previousTrackBtn');
+const nextTrackBtn = document.querySelector('.nextTrackBtn');
+const shuffleBtn = document.querySelector('.shuffleBtn');
 
 function openModalMusic() {
     const mainContent = document.querySelector('.main-content');
@@ -1704,25 +1710,25 @@ loadIconMini.addEventListener('click', function (e) {
 //обработчик для модального окна(удаление треков)
 fileList.addEventListener('click', function (event) {
     const removeButton = event.target.closest('.file-remove');
-    
+
     if (!removeButton) {
         return;
     }
-    
+
     const trackIndex = removeButton.getAttribute('data-track-index');
     const pendingIndex = removeButton.getAttribute('data-pending-index');
 
-    if(trackIndex != null){
+    if (trackIndex != null) {
         tracks.splice(trackIndex, 1);
-    saveTracksToStorage();
-    renderMusicTrackListMain();
-    showAlert('Аудиозапись успешно удалена!','✔');
+        saveTracksToStorage();
+        renderMusicTrackListMain();
+        showAlert('Аудиозапись успешно удалена!', '✔');
     } else {
         pendingFiles.splice(pendingIndex, 1);
     }
 
     renderMusicFileListDB();
-    
+
 });
 
 closeBtnMusic.addEventListener('click', closeModalMusic);
@@ -1738,6 +1744,10 @@ let pendingFiles = [];
 
 //Массив где будут хранится обьекты треков
 let tracks = [];
+//текущий индекс трека
+let currentPlayingTrackIndex = -1;
+//играет ли что то
+let isPlaying = false;
 
 // Форматирование длительности из секунд в MM:SS
 function formatDuration(seconds) {
@@ -1791,7 +1801,7 @@ async function uploadTrackToCloud(currentFile) {
 }
 
 //Функция сохранения списка треов
-function saveTracksToStorage(){
+function saveTracksToStorage() {
     let key = `tracks_user_${userID}`;
     localStorage.setItem(`${key}`, JSON.stringify(tracks));
 }
@@ -1844,7 +1854,7 @@ function renderMusicFileListDB() {
         const track = tracks[i];
         fileList.innerHTML += `
             <div class="music-file-item">
-                <div class="file-name">🎵 ${track.name}</div>
+                <div class="file-name"><img src = 'icons/nota.png' width = '18px' height = '18px'> ${track.name}</div>
                 <div class="file-size">${formatDuration(track.duration)} • ${formatFileSize(track.size)}</div>
                 <button class="file-remove" data-track-index="${i}">✕</button>
             </div>
@@ -1862,7 +1872,6 @@ function renderMusicTrackListMain() {
 
     const hasTracks = tracks.length > 0;
 
-     
     tracksWind.classList.toggle('has-tracks', hasTracks);
 
     if (hasTracks) {
@@ -1873,7 +1882,7 @@ function renderMusicTrackListMain() {
             const track = tracks[i];
             mainTracksList.innerHTML += `
                 <div class="main-track-item" data-track-index="${i}">
-                    <div class="track-name">🎵 ${track.name}</div>
+                    <div class="track-name"><img src = 'icons/nota.png' width = '18px' height = '18px'> ${track.name}</div>
                     <div class="track-info">
                         <div class="track-duration">${formatDuration(track.duration)}</div>
                         <div class="track-menu">⋮</div>
@@ -1883,9 +1892,75 @@ function renderMusicTrackListMain() {
         }
     } else {
         loadTrackContainer.style.display = 'flex';
-        mainTracksList.style.display = 'none';    
+        mainTracksList.style.display = 'none';
+    }
+    updatePlayingTrackUI();
+
+}
+mainTracksList.addEventListener('click', function (event) {
+    const trackItem = event.target.closest('.main-track-item');
+    if (trackItem && !event.target.closest('.track-menu')) {
+        const index = parseInt(trackItem.getAttribute('data-track-index'));
+        playTrack(index);
+        updatePlayBtnIcon();
+    }
+});
+
+//функция обновления иконки воспроизведения/паузы
+function updatePlayBtnIcon() {
+    const playBtnImg = document.getElementById('playBtnImg');
+    if (isPlaying) {
+        playBtnImg.src = 'icons/pause.png';
+        playBtnImg.style.transform = 'translateX(-3px)';  // паузу чуть влево
+    } else {
+        playBtnImg.src = 'icons/playTrack.png';
+        playBtnImg.style.transform = 'translateX(0)';    // play по центру
     }
 }
+
+
+//функция добавления класса playing к играющему треку
+function updatePlayingTrackUI() {
+    if (!mainTracksList) return;
+
+    const items = mainTracksList.querySelectorAll('.main-track-item');
+    items.forEach(function (item) {
+        const index = parseInt(item.getAttribute('data-track-index'));
+        item.classList.toggle('playing', index === currentPlayingTrackIndex);
+    });
+}
+
+playBtn.addEventListener('click', function () {
+    if (tracks.length === 0) {
+        showAlert('Сначала загрузите треки!', '⚠️');
+        return;
+    }
+
+    if (currentPlayingTrackIndex === -1) {
+        playTrack(0);
+        updatePlayBtnIcon();
+        return;
+    }
+
+    if (isPlaying) {
+
+        audioPlayer.pause();
+        isPlaying = false;
+    } else {
+        audioPlayer.play();
+        isPlaying = true;
+    }
+
+    updatePlayBtnIcon();
+    updatePlayingTrackUI();
+
+});
+
+audioPlayer.addEventListener('ended', function () {
+    const nextIndex = (currentPlayingTrackIndex + 1) % tracks.length;
+    playTrack(nextIndex);
+});
+
 
 // Обработчик выбора файлов
 if (dropZone && fileInput) {
@@ -1975,6 +2050,12 @@ document.addEventListener('drop', function (e) {
     e.preventDefault();
 });
 
+nextTrackBtn.addEventListener('click', nextTrack);
+previousTrackBtn.addEventListener('click', previousTrack);
+shuffleBtn.addEventListener('click', function () {
+    playTrack(randomTrack());
+});
+
 
 //Модальное окно ожидания
 const loadingMusicOverlay = document.getElementById('loadingOverlay');
@@ -1989,6 +2070,285 @@ function showLoadingModal(current, total) {
 function hideLoadingModal() {
     loadingMusicOverlay.classList.remove('show');
 }
+
+function playTrack(index) {
+
+    if (index < 0 || index >= tracks.length) {
+        return;
+    }
+
+    currentPlayingTrackIndex = index;
+    audioPlayer.src = tracks[index].url;
+    audioPlayer.play();
+    isPlaying = true;
+
+    // тут визуальное отображение играющего трека
+    updatePlayBtnIcon();
+    updatePlayingTrackUI();
+}
+
+function nextTrack() {
+    if (tracks.length === 0) {
+        showAlert('Список треков пуст!', '⚠️');
+        return;
+    }
+    const nextIndex = (currentPlayingTrackIndex + 1) % tracks.length;
+    playTrack(nextIndex);
+}
+
+function previousTrack() {
+    if (tracks.length === 0) {
+        showAlert('Список треков пуст!', '⚠️');
+        return;
+    }
+    const prevIndex = (currentPlayingTrackIndex - 1 + tracks.length) % tracks.length;
+    playTrack(prevIndex);
+}
+
+function randomTrack() {
+    const randomIndex = Math.floor(Math.random() * tracks.length);
+    return randomIndex
+}
+
+
+const vizCanvas = document.getElementById('visualizerCanvas');
+const vizTrackName = document.getElementById('visualizerTrackName');
+const vizBackBtn = document.getElementById('visualizerBackBtn');
+const vizCanvasWrap = document.querySelector('.visualizer-canvas-wrap');
+
+let vizAudioCtx = null;
+let vizAnalyser = null;
+let vizAnimationId = null;
+
+function vizInitAudio() {
+    if (vizAudioCtx) return;
+    vizAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    vizAnalyser = vizAudioCtx.createAnalyser();
+    vizAnalyser.fftSize = 256;
+    vizAnalyser.smoothingTimeConstant = 0.82;
+    const source = vizAudioCtx.createMediaElementSource(audioPlayer);
+    source.connect(vizAnalyser);
+    vizAnalyser.connect(vizAudioCtx.destination);
+}
+
+function vizResizeCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    vizCanvas.width = Math.max(1, Math.round(vizCanvasWrap.clientWidth * dpr));
+    vizCanvas.height = Math.max(1, Math.round(vizCanvasWrap.clientHeight * dpr));
+}
+
+function vizStartLoop() {
+    if (vizAnimationId) cancelAnimationFrame(vizAnimationId);
+    vizResizeCanvas();
+
+    const ctx = vizCanvas.getContext('2d');
+    const bufferLength = vizAnalyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    function render() {
+        vizAnimationId = requestAnimationFrame(render);
+        vizAnalyser.getByteFrequencyData(dataArray);
+
+        const w = vizCanvas.width;
+        const h = vizCanvas.height;
+        const dpr = window.devicePixelRatio || 1;
+        const bars = Math.min(64, Math.max(12, Math.floor((w / dpr) / 8)));
+
+        ctx.clearRect(0, 0, w, h);
+
+        const slot = w / bars;
+        const barWidth = slot * 0.62;
+
+        for (let i = 0; i < bars; i++) {
+            const value = dataArray[Math.floor(i * (bufferLength * 0.7) / bars)];
+            const barHeight = Math.max(4 * dpr, (value / 255) * h * 0.92);
+            const x = i * slot + (slot - barWidth) / 2;
+            const y = h - barHeight;
+
+            const gradient = ctx.createLinearGradient(0, h, 0, y);
+            gradient.addColorStop(0, '#5a3c98');
+            gradient.addColorStop(0.55, '#8b6fc8');
+            gradient.addColorStop(1, '#e7ccfc');
+
+            ctx.save();
+            ctx.fillStyle = gradient;
+            ctx.shadowColor = 'rgba(139, 111, 200, 0.75)';
+            ctx.shadowBlur = 12;
+            ctx.beginPath();
+            if (ctx.roundRect) ctx.roundRect(x, y, barWidth, barHeight, barWidth / 2);
+            else ctx.rect(x, y, barWidth, barHeight);
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+    render();
+}
+
+function vizStopLoop() {
+    if (vizAnimationId) {
+        cancelAnimationFrame(vizAnimationId);
+        vizAnimationId = null;
+    }
+}
+
+function vizUpdateTrackName() {
+    if (currentPlayingTrackIndex >= 0 && tracks[currentPlayingTrackIndex]) {
+        vizTrackName.textContent = '🎵 ' + tracks[currentPlayingTrackIndex].name;
+    }
+}
+
+function showVisualizer() {
+    if (tracks.length === 0) return;
+    vizInitAudio();
+    if (vizAudioCtx.state === 'suspended') vizAudioCtx.resume();
+    vizUpdateTrackName();
+    tracksWind.classList.add('visualizer-mode');
+    vizStartLoop();
+    showDancingMode(); 
+}
+
+function hideVisualizer() {
+    tracksWind.classList.remove('visualizer-mode');
+    hideDancingMode(); 
+    setTimeout(function () {
+        if (!tracksWind.classList.contains('visualizer-mode')) vizStopLoop();
+    }, 500);
+}
+
+// Замена playTrack из script.js (визуалайзер сам не открывается —
+// чтобы next/prev/shuffle не выбрасывали пользователя из списка)
+function playTrack(index) {
+    if (index < 0 || index >= tracks.length) return;
+
+    currentPlayingTrackIndex = index;
+    audioPlayer.src = tracks[index].url;
+    audioPlayer.play().catch(function (e) { console.log('Ошибка воспроизведения:', e); });
+    isPlaying = true;
+
+    updatePlayBtnIcon();
+    updatePlayingTrackUI();
+    vizUpdateTrackName();
+}
+
+// Клик по треку в списке: открыть визуалайзер.
+// Если кликнули по уже играющему треку — не перезапускаем его.
+// capture + stopPropagation, чтобы обработчик из script.js не сработал.
+mainTracksList.addEventListener('click', function (event) {
+    const item = event.target.closest('.main-track-item');
+    if (!item || event.target.closest('.track-menu')) return;
+
+    const index = parseInt(item.getAttribute('data-track-index'));
+    if (index === currentPlayingTrackIndex) {
+        event.stopPropagation();
+        showVisualizer();
+        return;
+    }
+    setTimeout(showVisualizer, 0); // после того как script.js запустит трек
+}, true);
+
+// Первое нажатие на Play (ничего ещё не играло) тоже открывает визуалайзер
+playBtn.addEventListener('click', function () {
+    const wasIdle = currentPlayingTrackIndex === -1;
+    if (wasIdle && tracks.length > 0) setTimeout(showVisualizer, 0);
+}, true);
+
+// Кнопка "выбор трека" возвращает к списку
+document.querySelector('.choosingTracksBtn').addEventListener('click', hideVisualizer);
+vizBackBtn.addEventListener('click', hideVisualizer);
+
+// Подгоняем canvas под размер контейнера
+new ResizeObserver(function () {
+    if (tracksWind.classList.contains('visualizer-mode')) vizResizeCanvas();
+}).observe(vizCanvasWrap);
+
+
+
+// ===== ТАНЦУЮЩИЕ ЛЮДИ =====
+const dancingContainer = document.getElementById('dancingContainer');
+const dancingPersonImg = document.getElementById('dancingPersonImg');
+const dancingBackBtn = document.getElementById('dancingBackBtn');
+const dancingTrackName = document.getElementById('dancingTrackName');
+const dancingDots = document.getElementById('dancingDots');
+
+const TOTAL_PERSONS = 4;       
+const PERSON_SWITCH_INTERVAL = 3000; 
+
+let currentPersonIndex = 0;
+let personSwitchTimer = null;
+
+function updateDancingDots(index) {
+    const dots = dancingDots.querySelectorAll('.dancing-dot');
+    dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+    });
+}
+
+// Циклическая смена танцоров
+function startDancingCycle() {
+    stopDancingCycle();
+    currentPersonIndex = 0;
+    setDancingPerson(currentPersonIndex);
+    updateDancingDots(currentPersonIndex);
+
+    personSwitchTimer = setInterval(() => {
+        dancingPersonImg.classList.add('fade-out');
+
+        setTimeout(() => {
+            currentPersonIndex = (currentPersonIndex + 1) % TOTAL_PERSONS;
+            setDancingPerson(currentPersonIndex);
+            updateDancingDots(currentPersonIndex);
+            dancingPersonImg.classList.remove('fade-out');
+            dancingPersonImg.classList.add('fade-in');
+
+            setTimeout(() => dancingPersonImg.classList.remove('fade-in'), 400);
+        }, 400);
+    }, PERSON_SWITCH_INTERVAL);
+}
+
+function stopDancingCycle() {
+    if (personSwitchTimer) {
+        clearInterval(personSwitchTimer);
+        personSwitchTimer = null;
+    }
+}
+
+function setDancingPerson(index) {
+    dancingPersonImg.src = `gif/person-${index + 1}.gif`;
+}
+
+function showDancingMode() {
+    containerNav.classList.add('dancing-mode');
+
+    if (currentPlayingTrackIndex >= 0 && tracks[currentPlayingTrackIndex]) {
+        dancingTrackName.textContent = '🎵 ' + tracks[currentPlayingTrackIndex].name;
+    }
+    startDancingCycle();
+}
+
+function hideDancingMode() {
+    stopDancingCycle();
+    containerNav.classList.remove('dancing-mode');
+}
+
+// Кнопка назад — возвращает меню и закрывает визуалайзер
+dancingBackBtn.addEventListener('click', function () {
+    hideVisualizer();
+    hideDancingMode();
+});
+
+// Если трек остановился / закончился — закрываем танцы
+audioPlayer.addEventListener('pause', function () {
+    if (containerNav.classList.contains('dancing-mode')) {
+        hideDancingMode();
+    }
+});
+
+audioPlayer.addEventListener('play', function () {
+    // Если трек возобновился, и визуалайзер активен — вернём танцоров
+    if (tracksWind.classList.contains('visualizer-mode') && !containerNav.classList.contains('dancing-mode')) {
+        showDancingMode();
+    }
+});
 
 //Обработчик события для бургер меню
 

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мини-Проекты</title>
     <link rel="stylesheet" href="css/calculatorStyle.css">
+    <link rel="stylesheet" href="css/visualizer.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -27,15 +28,34 @@
 
     <div class="main-content">
         <!--навигационное меню-->
-        <div class="burger-menu"><img src="icons/burger-menu-icon.png" id ="burger-menu-img" alt="Меню" width="40px" height="40px"></div>
-        <div class="containerNav">
-            <nav class="navMenu">
+        <div class="burger-menu"><img src="icons/burger-menu-icon.png" id="burger-menu-img" alt="Меню" width="40px"
+                height="40px"></div>
+        <div class="containerNav" id="containerNav">
+            <!-- Обычное меню -->
+            <nav class="navMenu" id="navMenu">
                 <div id="Math">Калькулятор</div>
                 <div id="Converter">Конвертер валют</div>
                 <div id="ToDoList">Список задач</div>
                 <div id="Timer">Таймер</div>
                 <div id="musicPlayer">Музыкальный плеер</div>
             </nav>
+
+            <!-- Танцующий человек (появляется вместо меню) -->
+            <div class="dancing-container" id="dancingContainer" style="display: none;">
+                <button class="dancing-back-btn" id="dancingBackBtn" title="К списку треков">
+                    <img src="icons/music-back-btn.png" alt="Назад" width="34px" height="34px">
+                </button>
+                <div class="dancing-person-wrap">
+                    <img id="dancingPersonImg" class="dancing-person" src="gifs/person-1.gif" alt="Танцор">
+                </div>
+                <div class="dancing-track-name" id="dancingTrackName"></div>
+                <div class="dancing-dots" id="dancingDots">
+                    <span class="dancing-dot active"></span>
+                    <span class="dancing-dot"></span>
+                    <span class="dancing-dot"></span>
+                    <span class="dancing-dot"></span>
+                </div>
+            </div>
         </div>
 
         <!--Контейнер для окон-->
@@ -214,13 +234,25 @@
                 <div class="musicPlayerWind">
                     <div class="tracksWind">
                         <div class="loadTrackContainer">
-                            <div class="loadIcon"><img src="icons/addTrack.png" id="loadTrackBtn" alt="Добавить+" width="70px" height="70px"></div>
+                            <div class="loadIcon"><img src="icons/addTrack.png" id="loadTrackBtn" alt="Добавить+"
+                                    width="70px" height="70px"></div>
                             <div class="loadText">Загрузить трек</div>
                         </div>
-                    <div class="main-tracks-list">
-                        
+                        <div class="main-tracks-list">
+
+                        </div>
+
+                        <!--Визуалайзер (лежит поверх списка треков внутри tracksWind)-->
+                        <div class="visualizerWind" id="visualizerWind">
+                            <button class="visualizer-back-btn" id="visualizerBackBtn" title="К списку треков"><img
+                                    src="icons/music-back-btn.png" alt="Назад" width="34px" height="34px"></button>
+                            <div class="visualizer-canvas-wrap">
+                                <canvas id="visualizerCanvas"></canvas>
+                            </div>
+                            <div class="visualizer-track-name" id="visualizerTrackName"></div>
+                        </div>
                     </div>
-                </div>
+                    <audio id="audioPlayer"></audio>
                     <div class="controlPanel">
                         <div class="controlPanelOne">
                             <div class="choosingTracksBtn"><img src="icons/choosingTrack.png" alt="Выбор трека"
@@ -231,14 +263,15 @@
                         <div class="controlPanelTwo">
                             <div class="previousTrackBtn"><img src="icons/previousTrack.png" alt="Предыдущий"
                                     width="50px" height="50px"></div>
-                            <div class="playBtn"><img src="icons/playTrack.png" alt="Воспроизведение" width="50px"
-                                    height="50px"></div>
+                            <div class="playBtn"><img id="playBtnImg" src="icons/playTrack.png" alt="Воспроизведение"
+                                    width="50px" height="50px"></div>
                             <div class="nextTrackBtn"><img src="icons/nextTrack.png" alt="Следующий" width="50px"
                                     height="50px"></div>
                             <div class="controlPanelTwoContainer">
-                                <div class="loadIconMini"><img src="icons/addTrack.png" id="loadTrackMiniBtn" alt="Добавить+"
-                                    width="45px" height="45px"></div>
-                                <div id="infoMusicPlayer"><img src="icons/INFO.png" alt="Инфо" width="45px" height="45px"></div>
+                                <div class="loadIconMini"><img src="icons/addTrack.png" id="loadTrackMiniBtn"
+                                        alt="Добавить+" width="45px" height="45px"></div>
+                                <div id="infoMusicPlayer"><img src="icons/INFO.png" alt="Инфо" width="45px"
+                                        height="45px"></div>
                             </div>
                         </div>
                     </div>
@@ -347,7 +380,7 @@
         </div>
     </div>
 
-        <!-- Модальное окно загрузки треков -->
+    <!-- Модальное окно загрузки треков -->
     <div class="loadingOverlay" id="loadingOverlay">
         <div class="loadingContainer">
             <img src="gif/loading.gif" alt="Загрузка" class="loadingGif">
@@ -359,6 +392,7 @@
     <script src="particles/particles.min.js"></script>
     <script src="particles/particles-bg-config.js"></script>
     <script src="calculatorJS/script.js"></script>
+    <script src="calculatorJS/visualizer.js"></script>
 </body>
 
 </html>
