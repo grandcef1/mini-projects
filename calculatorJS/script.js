@@ -1404,7 +1404,7 @@ infoTimer.addEventListener('click', () => {
         '✦ Особенности:\n' +
         '   • Интуитивно понятные кнопки\n' +
         '   • Визуальное отображение оставшегося времени', 'ⓘ')
-})
+});
 
 //функция отображения текущего режима
 let isTimer = true;
@@ -1669,6 +1669,7 @@ const playBtn = document.querySelector('.playBtn');
 const previousTrackBtn = document.querySelector('.previousTrackBtn');
 const nextTrackBtn = document.querySelector('.nextTrackBtn');
 const shuffleBtn = document.querySelector('.shuffleBtn');
+const infoMusicBtn = document.getElementById('infoMusicPlayer');
 
 function openModalMusic() {
     const mainContent = document.querySelector('.main-content');
@@ -1692,7 +1693,24 @@ function closeModalMusic() {
     pendingFiles = [];
     renderMusicFileListDB();
 }
-
+infoMusicBtn.addEventListener('click',() => {
+    showAlert('✦ Возможности:\n' +
+    '   • Загрузка треков (Drag & Drop / файлы)\n' +
+    '   • Облачное хранение и автосохранение\n' +
+    '   • Управление: play/pause, shuffle\n' +
+    '   • Визуалайзер в реальном времени\n\n' +
+    '✦ Ограничения:\n' +
+    '   • Форматы: .mp3, .wav, .ogg, .flac\n' +
+    '   • Требуется интернет для загрузки\n' +
+    '   • Размер файла не более 50MB\n\n' +
+    '✦ Примечания:\n' +
+    '   • Индикатор прогресса загрузки\n' +
+    '   • Редактирование названий треков\n' +
+    '   • Автосохранение плейлиста в браузере\n\n' +
+    '✦ Особенности:\n' +
+    '   • Интерактивные танцоры вместо меню\n' +
+    '   • Плавные анимации и уведомления', 'ⓘ');
+});
 loadTrackBtn.addEventListener('click', function (e) {
     e.stopPropagation();
     e.preventDefault();
@@ -1748,6 +1766,8 @@ let tracks = [];
 let currentPlayingTrackIndex = -1;
 //играет ли что то
 let isPlaying = false;
+
+const MAX_FILE_SIZE = 50 * 1024 * 1024;
 
 // Форматирование длительности из секунд в MM:SS
 function formatDuration(seconds) {
@@ -1973,13 +1993,23 @@ if (dropZone && fileInput) {
 
     // Выбор файлов через диалог
     fileInput.addEventListener('change', function (e) {
-        if (this.files && this.files.length > 0) {
-            // TODO: Обработать выбранные файлы
-            console.log('Выбрано файлов:', this.files.length);
-            pendingFiles = [...pendingFiles, ...Array.from(this.files)];
+    if (this.files && this.files.length > 0) {
+        const newFiles = Array.from(this.files).filter(file => {
+            if (file.size > MAX_FILE_SIZE) {
+                showAlert(`Файл "${file.name}" слишком большой!\nМаксимальный размер: 50 МБ`, '⚠️');
+                return false;
+            }
+            return true;
+        });
+        
+        if (newFiles.length > 0) {
+            pendingFiles = [...pendingFiles, ...newFiles];
             renderMusicFileListDB();
         }
-    });
+    }
+    
+    this.value = ''; 
+});
 
     // Drag & Drop
     dropZone.addEventListener('dragover', function (e) {
@@ -1994,16 +2024,22 @@ if (dropZone && fileInput) {
 
 
     dropZone.addEventListener('drop', function (e) {
-        e.preventDefault();
-        this.classList.remove('dragover');
+    e.preventDefault();
+    this.classList.remove('dragover');
 
-        pendingFiles = [...pendingFiles, ...Array.from(e.dataTransfer.files)];
-        if (pendingFiles && pendingFiles.length > 0) {
-            renderMusicFileListDB();
-            // TODO: Обработать перетащенные файлы
-            console.log('Перетащено файлов:', pendingFiles.length);
+    const newFiles = Array.from(e.dataTransfer.files).filter(file => {
+        if (file.size > MAX_FILE_SIZE) {
+            showAlert(`Файл "${file.name}" слишком большой!\nМаксимальный размер: 50 МБ`, '⚠️');
+            return false;
         }
+        return true;
     });
+
+    if (newFiles.length > 0) {
+        pendingFiles = [...pendingFiles, ...newFiles];
+        renderMusicFileListDB();
+    }
+});
 
     console.log('Drop zone инициализирована');
 } else {
@@ -2104,10 +2140,30 @@ function previousTrack() {
     const prevIndex = (currentPlayingTrackIndex - 1 + tracks.length) % tracks.length;
     playTrack(prevIndex);
 }
-
+//переменная для хранения последних двух играющих треков
+let lastPlayedTracks = [];
 function randomTrack() {
-    const randomIndex = Math.floor(Math.random() * tracks.length);
-    return randomIndex
+    if (tracks.length <= 2) {
+        let randomIndex = Math.floor(Math.random() * tracks.length);
+        updateHistory(randomIndex);
+        return randomIndex;
+    }
+    let randomIndex;
+    do {
+        randomIndex = Math.floor(Math.random() * tracks.length);
+    } while (lastPlayedTracks.includes(randomIndex));
+
+    updateHistory(randomIndex);
+    return randomIndex;
+}
+
+// вспомогательная функция для управления историей
+function updateHistory(index) {
+    lastPlayedTracks.push(index);
+    
+    if (lastPlayedTracks.length > 2) {
+        lastPlayedTracks.shift(); 
+    }
 }
 
 
@@ -2332,7 +2388,6 @@ function hideDancingMode() {
 
 // Кнопка назад — возвращает меню и закрывает визуалайзер
 dancingBackBtn.addEventListener('click', function () {
-    hideVisualizer();
     hideDancingMode();
 });
 
