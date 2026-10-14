@@ -1671,148 +1671,128 @@ const nextTrackBtn = document.querySelector('.nextTrackBtn');
 const shuffleBtn = document.querySelector('.shuffleBtn');
 const infoMusicBtn = document.getElementById('infoMusicPlayer');
 
+let pendingFiles = [];
+let tracks = [];
+let currentPlayingTrackIndex = -1;
+let isPlaying = false;
+const MAX_FILE_SIZE = 30 * 1024 * 1024;
+let lastPlayedTracks = [];
+
 function openModalMusic() {
     const mainContent = document.querySelector('.main-content');
-
     modalOverlayMusic.classList.add('show');
     mainContent.style.filter = 'blur(2px)';
     mainContent.style.pointerEvents = 'none';
-
     renderMusicFileListDB();
 }
 
 function closeModalMusic() {
     const mainContent = document.querySelector('.main-content');
-
     if (modalOverlayMusic) {
         modalOverlayMusic.classList.remove('show');
     }
     mainContent.style.filter = 'none';
     mainContent.style.pointerEvents = 'auto';
-
     pendingFiles = [];
     renderMusicFileListDB();
 }
-infoMusicBtn.addEventListener('click',() => {
+
+infoMusicBtn.addEventListener('click', () => {
     showAlert('✦ Возможности:\n' +
     '   • Загрузка треков (Drag & Drop / файлы)\n' +
-    '   • Облачное хранение и автосохранение\n' +
+    '   • Редактирование названий, удаление треков\n' +
     '   • Управление: play/pause, shuffle\n' +
     '   • Визуалайзер в реальном времени\n\n' +
     '✦ Ограничения:\n' +
     '   • Форматы: .mp3, .wav, .ogg, .flac\n' +
     '   • Требуется интернет для загрузки\n' +
-    '   • Размер файла не более 50MB\n\n' +
+    '   • Размер файла не более 30MB\n\n' +
     '✦ Примечания:\n' +
     '   • Индикатор прогресса загрузки\n' +
-    '   • Редактирование названий треков\n' +
+    '   • Облачное хранение треков\n' +
     '   • Автосохранение плейлиста в браузере\n\n' +
     '✦ Особенности:\n' +
     '   • Интерактивные танцоры вместо меню\n' +
     '   • Плавные анимации и уведомления', 'ⓘ');
 });
+
 loadTrackBtn.addEventListener('click', function (e) {
     e.stopPropagation();
     e.preventDefault();
-    console.log('🎵 Клик по кнопке загрузки (img)');
     openModalMusic();
 });
 
 loadIconMini.addEventListener('click', function (e) {
     e.stopPropagation();
     e.preventDefault();
-    console.log('🎵 Клик по кнопке загрузки (img)');
     openModalMusic();
 });
 
-//обработчик для модального окна(удаление треков)
 fileList.addEventListener('click', function (event) {
     const removeButton = event.target.closest('.file-remove');
-
-    if (!removeButton) {
-        return;
-    }
+    if (!removeButton) return;
 
     const trackIndex = removeButton.getAttribute('data-track-index');
     const pendingIndex = removeButton.getAttribute('data-pending-index');
 
     if (trackIndex != null) {
-        tracks.splice(trackIndex, 1);
+        if (parseInt(trackIndex) === currentPlayingTrackIndex) {
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+            audioPlayer.removeAttribute('src');
+            audioPlayer.load();
+            currentPlayingTrackIndex = -1;
+            isPlaying = false;
+            updatePlayBtnIcon();
+            hideVisualizer();
+            hideDancingMode();
+        }
+        tracks.splice(parseInt(trackIndex), 1);
         saveTracksToStorage();
         renderMusicTrackListMain();
         showAlert('Аудиозапись успешно удалена!', '✔');
     } else {
-        pendingFiles.splice(pendingIndex, 1);
+        pendingFiles.splice(parseInt(pendingIndex), 1);
     }
-
     renderMusicFileListDB();
-
 });
 
 closeBtnMusic.addEventListener('click', closeModalMusic);
 
-
-//облако Cloudinary
 const cloudName = 'mddvc8xi';
 const uploadPreset = 'music_player_uploads';
 
-
-//Массив,где будут хранится перетащенные треки
-let pendingFiles = [];
-
-//Массив где будут хранится обьекты треков
-let tracks = [];
-//текущий индекс трека
-let currentPlayingTrackIndex = -1;
-//играет ли что то
-let isPlaying = false;
-
-const MAX_FILE_SIZE = 50 * 1024 * 1024;
-
-// Форматирование длительности из секунд в MM:SS
 function formatDuration(seconds) {
     if (!seconds || isNaN(seconds)) return '0:00';
-
     const minutes = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
-
     return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
 }
 
-// Форматирование размера из байтов в MB
 function formatFileSize(bytes) {
     if (!bytes) return '0 MB';
     const mb = bytes / (1024 * 1024);
     return `${mb.toFixed(1)} MB`;
 }
 
-
-// Функция загрузки треков в облако
 async function uploadTrackToCloud(currentFile) {
-    console.log('Загрузка файла:', currentFile.name);
     const formData = new FormData();
     formData.append('file', currentFile);
     formData.append('upload_preset', uploadPreset);
     formData.append('folder', `tracks/user_${userID}`);
-
-
     try {
         const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/video/upload`, {
             method: 'POST',
             body: formData
         });
-        if (!response.ok) {
-            console.log('Сервер вернул ошибку:', response.status);
-            return null;
-        }
+        if (!response.ok) return null;
         const data = await response.json();
-        console.log(data);
         return {
             url: data.secure_url,
-            publicId: data.public_id,     // идентификатор для удаления
-            name: data.original_filename,         // имя трека
-            duration: data.duration,     // длительность в секундах
-            size: data.bytes         // размер в байтах
+            publicId: data.public_id,
+            name: data.original_filename,
+            duration: data.duration,
+            size: data.bytes
         };
     } catch (error) {
         console.log(error);
@@ -1820,16 +1800,13 @@ async function uploadTrackToCloud(currentFile) {
     }
 }
 
-//Функция сохранения списка треов
 function saveTracksToStorage() {
     let key = `tracks_user_${userID}`;
     localStorage.setItem(`${key}`, JSON.stringify(tracks));
 }
 
-// Функция получения списка треков
 function loadTracksFromStorage() {
     let key = `tracks_user_${userID}`;
-    console.log('Загрузка списка треков');
     let savedTracks = localStorage.getItem(`${key}`);
     if (savedTracks) {
         return JSON.parse(savedTracks);
@@ -1837,27 +1814,13 @@ function loadTracksFromStorage() {
     return [];
 }
 
-// Функция удаления трека
-async function deleteTrackFromStorage(trackId) {
-    // TODO: Реализовать удаление трека из облака
-    console.log('Удаление трека:', trackId);
-}
-
-// Функция отрисовки списка треков в модальном окне загрузки
 function renderMusicFileListDB() {
-    if (!fileList) {
-        return;
-    }
-
-    // Если ничего нет — показываем placeholder
+    if (!fileList) return;
     if (tracks.length === 0 && pendingFiles.length === 0) {
         fileList.innerHTML = '<div style="text-align: center; padding: 20px; color: #5a4a6a;">🎵 Список треков пуст</div>';
         return;
     }
-
     fileList.innerHTML = '';
-
-    // 1. ожидающие загрузки
     for (let i = 0; i < pendingFiles.length; i++) {
         const file = pendingFiles[i];
         fileList.innerHTML += `
@@ -1868,13 +1831,11 @@ function renderMusicFileListDB() {
             </div>
         `;
     }
-
-    // 2. загруженные треки
     for (let i = 0; i < tracks.length; i++) {
         const track = tracks[i];
         fileList.innerHTML += `
             <div class="music-file-item">
-                <div class="file-name"><img src = 'icons/nota.png' width = '18px' height = '18px'> ${track.name}</div>
+                <div class="file-name"><img src='icons/nota.png' width='18px' height='18px'> ${track.name}</div>
                 <div class="file-size">${formatDuration(track.duration)} • ${formatFileSize(track.size)}</div>
                 <button class="file-remove" data-track-index="${i}">✕</button>
             </div>
@@ -1883,29 +1844,30 @@ function renderMusicFileListDB() {
 }
 
 function renderMusicTrackListMain() {
-    if (!mainTracksList) {
-        console.error('mainTracksList не найден в DOM');
-        return;
-    }
-
+    if (!mainTracksList) return;
     mainTracksList.innerHTML = '';
-
     const hasTracks = tracks.length > 0;
-
     tracksWind.classList.toggle('has-tracks', hasTracks);
 
     if (hasTracks) {
         loadTrackContainer.style.display = 'none';
         mainTracksList.style.display = 'block';
+        loadIconMini.style.display = 'flex';
 
         for (let i = 0; i < tracks.length; i++) {
             const track = tracks[i];
             mainTracksList.innerHTML += `
                 <div class="main-track-item" data-track-index="${i}">
-                    <div class="track-name"><img src = 'icons/nota.png' width = '18px' height = '18px'> ${track.name}</div>
+                    <div class="track-name"><img src='icons/nota.png' width='18px' height='18px'> ${track.name}</div>
                     <div class="track-info">
                         <div class="track-duration">${formatDuration(track.duration)}</div>
-                        <div class="track-menu">⋮</div>
+                        <div class="track-menu-wrapper">
+                            <div class="track-menu" data-track-index="${i}">⋮</div>
+                            <div class="track-dropdown" id="track-dropdown-${i}">
+                                <div class="track-dropdown-item" data-action="edit" data-index="${i}">✎ Редактировать название</div>
+                                <div class="track-dropdown-item delete" data-action="delete" data-index="${i}">✕ Удалить трек</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
@@ -1913,36 +1875,166 @@ function renderMusicTrackListMain() {
     } else {
         loadTrackContainer.style.display = 'flex';
         mainTracksList.style.display = 'none';
+        loadIconMini.style.display = 'none'; 
     }
     updatePlayingTrackUI();
-
 }
+
 mainTracksList.addEventListener('click', function (event) {
+    // 1. Открытие/закрытие меню трека (⋮)
+    const menuBtn = event.target.closest('.track-menu');
+    if (menuBtn) {
+        event.stopPropagation();
+        const index = parseInt(menuBtn.getAttribute('data-track-index'));
+        const dropdown = document.getElementById(`track-dropdown-${index}`);
+        const parentItem = menuBtn.closest('.main-track-item');
+        
+        // Сбрасываем z-index у всех треков и закрываем другие открытые меню
+        document.querySelectorAll('.main-track-item').forEach(item => {
+            item.style.zIndex = ''; 
+            const otherDropdown = item.querySelector('.track-dropdown');
+            if (otherDropdown && otherDropdown.id !== `track-dropdown-${index}`) {
+                otherDropdown.classList.remove('show');
+            }
+        });
+        
+        // Если меню открывается, мгновенно поднимаем его трек на самый верх
+        if (!dropdown.classList.contains('show')) {
+            parentItem.style.zIndex = '100';
+        }
+        
+        dropdown.classList.toggle('show');
+        return;
+    }
+
+    // 2. Обработка выбора действия в меню (Удалить или Редактировать)
+    const dropdownItem = event.target.closest('.track-dropdown-item');
+    if (dropdownItem) {
+        event.stopPropagation();
+        const action = dropdownItem.getAttribute('data-action');
+        const index = parseInt(dropdownItem.getAttribute('data-index'));
+
+        if (action === 'delete') {
+            deleteTrack(index);
+        } else if (action === 'edit') {
+            startInlineEdit(index);
+        }
+        dropdownItem.closest('.track-dropdown').classList.remove('show');
+        return;
+    }
+
+    // 3. Защита: если кликнули по самому полю ввода редактирования
+    if (event.target.classList.contains('inline-edit-input')) {
+        event.stopPropagation();
+        return;
+    }
+
+    // 4. Воспроизведение трека или открытие визуалайзера
     const trackItem = event.target.closest('.main-track-item');
-    if (trackItem && !event.target.closest('.track-menu')) {
+    if (trackItem && !event.target.closest('.track-info')) { 
         const index = parseInt(trackItem.getAttribute('data-track-index'));
+        if (index === currentPlayingTrackIndex) {
+            event.stopPropagation();
+            showVisualizer();
+            return;
+        }
         playTrack(index);
         updatePlayBtnIcon();
+        setTimeout(showVisualizer, 0);
     }
 });
 
-//функция обновления иконки воспроизведения/паузы
+document.addEventListener('click', function (e) {
+    if (!e.target.closest('.track-menu-wrapper')) {
+        document.querySelectorAll('.track-dropdown').forEach(d => d.classList.remove('show'));
+    }
+});
+
+function deleteTrack(index) {
+    if (index === currentPlayingTrackIndex) {
+        audioPlayer.pause();
+        audioPlayer.currentTime = 0;
+        audioPlayer.removeAttribute('src');
+        audioPlayer.load();
+        currentPlayingTrackIndex = -1;
+        isPlaying = false;
+        updatePlayBtnIcon();
+        hideVisualizer();
+        hideDancingMode();
+    }
+
+    tracks.splice(index, 1);
+    if (currentPlayingTrackIndex > index) {
+        currentPlayingTrackIndex--;
+    } else if (currentPlayingTrackIndex === index) {
+        currentPlayingTrackIndex = -1;
+    }
+
+    saveTracksToStorage();
+    renderMusicTrackListMain();
+    showAlert('Аудиозапись успешно удалена!', '✔');
+}
+
+function startInlineEdit(index) {
+    const trackItem = mainTracksList.querySelector(`.main-track-item[data-track-index="${index}"]`);
+    if (!trackItem) return;
+
+    const nameDiv = trackItem.querySelector('.track-name');
+    const currentName = tracks[index].name;
+
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'inline-edit-input';
+    input.value = currentName;
+    
+    nameDiv.innerHTML = '';
+    nameDiv.appendChild(input);
+    input.focus();
+    input.select();
+
+    const saveEdit = () => {
+        const newName = input.value.trim();
+        if (newName !== '' && newName !== currentName) {
+            tracks[index].name = newName;
+            saveTracksToStorage();
+            showAlert('Название трека обновлено!', '✔');
+            if (index === currentPlayingTrackIndex) {
+                vizUpdateTrackName();
+                const containerNav = document.getElementById('containerNav');
+                if (containerNav && containerNav.classList.contains('dancing-mode')) {
+                    document.getElementById('dancingTrackName').textContent = '🎵 ' + newName;
+                }
+            }
+        }
+        renderMusicTrackListMain();
+    };
+
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            input.blur();
+        }
+        if (e.key === 'Escape') {
+            renderMusicTrackListMain();
+        }
+    });
+
+    input.addEventListener('blur', saveEdit);
+}
+
 function updatePlayBtnIcon() {
     const playBtnImg = document.getElementById('playBtnImg');
     if (isPlaying) {
         playBtnImg.src = 'icons/pause.png';
-        playBtnImg.style.transform = 'translateX(-3px)';  // паузу чуть влево
+        playBtnImg.style.transform = 'translateX(-3px)';
     } else {
         playBtnImg.src = 'icons/playTrack.png';
-        playBtnImg.style.transform = 'translateX(0)';    // play по центру
+        playBtnImg.style.transform = 'translateX(0)';
     }
 }
 
-
-//функция добавления класса playing к играющему треку
 function updatePlayingTrackUI() {
     if (!mainTracksList) return;
-
     const items = mainTracksList.querySelectorAll('.main-track-item');
     items.forEach(function (item) {
         const index = parseInt(item.getAttribute('data-track-index'));
@@ -1959,21 +2051,24 @@ playBtn.addEventListener('click', function () {
     if (currentPlayingTrackIndex === -1) {
         playTrack(0);
         updatePlayBtnIcon();
+        setTimeout(showVisualizer, 0);
         return;
     }
 
     if (isPlaying) {
-
         audioPlayer.pause();
         isPlaying = false;
+        hideVisualizer();
+        hideDancingMode();
     } else {
         audioPlayer.play();
         isPlaying = true;
+        setTimeout(showVisualizer, 0);
+        showDancingMode();
     }
 
     updatePlayBtnIcon();
     updatePlayingTrackUI();
-
 });
 
 audioPlayer.addEventListener('ended', function () {
@@ -1981,37 +2076,30 @@ audioPlayer.addEventListener('ended', function () {
     playTrack(nextIndex);
 });
 
-
-// Обработчик выбора файлов
 if (dropZone && fileInput) {
-    // Клик для открытия диалога
     dropZone.addEventListener('click', function (e) {
         if (e.target === dropZone || e.target.closest('.drop-zone-music')) {
             fileInput.click();
         }
     });
 
-    // Выбор файлов через диалог
     fileInput.addEventListener('change', function (e) {
-    if (this.files && this.files.length > 0) {
-        const newFiles = Array.from(this.files).filter(file => {
-            if (file.size > MAX_FILE_SIZE) {
-                showAlert(`Файл "${file.name}" слишком большой!\nМаксимальный размер: 50 МБ`, '⚠️');
-                return false;
+        if (this.files && this.files.length > 0) {
+            const newFiles = Array.from(this.files).filter(file => {
+                if (file.size > MAX_FILE_SIZE) {
+                    showAlert(`Файл "${file.name}" слишком большой!\nМаксимальный размер: 30 МБ`, '⚠️');
+                    return false;
+                }
+                return true;
+            });
+            if (newFiles.length > 0) {
+                pendingFiles = [...pendingFiles, ...newFiles];
+                renderMusicFileListDB();
             }
-            return true;
-        });
-        
-        if (newFiles.length > 0) {
-            pendingFiles = [...pendingFiles, ...newFiles];
-            renderMusicFileListDB();
         }
-    }
-    
-    this.value = ''; 
-});
+        this.value = ''; 
+    });
 
-    // Drag & Drop
     dropZone.addEventListener('dragover', function (e) {
         e.preventDefault();
         this.classList.add('dragover');
@@ -2022,46 +2110,33 @@ if (dropZone && fileInput) {
         this.classList.remove('dragover');
     });
 
-
     dropZone.addEventListener('drop', function (e) {
-    e.preventDefault();
-    this.classList.remove('dragover');
-
-    const newFiles = Array.from(e.dataTransfer.files).filter(file => {
-        if (file.size > MAX_FILE_SIZE) {
-            showAlert(`Файл "${file.name}" слишком большой!\nМаксимальный размер: 50 МБ`, '⚠️');
-            return false;
+        e.preventDefault();
+        this.classList.remove('dragover');
+        const newFiles = Array.from(e.dataTransfer.files).filter(file => {
+            if (file.size > MAX_FILE_SIZE) {
+                showAlert(`Файл "${file.name}" слишком большой!\nМаксимальный размер: 30 МБ`, '⚠️');
+                return false;
+            }
+            return true;
+        });
+        if (newFiles.length > 0) {
+            pendingFiles = [...pendingFiles, ...newFiles];
+            renderMusicFileListDB();
         }
-        return true;
     });
-
-    if (newFiles.length > 0) {
-        pendingFiles = [...pendingFiles, ...newFiles];
-        renderMusicFileListDB();
-    }
-});
-
-    console.log('Drop zone инициализирована');
-} else {
-    console.error('Drop zone или fileInput не найдены!');
 }
 
 if (modalConfirmBtn) {
     modalConfirmBtn.addEventListener('click', async function () {
         showLoadingModal(0, pendingFiles.length);
-
         for (let i = 0; i < pendingFiles.length; i++) {
-            console.log(`Загрузка: ${i + 1} из ${pendingFiles.length}`);
             showLoadingModal(i + 1, pendingFiles.length);
-
             const currentTrack = await uploadTrackToCloud(pendingFiles[i]);
             if (currentTrack !== null) {
                 tracks.push(currentTrack);
-            } else {
-                console.log(`Ошибка загрузки трека №${i + 1}`);
             }
         }
-
         pendingFiles = [];
         hideLoadingModal();
 
@@ -2070,21 +2145,14 @@ if (modalConfirmBtn) {
             renderMusicFileListDB();
             renderMusicTrackListMain();
             saveTracksToStorage();
-
         } else {
             showAlert('Ошибка загрузки выбранных треков', '✗');
         }
     });
 }
 
-
-document.addEventListener('dragover', function (e) {
-    e.preventDefault();
-});
-
-document.addEventListener('drop', function (e) {
-    e.preventDefault();
-});
+document.addEventListener('dragover', function (e) { e.preventDefault(); });
+document.addEventListener('drop', function (e) { e.preventDefault(); });
 
 nextTrackBtn.addEventListener('click', nextTrack);
 previousTrackBtn.addEventListener('click', previousTrack);
@@ -2092,11 +2160,8 @@ shuffleBtn.addEventListener('click', function () {
     playTrack(randomTrack());
 });
 
-
-//Модальное окно ожидания
 const loadingMusicOverlay = document.getElementById('loadingOverlay');
 const loadingProgress = document.getElementById('loadingProgress');
-
 
 function showLoadingModal(current, total) {
     loadingMusicOverlay.classList.add('show');
@@ -2108,19 +2173,14 @@ function hideLoadingModal() {
 }
 
 function playTrack(index) {
-
-    if (index < 0 || index >= tracks.length) {
-        return;
-    }
-
+    if (index < 0 || index >= tracks.length) return;
     currentPlayingTrackIndex = index;
     audioPlayer.src = tracks[index].url;
-    audioPlayer.play();
+    audioPlayer.play().catch(function (e) { console.log('Ошибка воспроизведения:', e); });
     isPlaying = true;
-
-    // тут визуальное отображение играющего трека
     updatePlayBtnIcon();
     updatePlayingTrackUI();
+    vizUpdateTrackName();
 }
 
 function nextTrack() {
@@ -2140,8 +2200,7 @@ function previousTrack() {
     const prevIndex = (currentPlayingTrackIndex - 1 + tracks.length) % tracks.length;
     playTrack(prevIndex);
 }
-//переменная для хранения последних двух играющих треков
-let lastPlayedTracks = [];
+
 function randomTrack() {
     if (tracks.length <= 2) {
         let randomIndex = Math.floor(Math.random() * tracks.length);
@@ -2152,20 +2211,16 @@ function randomTrack() {
     do {
         randomIndex = Math.floor(Math.random() * tracks.length);
     } while (lastPlayedTracks.includes(randomIndex));
-
     updateHistory(randomIndex);
     return randomIndex;
 }
 
-// вспомогательная функция для управления историей
 function updateHistory(index) {
     lastPlayedTracks.push(index);
-    
     if (lastPlayedTracks.length > 2) {
         lastPlayedTracks.shift(); 
     }
 }
-
 
 const vizCanvas = document.getElementById('visualizerCanvas');
 const vizTrackName = document.getElementById('visualizerTrackName');
@@ -2196,7 +2251,6 @@ function vizResizeCanvas() {
 function vizStartLoop() {
     if (vizAnimationId) cancelAnimationFrame(vizAnimationId);
     vizResizeCanvas();
-
     const ctx = vizCanvas.getContext('2d');
     const bufferLength = vizAnalyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
@@ -2204,14 +2258,11 @@ function vizStartLoop() {
     function render() {
         vizAnimationId = requestAnimationFrame(render);
         vizAnalyser.getByteFrequencyData(dataArray);
-
         const w = vizCanvas.width;
         const h = vizCanvas.height;
         const dpr = window.devicePixelRatio || 1;
         const bars = Math.min(64, Math.max(12, Math.floor((w / dpr) / 8)));
-
         ctx.clearRect(0, 0, w, h);
-
         const slot = w / bars;
         const barWidth = slot * 0.62;
 
@@ -2220,12 +2271,10 @@ function vizStartLoop() {
             const barHeight = Math.max(4 * dpr, (value / 255) * h * 0.92);
             const x = i * slot + (slot - barWidth) / 2;
             const y = h - barHeight;
-
             const gradient = ctx.createLinearGradient(0, h, 0, y);
             gradient.addColorStop(0, '#5a3c98');
             gradient.addColorStop(0.55, '#8b6fc8');
             gradient.addColorStop(1, '#e7ccfc');
-
             ctx.save();
             ctx.fillStyle = gradient;
             ctx.shadowColor = 'rgba(139, 111, 200, 0.75)';
@@ -2271,55 +2320,13 @@ function hideVisualizer() {
     }, 500);
 }
 
-// Замена playTrack из script.js (визуалайзер сам не открывается —
-// чтобы next/prev/shuffle не выбрасывали пользователя из списка)
-function playTrack(index) {
-    if (index < 0 || index >= tracks.length) return;
-
-    currentPlayingTrackIndex = index;
-    audioPlayer.src = tracks[index].url;
-    audioPlayer.play().catch(function (e) { console.log('Ошибка воспроизведения:', e); });
-    isPlaying = true;
-
-    updatePlayBtnIcon();
-    updatePlayingTrackUI();
-    vizUpdateTrackName();
-}
-
-// Клик по треку в списке: открыть визуалайзер.
-// Если кликнули по уже играющему треку — не перезапускаем его.
-// capture + stopPropagation, чтобы обработчик из script.js не сработал.
-mainTracksList.addEventListener('click', function (event) {
-    const item = event.target.closest('.main-track-item');
-    if (!item || event.target.closest('.track-menu')) return;
-
-    const index = parseInt(item.getAttribute('data-track-index'));
-    if (index === currentPlayingTrackIndex) {
-        event.stopPropagation();
-        showVisualizer();
-        return;
-    }
-    setTimeout(showVisualizer, 0); // после того как script.js запустит трек
-}, true);
-
-// Первое нажатие на Play (ничего ещё не играло) тоже открывает визуалайзер
-playBtn.addEventListener('click', function () {
-    const wasIdle = currentPlayingTrackIndex === -1;
-    if (wasIdle && tracks.length > 0) setTimeout(showVisualizer, 0);
-}, true);
-
-// Кнопка "выбор трека" возвращает к списку
 document.querySelector('.choosingTracksBtn').addEventListener('click', hideVisualizer);
 vizBackBtn.addEventListener('click', hideVisualizer);
 
-// Подгоняем canvas под размер контейнера
 new ResizeObserver(function () {
     if (tracksWind.classList.contains('visualizer-mode')) vizResizeCanvas();
 }).observe(vizCanvasWrap);
 
-
-
-// ===== ТАНЦУЮЩИЕ ЛЮДИ =====
 const dancingContainer = document.getElementById('dancingContainer');
 const dancingPersonImg = document.getElementById('dancingPersonImg');
 const dancingBackBtn = document.getElementById('dancingBackBtn');
@@ -2328,7 +2335,6 @@ const dancingDots = document.getElementById('dancingDots');
 
 const TOTAL_PERSONS = 4;       
 const PERSON_SWITCH_INTERVAL = 3000; 
-
 let currentPersonIndex = 0;
 let personSwitchTimer = null;
 
@@ -2339,23 +2345,19 @@ function updateDancingDots(index) {
     });
 }
 
-// Циклическая смена танцоров
 function startDancingCycle() {
     stopDancingCycle();
     currentPersonIndex = 0;
     setDancingPerson(currentPersonIndex);
     updateDancingDots(currentPersonIndex);
-
     personSwitchTimer = setInterval(() => {
         dancingPersonImg.classList.add('fade-out');
-
         setTimeout(() => {
             currentPersonIndex = (currentPersonIndex + 1) % TOTAL_PERSONS;
             setDancingPerson(currentPersonIndex);
             updateDancingDots(currentPersonIndex);
             dancingPersonImg.classList.remove('fade-out');
             dancingPersonImg.classList.add('fade-in');
-
             setTimeout(() => dancingPersonImg.classList.remove('fade-in'), 400);
         }, 400);
     }, PERSON_SWITCH_INTERVAL);
@@ -2373,8 +2375,8 @@ function setDancingPerson(index) {
 }
 
 function showDancingMode() {
+    const containerNav = document.getElementById('containerNav');
     containerNav.classList.add('dancing-mode');
-
     if (currentPlayingTrackIndex >= 0 && tracks[currentPlayingTrackIndex]) {
         dancingTrackName.textContent = '🎵 ' + tracks[currentPlayingTrackIndex].name;
     }
@@ -2383,48 +2385,45 @@ function showDancingMode() {
 
 function hideDancingMode() {
     stopDancingCycle();
+    const containerNav = document.getElementById('containerNav');
     containerNav.classList.remove('dancing-mode');
 }
 
-// Кнопка назад — возвращает меню и закрывает визуалайзер
 dancingBackBtn.addEventListener('click', function () {
     hideDancingMode();
 });
 
-// Если трек остановился / закончился — закрываем танцы
 audioPlayer.addEventListener('pause', function () {
+    const containerNav = document.getElementById('containerNav');
     if (containerNav.classList.contains('dancing-mode')) {
         hideDancingMode();
     }
 });
 
 audioPlayer.addEventListener('play', function () {
-    // Если трек возобновился, и визуалайзер активен — вернём танцоров
+    const containerNav = document.getElementById('containerNav');
     if (tracksWind.classList.contains('visualizer-mode') && !containerNav.classList.contains('dancing-mode')) {
         showDancingMode();
     }
 });
 
-//Обработчик события для бургер меню
-
 let burgerMenu = document.querySelector('.burger-menu');
 let containerNav = document.querySelector('.containerNav');
 let burgerMenuImg = document.getElementById('burger-menu-img');
 let isBurgerOpen = false;
-let mainContent = document.querySelector('.main-content');
 
 burgerMenu.addEventListener('click', function () {
     containerNav.style.animation = 'BurgerFadeIn 0.3s ease';
     if (isBurgerOpen) {
         burgerMenuImg.src = 'icons/burger-menu-icon.png';
-        burgerMenu.width = '40px';
-        burgerMenu.height = '40px';
+        burgerMenu.style.width = '40px';
+        burgerMenu.style.height = '40px';
         containerNav.style.display = 'none';
         isBurgerOpen = false;
     } else {
         burgerMenuImg.src = 'icons/close-burger-menu.png';
-        burgerMenu.width = '30px';
-        burgerMenu.height = '30px';
+        burgerMenu.style.width = '30px';
+        burgerMenu.style.height = '30px';
         containerNav.style.display = 'flex';
         isBurgerOpen = true;
     }
@@ -2432,8 +2431,6 @@ burgerMenu.addEventListener('click', function () {
 
 window.addEventListener('resize', function () {
     if (window.innerWidth > 1165) {
-        // пустая строка потому что тогда удаляется инлайн стиль,у которого приоритет выше чем у обычного css
-        // и контейнер снова подчиняется css
         containerNav.style.display = '';
         isBurgerOpen = false;
         burgerMenuImg.src = 'icons/burger-menu-icon.png';

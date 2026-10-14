@@ -2044,7 +2044,7 @@ nav div:hover {
     height: 34px;
     border-radius: 50%;
     border: 2px solid #ffffff;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgb(255, 255, 255);
     cursor: pointer;
     transition: all 0.25s ease;
     z-index: 5;
@@ -2055,42 +2055,9 @@ nav div:hover {
 .dancing-back-btn:hover {
     transform: scale(1.1);
     box-shadow: 0 0 12px rgba(139, 111, 200, 0.6);
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(255, 255, 255, 1);
 }
 
-/* Адаптив для танцора */
-@media (max-width: 1165px) {
-    .containerNav.dancing-mode {
-        width: 360px !important;
-        height: 435px !important;
-        left: 100px !important;
-    }
-}
-
-@media (max-width: 500px) {
-    .containerNav.dancing-mode {
-        width: 100% !important;
-        min-height: 300px !important;
-        border-radius: 25px !important;
-        border-width: 3px !important;
-    }
-
-    .dancing-back-btn {
-        width: 28px !important;
-        height: 28px !important;
-        top: 10px !important;
-        left: 10px !important;
-    }
-
-    .dancing-back-btn img {
-        width: 24px !important;
-        height: 24px !important;
-    }
-
-    .dancing-track-name {
-        font-size: 12px !important;
-    }
-}
 
 .tracksWind {
     border-radius: 35px 35px 8px 8px;
@@ -2145,6 +2112,7 @@ nav div:hover {
 
 .main-track-item {
     display: flex;
+    position: relative;
     justify-content: space-between;
     align-items: center;
     padding: 12px 15px;
@@ -2166,6 +2134,7 @@ nav div:hover {
 }
 
 .main-track-item:not(.playing):hover {
+    z-index: 1;
     background: rgba(255, 255, 255, 0.15);
     border-color: rgba(255, 255, 255, 0.25);
     transform: translateX(3px);
@@ -2757,6 +2726,89 @@ nav div:hover {
     color: #666;
 }
 
+.track-menu-wrapper {
+    position: relative;
+}
+
+.track-menu {
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 6px;
+    transition: background 0.2s;
+    font-size: 20px;
+    line-height: 1;
+}
+
+.track-menu:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.track-dropdown {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    margin-top: 5px;
+    background: #2e1a47; 
+    border: 1px solid #5a3c98;
+    border-radius: 10px;
+    z-index: 1000;
+    min-width: 160px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    display: none;
+    font-family: 'Segoe UI', sans-serif;
+    z-index: 1000;
+}
+
+.track-dropdown.show {
+    display: block;
+    animation: dropdownFade 0.2s ease;
+}
+
+.track-dropdown-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 14px;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.track-dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.track-dropdown-item.delete {
+    color: #ff6b6b;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.track-dropdown-item.delete:hover {
+    background: rgba(255, 107, 107, 0.15);
+}
+
+.inline-edit-input {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #8b6fc8;
+    border-radius: 6px;
+    color: #ffffff;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 4px 8px;
+    width: 100%;
+    outline: none;
+    margin-left: 5px;
+    box-shadow: 0 0 10px rgba(139, 111, 200, 0.3);
+}
+
+.inline-edit-input:focus {
+    border-color: #e7ccfc;
+    background: rgba(255, 255, 255, 0.15);
+}
+
 @keyframes BurgerFadeIn {
     from {
         opacity: 0;
@@ -2766,6 +2818,39 @@ nav div:hover {
     to {
         opacity: 1;
         transform: translateX(0) scale(1);
+    }
+}
+
+@media (max-width: 1165px) {
+    .containerNav.dancing-mode {
+        width: 360px !important;
+        height: 435px !important;
+        left: 100px !important;
+    }
+}
+
+@media (max-width: 500px) {
+    .containerNav.dancing-mode {
+        width: 100% !important;
+        min-height: 300px !important;
+        border-radius: 25px !important;
+        border-width: 3px !important;
+    }
+
+    .dancing-back-btn {
+        width: 28px !important;
+        height: 28px !important;
+        top: 10px !important;
+        left: 10px !important;
+    }
+
+    .dancing-back-btn img {
+        width: 24px !important;
+        height: 24px !important;
+    }
+
+    .dancing-track-name {
+        font-size: 12px !important;
     }
 }
 
