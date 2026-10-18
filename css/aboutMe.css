@@ -517,6 +517,84 @@ hr.glass {
     justify-content: center;
     align-items: center;
 }
+.hakhaton{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-top: 50px;
+}
+.hakhaton-text{
+    display: flex;
+    flex-direction: column;
+    text-align: justify;
+    font-size: 20px;
+    font-family: 'Segoe UI';
+    margin-right: 25px;
+    padding: 15px;
+    border: 5px dotted #ffffff;
+    border-radius: 50px;
+}
+.hakhaton-text-about{
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.hakhaton-text-about li{
+    margin-top: 20px;
+}
+.hakhaton-text-h1{
+    font-size: 30px;
+    font-size: 600;
+    box-shadow: 
+    0 0 20px rgba(240, 230, 245, 0.5),
+    0 0 40px rgba(235, 220, 240, 0.4),
+    0 0 75px rgba(200, 180, 220, 0.3),
+    0 0 105px rgba(150, 125, 180, 0.12);
+    border-radius: 20px;
+    padding: 10px;
+    padding-left: 20px;
+
+}
+#hakhaton-text-about-first{
+    margin-left: 10px;
+}
+.hakhaton-img{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    box-shadow: 
+    0 0 20px rgba(240, 230, 245, 0.5),
+    0 0 40px rgba(235, 220, 240, 0.4),
+    0 0 75px rgba(200, 180, 220, 0.3),
+    0 0 105px rgba(150, 125, 180, 0.12);
+    border-radius: 50px;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    border: 5px dotted #ffffff;
+}
+.hakhaton-img-one{
+    border-radius: 40px;
+    width: 500px; 
+    height: 300px; 
+    flex-shrink: 0;
+}
+.hakhaton-img-two{
+    border-radius: 40px;
+    width: 500px;  
+    height: 300px; 
+    flex-shrink: 0;
+}
+.hakhaton-img img{
+    border-radius: 20px;
+    box-shadow: 
+    0 0 20px rgba(240, 230, 245, 0.5),
+    0 0 40px rgba(235, 220, 240, 0.4),
+    0 0 75px rgba(200, 180, 220, 0.3),
+    0 0 105px rgba(150, 125, 180, 0.12);
+    object-fit: cover;
+}
 @media (max-width: 1475px){
     .stack{
         height: auto;
