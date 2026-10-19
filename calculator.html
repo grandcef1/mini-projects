@@ -246,6 +246,15 @@
                         <div class="visualizerWind" id="visualizerWind">
                             <button class="visualizer-back-btn" id="visualizerBackBtn" title="К списку треков"><img
                                     src="icons/music-back-btn.png" alt="Назад" width="34px" height="34px"></button>
+                            <div class="volume-control" id="volumeControl">
+                                <button class="volume-btn" id="volumeBtn" title="Управление громкостью">
+                                    <img src="icons/volume.png" alt="Громкость" width="26px" height="26px">
+                                </button>
+                                <div class="volume-slider-wrapper">
+                                    <input type="range" id="volumeRange" min="0" max="100" value="50"
+                                        class="volume-slider">
+                                </div>
+                            </div>
                             <div class="visualizer-canvas-wrap">
                                 <canvas id="visualizerCanvas"></canvas>
                             </div>

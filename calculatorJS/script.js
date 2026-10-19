@@ -1670,6 +1670,9 @@ const previousTrackBtn = document.querySelector('.previousTrackBtn');
 const nextTrackBtn = document.querySelector('.nextTrackBtn');
 const shuffleBtn = document.querySelector('.shuffleBtn');
 const infoMusicBtn = document.getElementById('infoMusicPlayer');
+const volumeSlider = document.getElementById('volumeRange');
+const volumeBtn = document.getElementById('volumeBtn');
+const volumeControl = document.getElementById('volumeControl'); 
 
 let pendingFiles = [];
 let tracks = [];
@@ -2406,6 +2409,41 @@ audioPlayer.addEventListener('play', function () {
         showDancingMode();
     }
 });
+
+
+
+volumeBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); 
+    volumeControl.classList.toggle('is-open');
+});
+
+
+document.addEventListener('click', (e) => {
+    if (!volumeControl.contains(e.target)) {
+        volumeControl.classList.remove('is-open');
+    }
+});
+
+
+volumeSlider.addEventListener('input', function() {
+    audioPlayer.volume = this.value / 100;
+    updateVolumeIcon(this.value);
+});
+
+function updateVolumeIcon(value) {
+    const img = volumeBtn.querySelector('img');
+    
+    if (value == 0) {
+        img.src = 'icons/volume-mute.png'; 
+        
+        img.style.filter = 'grayscale(100%) opacity(0.5)';
+    } else {
+        img.src = 'icons/volume.png';
+        img.style.filter = 'none';
+    }
+}
+
+audioPlayer.volume = volumeSlider.value / 100;
 
 let burgerMenu = document.querySelector('.burger-menu');
 let containerNav = document.querySelector('.containerNav');
