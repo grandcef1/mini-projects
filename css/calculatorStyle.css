@@ -1877,17 +1877,27 @@ nav div:hover {
 }
 
 .visualizer-track-name {
+    position: absolute;
+    bottom: 67px;
+    left: 20px;
     max-width: 100%;
     text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    padding: 5px;
     font-family: 'Segoe UI', sans-serif;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 500;
     color: #ffffff;
     text-shadow: 0 0 10px rgba(139, 111, 200, 0.8);
     user-select: none;
+    backdrop-filter: blur(10px);
+    z-index: 20;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
 }
 
 .visualizer-back-btn {
@@ -2058,14 +2068,28 @@ nav div:hover {
     background: rgba(255, 255, 255, 1);
 }
 
-
-.volume-control {
+.duration-volume-sliders{
     position: absolute;
-    bottom: 20px;
-    right: 20px;
+    bottom: 13px;
+    left: 20px;
+    right: 20px; 
     display: flex;
     align-items: center;
+    gap: 15px;
+    backdrop-filter: blur(10px);
+    z-index: 20;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 4px solid rgba(255, 255, 255, 0.5);;
+    transition: all 0.3s ease;
+}
+
+.volume-control {
+    flex: 0 0 auto;
+    display: flex;
     gap: 12px;
+    align-items: center;
     z-index: 20;
 }
 
@@ -2082,7 +2106,7 @@ nav div:hover {
     cursor: pointer;
     transition: all 0.3s ease;
     backdrop-filter: blur(5px);
-    flex-shrink: 0; /* Чтобы кнопка не сжималась */
+    flex-shrink: 0; 
 }
 
 .volume-btn:hover {
@@ -2107,9 +2131,91 @@ nav div:hover {
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.duration-control{
+    display: flex;
+    flex: 1;
+    align-items: center;
+    z-index: 20;
+    min-width: 0;
+}
+
+.duration-slider-wrapper{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 30px;
+    gap: 10px;
+    overflow: hidden;
+    transform: translateX(0px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.duration-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+}
+
+
+.duration-slider:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.duration-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #ffffff;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.duration-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    background: #e7ccfc; 
+}
+
+.duration-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: #ffffff;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.seeker-duration{
+    display: flex;
+    align-items: center;
+    width: 20px;
+    height: 30px;
+    font-size: 15px;
+    font-family: 'Segoe UI';
+    font-weight: 600;
+}
+.max-duration{
+    display: flex;
+    align-items: center;
+    width: 20px;
+    height: 30px;
+    font-size: 15px;
+    font-family: 'Segoe UI';
+    font-weight: 600;
+    margin-right: 20px;
+}
+
 
 .volume-control.is-open .volume-slider-wrapper {
-    width: 120px; /* Ширина раскрытого ползунка */
+    width: 120px;
     opacity: 1;
     transform: translateX(0);
 }

@@ -1673,6 +1673,9 @@ const infoMusicBtn = document.getElementById('infoMusicPlayer');
 const volumeSlider = document.getElementById('volumeRange');
 const volumeBtn = document.getElementById('volumeBtn');
 const volumeControl = document.getElementById('volumeControl'); 
+const seeker = document.getElementById('seeker');
+const seekerDuration = document.querySelector('.seeker-duration');
+const maxDuration = document.querySelector('.max-duration');
 
 let pendingFiles = [];
 let tracks = [];
@@ -2430,6 +2433,20 @@ volumeSlider.addEventListener('input', function() {
     updateVolumeIcon(this.value);
 });
 
+audioPlayer.addEventListener('timeupdate', () => {
+    seeker.value = audioPlayer.currentTime;
+    seekerDuration.textContent = formatTime(audioPlayer.currentTime);
+});
+seeker.addEventListener('input', () => {
+    audioPlayer.currentTime = seeker.value;
+});
+
+function formatTime(seconds) {
+    if (isNaN(seconds)) return "0:00";
+    const min = Math.floor(seconds / 60);
+    const sec = Math.floor(seconds % 60);
+    return `${min}:${sec.toString().padStart(2, '0')}`;
+}
 function updateVolumeIcon(value) {
     const img = volumeBtn.querySelector('img');
     
@@ -2442,7 +2459,10 @@ function updateVolumeIcon(value) {
         img.style.filter = 'none';
     }
 }
-
+audioPlayer.addEventListener('loadedmetadata', () => {
+    seeker.max = audioPlayer.duration;
+    maxDuration.textContent = formatTime(audioPlayer.duration);
+});
 audioPlayer.volume = volumeSlider.value / 100;
 
 let burgerMenu = document.querySelector('.burger-menu');

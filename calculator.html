@@ -246,6 +246,15 @@
                         <div class="visualizerWind" id="visualizerWind">
                             <button class="visualizer-back-btn" id="visualizerBackBtn" title="К списку треков"><img
                                     src="icons/music-back-btn.png" alt="Назад" width="34px" height="34px"></button>
+                        <div class="duration-volume-sliders">
+                            <div class="duration-control" id="durationControl">
+                                <div class="duration-slider-wrapper">
+                                    <span class="seeker-duration"></span>
+                                    <input type="range" id="seeker" value="0" min="0" max="100" step="0.01"
+                                        class="duration-slider">
+                                    <span class="max-duration"></span>
+                                </div>
+                            </div>
                             <div class="volume-control" id="volumeControl">
                                 <button class="volume-btn" id="volumeBtn" title="Управление громкостью">
                                     <img src="icons/volume.png" alt="Громкость" width="26px" height="26px">
@@ -255,6 +264,7 @@
                                         class="volume-slider">
                                 </div>
                             </div>
+                        </div>
                             <div class="visualizer-canvas-wrap">
                                 <canvas id="visualizerCanvas"></canvas>
                             </div>
