@@ -37,6 +37,8 @@ observer.observe(document.querySelector('.third-project-image'));
 observer.observe(document.querySelector('.third-project-text'));
 observer.observe(document.querySelector('.fourth-project-image'));
 observer.observe(document.querySelector('.fourth-project-text'));
+observer.observe(document.querySelector('.fifth-project-image'));
+observer.observe(document.querySelector('.fifth-project-text'));
 
 function addClasses(entries) {
     entries.forEach(entry => {
@@ -63,6 +65,12 @@ function addClasses(entries) {
                 entry.target.classList.add('animationImg');
             }
             if (entry.target.classList.contains('fourth-project-text')) {
+                entry.target.classList.add('animationText');
+            }
+            if (entry.target.classList.contains('fifth-project-image')) {
+                entry.target.classList.add('animationImg');
+            }
+            if (entry.target.classList.contains('fifth-project-text')) {
                 entry.target.classList.add('animationText');
             }
             observer.unobserve(entry.target);
@@ -102,6 +110,7 @@ scrollBtnObserver.observe(document.querySelector('.first-project-image'));
 scrollBtnObserver.observe(document.querySelector('.second-project-image'));
 scrollBtnObserver.observe(document.querySelector('.third-project-image'));
 scrollBtnObserver.observe(document.querySelector('.fourth-project-image'));
+scrollBtnObserver.observe(document.querySelector('.fifth-project-image'));
 
     //прокрутка вверх
     scrollTopBtn.addEventListener('click', function(event) {

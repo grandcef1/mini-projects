@@ -1879,7 +1879,7 @@ nav div:hover {
 .visualizer-track-name {
     position: absolute;
     bottom: 67px;
-    left: 20px;
+    left: 10px;
     max-width: 100%;
     text-align: center;
     overflow: hidden;
@@ -1895,7 +1895,7 @@ nav div:hover {
     backdrop-filter: blur(10px);
     z-index: 20;
     background: rgba(255, 255, 255, 0.08);
-    border-radius: 8px;
+    border-radius: 15px;
     border: 2px solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
 }
@@ -2071,8 +2071,8 @@ nav div:hover {
 .duration-volume-sliders{
     position: absolute;
     bottom: 13px;
-    left: 20px;
-    right: 20px; 
+    left: 10px;
+    right: 10px; 
     display: flex;
     align-items: center;
     gap: 15px;
@@ -2201,6 +2201,7 @@ nav div:hover {
     font-size: 15px;
     font-family: 'Segoe UI';
     font-weight: 600;
+    color: #ffffff;
 }
 .max-duration{
     display: flex;
@@ -2211,6 +2212,7 @@ nav div:hover {
     font-family: 'Segoe UI';
     font-weight: 600;
     margin-right: 20px;
+    color: #ffffff;
 }
 
 

@@ -2381,6 +2381,9 @@ function setDancingPerson(index) {
 }
 
 function showDancingMode() {
+    if (window.innerWidth <= 500) {
+        return; 
+    }
     const containerNav = document.getElementById('containerNav');
     containerNav.classList.add('dancing-mode');
     if (currentPlayingTrackIndex >= 0 && tracks[currentPlayingTrackIndex]) {
@@ -2397,6 +2400,14 @@ function hideDancingMode() {
 
 dancingBackBtn.addEventListener('click', function () {
     hideDancingMode();
+});
+
+window.addEventListener('resize', function() {
+    const containerNav = document.getElementById('containerNav');
+    
+    if (window.innerWidth <= 500 && containerNav.classList.contains('dancing-mode')) {
+        hideDancingMode(); 
+    }
 });
 
 audioPlayer.addEventListener('pause', function () {

@@ -432,20 +432,23 @@ nav a {
 .first-project-wrapper,
 .second-project-wrapper,
 .third-project-wrapper,
-.fourth-project-wrapper {
+.fourth-project-wrapper,
+.fifth-project-wrapper {
     perspective: 800px;
     width: 50%;
 }
 
 .first-project-wrapper,
-.third-project-wrapper {
+.third-project-wrapper,
+.fifth-project-wrapper {
     margin-right: 50px;
 }
 
 .first-project-image,
 .second-project-image,
 .third-project-image,
-.fourth-project-image {
+.fourth-project-image,
+.fifth-project-image {
     transition: all ease 1s;
     opacity: 0;
     padding: 30px;
@@ -456,7 +459,8 @@ nav a {
 }
 
 .first-project-image,
-.third-project-image {
+.third-project-image,
+.fifth-project-image {
     transform: scale(0.7) translateX(-50px) rotateY(-10deg);
     margin-left: 60px;
 }
@@ -467,7 +471,8 @@ nav a {
 }
 
 .first-project-image img,
-.third-project-image img {
+.third-project-image img,
+.fifth-project-image img {
     filter: contrast(1.2);
     border-radius: 30px;
     transform: rotateY(7deg);
@@ -476,6 +481,9 @@ nav a {
         0 0 40px rgba(235, 220, 240, 0.4),
         0 0 75px rgba(200, 180, 220, 0.3),
         0 0 105px rgba(150, 125, 180, 0.12);
+}
+.fifth-project-image img{
+    border: 2px solid black;
 }
 
 .second-project-image img,
@@ -492,7 +500,8 @@ nav a {
 .first-project-text,
 .second-project-text,
 .third-project-text,
-.fourth-project-text {
+.fourth-project-text,
+.fifth-project-text {
     opacity: 0;
     transition: all ease 1s;
     box-sizing: border-box;
@@ -506,9 +515,13 @@ nav a {
     width: 40%;
     margin-top: 30px;
 }
+.fifth-project-text{
+    margin-bottom: 100px;
+}
 
 .first-project-text,
-.third-project-text {
+.third-project-text,
+.fifth-project-text {
     transform: scale(0.8) translateX(-100px);
 }
 
@@ -519,7 +532,8 @@ nav a {
 }
 
 .first-project-image.animationImg,
-.third-project-image.animationImg {
+.third-project-image.animationImg,
+.fifth-project-image.animationImg {
     transform: scale(1) translateX(0px) rotateY(7deg);
     opacity: 1;
 }
@@ -533,7 +547,8 @@ nav a {
 .first-project-text.animationText,
 .second-project-text.animationText,
 .third-project-text.animationText,
-.fourth-project-text.animationText {
+.fourth-project-text.animationText,
+.fifth-project-text.animationText{
     transform: scale(1) translateX(0px);
     opacity: 1;
 }
