@@ -597,6 +597,39 @@ hr.glass {
     0 0 105px rgba(150, 125, 180, 0.12);
     object-fit: cover;
 }
+
+.scroll-top-btn {
+    opacity: 0;
+    z-index: 9999;
+    transition: all ease 0.2s;
+    position: fixed;
+    border-radius: 20px;
+    box-sizing: border-box;
+    width: 85px;
+    height: 80px;
+    bottom: 20px;
+    left: 90%;
+    padding-top: 1px;
+    pointer-events: auto;
+}
+
+.top-arrow {
+    z-index: 3;
+    display: flex;
+    margin-left: 30px;
+    margin-top: 35px;
+    width: 20px;
+    height: 20px;
+    border-left: 3px solid rgba(0, 0, 0, 0.5);
+    border-bottom: 3px solid rgba(0, 0, 0, 0.5);
+    transform: rotate(135deg);
+}
+
+.scroll-top-btn:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transform: scale(1.1);
+    backdrop-filter: blur(5px);
+}
 @media (max-width: 1475px){
     .stack{
         height: auto;
@@ -819,5 +852,121 @@ hr.glass {
     }
     .plans-module span{
         font-size: 14px;
+    }
+}
+/* ===== АДАПТИВНОСТЬ БЛОКА ХАКАТОНА ===== */
+
+/* 1. Переход в вертикальный режим (планшеты и узкие ноутбуки) */
+@media (max-width: 1235px) {
+    .hakhaton {
+        flex-direction: column;
+        gap: 30px;
+        margin-top: 30px;
+    }
+    
+    .hakhaton-text {
+        margin-right: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .hakhaton-img {
+        width: 100%;
+        box-sizing: border-box;
+        gap: 20px;
+    }
+    
+    /* Делаем картинки резиновыми, но сохраняем их пропорции 5:3 */
+    .hakhaton-img-one,
+    .hakhaton-img-two {
+        width: 100%;
+        max-width: 500px; /* Чтобы на планшете не становились гигантскими */
+        height: auto;
+        aspect-ratio: 5 / 3;
+    }
+}
+
+/* 2. Уменьшение шрифтов и отступов (маленькие планшеты) */
+@media (max-width: 812px) {
+    .hakhaton-text {
+        font-size: 18px;
+        padding: 12px;
+        border-width: 4px;
+    }
+    
+    .hakhaton-text-h1 {
+        font-size: 24px;
+        padding: 8px;
+        padding-left: 15px;
+    }
+    
+    .hakhaton-text-about li {
+        margin-top: 15px;
+    }
+    
+    .hakhaton-img {
+        padding: 15px;
+        border-width: 4px;
+    }
+}
+
+/* 3. Дополнительное сжатие текста (большие телефоны) */
+@media (max-width: 750px) {
+    .hakhaton-text {
+        font-size: 16px;
+    }
+    
+    .hakhaton-text-h1 {
+        font-size: 20px;
+    }
+}
+
+/* 4. Мобильные устройства (полная оптимизация) */
+@media (max-width: 470px) {
+    .hakhaton {
+        margin-top: 20px;
+    }
+    
+    .hakhaton-text {
+        font-size: 14px;
+        padding: 10px;
+        border-width: 3px;
+        border-radius: 25px;
+    }
+    
+    .hakhaton-text-h1 {
+        font-size: 18px;
+        padding: 8px;
+        padding-left: 12px;
+        margin-top: 5px;
+        margin-left: 5px;
+        border-radius: 15px;
+    }
+    
+    .hakhaton-text-about {
+        padding: 5px;
+        margin-bottom: 10px;
+    }
+    
+    .hakhaton-text-about li {
+        margin-top: 10px;
+    }
+    
+    .hakhaton-img {
+        padding: 10px;
+        border-width: 3px;
+        border-radius: 25px;
+        gap: 15px;
+    }
+    
+    .hakhaton-img-one,
+    .hakhaton-img-two {
+        width: 100%;
+        height: auto;
+        border-radius: 15px;
+    }
+    
+    .hakhaton-img img {
+        border-radius: 12px;
     }
 }

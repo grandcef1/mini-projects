@@ -617,7 +617,8 @@ body::-webkit-scrollbar-thumb:hover {
     .first-project-image img,
     .second-project-image img,
     .third-project-image img,
-    .fourth-project-image img {
+    .fourth-project-image img,
+    .fifth-project-image img {
         height: 90%;
         width: 90%; 
     }
@@ -713,20 +714,25 @@ body::-webkit-scrollbar-thumb:hover {
         gap: 10px;               
         padding-top: 20px;
     }
+    
+    
     .first-project-image,
     .second-project-image,
     .third-project-image,
-    .fourth-project-image {
+    .fourth-project-image,
+    .fifth-project-image {
         width: 100%;
         padding-left: 10px;
         padding-right: 10px; 
         transform: none;
     }
 
+    
     .first-project-wrapper,
     .second-project-wrapper,
     .third-project-wrapper,
-    .fourth-project-wrapper {
+    .fourth-project-wrapper,
+    .fifth-project-wrapper {
         width: 80%;
         padding-left: 10px;
         padding-right: 10px;
@@ -734,19 +740,23 @@ body::-webkit-scrollbar-thumb:hover {
         margin-right: auto;
     }
 
+    
     .first-project-text,
     .second-project-text,
     .third-project-text,
-    .fourth-project-text {
+    .fourth-project-text,
+    .fifth-project-text {
         width: 80%;
         margin: 0;
         padding: 0;
     }
 
+    
     .first-project-image,
     .second-project-image,
     .third-project-image,
-    .fourth-project-image {
+    .fourth-project-image,
+    .fifth-project-image {
         margin-left: auto;
         margin-right: auto;
         height: auto;         
@@ -755,10 +765,12 @@ body::-webkit-scrollbar-thumb:hover {
         opacity: 0;
     }
 
+    
     .first-project-text,
     .second-project-text,
     .third-project-text,
-    .fourth-project-text {
+    .fourth-project-text,
+    .fifth-project-text {
         margin-left: auto;   
         margin-right: auto;
         height: auto;      
@@ -766,41 +778,45 @@ body::-webkit-scrollbar-thumb:hover {
         display: block;      
         text-align: center;  
     }
-
+    
     
     .first-project-image img,
     .second-project-image img,
     .third-project-image img,
-    .fourth-project-image img {
+    .fourth-project-image img,
+    .fifth-project-image img {
         transform: none;
         perspective: none; 
         display: block;      
         margin: 0 auto;
     }
 
+    
     .first-project-image.animationImg,
     .second-project-image.animationImg,
     .third-project-image.animationImg,
-    .fourth-project-image.animationImg {
+    .fourth-project-image.animationImg,
+    .fifth-project-image.animationImg {
         transform: none;
         opacity: 1;
     }
 
+    
     .first-project-wrapper { order: 1; }
     .first-project-text    { order: 2; }
 
-    
     .second-project-wrapper { order: 3; }  
     .second-project-text    { order: 4; }  
 
-    
     .third-project-wrapper { order: 5; }
     .third-project-text    { order: 6; }
 
-    
     .fourth-project-wrapper { order: 7; }  
     .fourth-project-text    { order: 8; }
 
+    
+    .fifth-project-wrapper { order: 9; }  
+    .fifth-project-text    { order: 10; }
 }
 @media (max-width: 735px) {
     .greeting-three {

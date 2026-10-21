@@ -97,9 +97,11 @@ const scrollBtnObserver = new IntersectionObserver(
         // Показываем кнопку, если виден хотя бы один проект
         if (visibleProjects.size > 0) {
             scrollTopBtn.style.opacity = '1';
+            scrollTopBtn.style.pointerEvents = 'auto';
             scrollTopBtn.style.cursor = 'pointer';
         } else {
             scrollTopBtn.style.opacity = '0';
+            scrollTopBtn.style.pointerEvents = 'none';
             scrollTopBtn.style.cursor = 'default';
         }
     },

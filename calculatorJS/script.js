@@ -2444,11 +2444,24 @@ volumeSlider.addEventListener('input', function() {
     updateVolumeIcon(this.value);
 });
 
+
+let isSeekerDragging = false;
+
 audioPlayer.addEventListener('timeupdate', () => {
-    seeker.value = audioPlayer.currentTime;
-    seekerDuration.textContent = formatTime(audioPlayer.currentTime);
+    if (!isSeekerDragging) {
+        seeker.value = audioPlayer.currentTime;
+        seekerDuration.textContent = formatTime(audioPlayer.currentTime);
+    }
 });
+
 seeker.addEventListener('input', () => {
+    isSeekerDragging = true; 
+    
+    seekerDuration.textContent = formatTime(seeker.value);
+});
+
+seeker.addEventListener('change', () => {
+    isSeekerDragging = false; 
     audioPlayer.currentTime = seeker.value;
 });
 
