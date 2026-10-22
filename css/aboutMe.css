@@ -437,6 +437,56 @@ hr.glass {
     text-decoration-thickness: 1.5px;
     transform: scale(1.03);
 }
+
+.hackerRank-Basic-card{
+    background: #aa92c4;
+    box-shadow: 
+    0 0 20px rgba(240, 230, 245, 0.5),
+    0 0 40px rgba(235, 220, 240, 0.4),
+    0 0 75px rgba(200, 180, 220, 0.3),
+    0 0 105px rgba(150, 125, 180, 0.12);
+    border-radius: 35px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 200px;
+    margin-top: 30px;
+    gap: 20px;
+}
+.hackerRank-Basic-avatar{
+    border-radius: 30px;
+    overflow: hidden;
+    margin-left: 45px;
+}
+.hackerRank-Basic-title{
+    font-family: "Montserrat";
+    font-size: 35px;
+    font-weight: 400;
+}
+.hackerRank-Basic-info{
+    margin-right: 80px;
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 100px;
+    font-family: "Montserrat";
+    font-size: 40px;
+    flex: 1;
+    line-height: 1;
+}
+.hackerRank-Basic-info a{
+    color: black;
+    text-decoration: none;
+    transition: all ease 0.3s;
+    display: inline-block;
+    
+}
+.hackerRank-Basic-info a:hover{
+    text-decoration-thickness: 1.5px;
+    transform: scale(1.03);
+}
+
 .plans{
     display: flex;
     flex-direction: column;
@@ -659,52 +709,40 @@ hr.glass {
         flex-direction: column;
         height: auto;
     }
-    .codewars-card{
-        min-height: 200px;
-        height: auto;
-        min-width: 420px;
-    }
-    .efset-card{
+    .codewars-card,
+    .efset-card,
+    .hackerRank-Basic-card { 
         min-height: 200px;
         height: auto;
         min-width: 420px;
     }
 }
-@media (max-width: 1250px){
-    .codewars-info{
+@media (max-width: 1250px) {
+    .codewars-info,
+    .efset-info,
+    .hackerRank-Basic-info { 
         font-size: 25px;
     }
-    .codewars-title{
+    .codewars-title,
+    .efset-title,
+    .hackerRank-Basic-title { 
         font-size: 25px;
     }
-    .codewars-avatar{
+    .codewars-avatar,
+    .efset-avatar,
+    .hackerRank-Basic-avatar { 
         width: 100px;
         height: 100px;
     }
-    .codewars-avatar img{
+    .codewars-avatar img,
+    .efset-avatar img,
+    .hackerRank-Basic-avatar img { 
         width: 100px;
         height: 100px;
     }
-    .codewars-card{
-        gap: 5px;
-    }
-    
-
-    .efset-info{
-        font-size: 25px;
-    }
-    .efset-title{
-        font-size: 25px;
-    }
-    .efset-avatar{
-        width: 100px;
-        height: 100px;
-    }
-    .efset-avatar img{
-        width: 100px;
-        height: 100px;
-    }
-    .efset-card{
+    .codewars-card,
+    .efset-card,
+    .hackerRank-Basic-card { 
         gap: 5px;
     }
 }
@@ -746,11 +784,10 @@ hr.glass {
         height: auto;
     }
 }
-@media (max-width: 940px){
-    .codewars-info{
-        gap: 15px;
-    }
-    .efset-info{
+@media (max-width: 940px) {
+    .codewars-info,
+    .efset-info,
+    .hackerRank-Basic-info { 
         gap: 15px;
     }
 }
@@ -764,33 +801,26 @@ hr.glass {
         height: 80px;
     }
 }
-@media (max-width: 765px){
-    .codewars-info{
+@media (max-width: 765px) {
+    .codewars-info,
+    .efset-info,
+    .hackerRank-Basic-info { 
         font-size: 20px;
     }
-    .codewars-title{
-        font-size: 18px;
+    .codewars-title,
+    .efset-title,
+    .hackerRank-Basic-title { 
+        font-size: 20px;
     }
-    .codewars-avatar{
+    .codewars-avatar,
+    .efset-avatar,
+    .hackerRank-Basic-avatar { 
         width: 70px;
         height: 70px;
     }
-    .codewars-avatar img{
-        width: 70px;
-        height: 70px;
-    }
-
-    .efset-info{
-        font-size: 20px;
-    }
-    .efset-title{
-        font-size: 20px;
-    }
-    .efset-avatar{
-        width: 70px;
-        height: 70px;
-    }
-    .efset-avatar img{
+    .codewars-avatar img,
+    .efset-avatar img,
+    .hackerRank-Basic-avatar img { 
         width: 70px;
         height: 70px;
     }
@@ -805,11 +835,10 @@ hr.glass {
         font-size: 35px;
     }
 }
-@media (max-width: 700px){
-    .codewars-info{
-        margin-right: 10px;
-    }
-    .efset-info{
+@media (max-width: 700px) {
+    .codewars-info,
+    .efset-info,
+    .hackerRank-Basic-info { 
         margin-right: 10px;
     }
 }
