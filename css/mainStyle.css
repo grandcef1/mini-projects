@@ -6,71 +6,66 @@
     font-display: swap;
 }
 
+/* ===== БАЗА ===== */
+:root {
+    --font-ui: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-head: "Lexend Giga", "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    --bg: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #7d6899 100%);
+    --glow:
+        0 0 20px rgba(240, 230, 245, 0.5),
+        0 0 40px rgba(235, 220, 240, 0.4),
+        0 0 75px rgba(200, 180, 220, 0.3),
+        0 0 105px rgba(150, 125, 180, 0.12);
+    /* ширина текста, чтобы он не заезжал под правую панель с анимациями (только на десктопе) */
+    --text-w: clamp(520px, calc(100vw - 710px), 740px);
+    /* скругление картинок проектов в % от их размера — масштабируется вместе с картинкой.
+       Если по углам всё ещё видно срез — подбери эти числа (горизонталь / вертикаль). */
+    --r-wide: 8% / 16%;
+    --r-soft: 5% / 10%;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
 #Montserrat {
-    margin-left: 25px;
-    font-family: "Montserrat";
+    margin-left: clamp(10px, 2vw, 25px);
+    font-family: "Montserrat", var(--font-ui);
     font-weight: 400;
     letter-spacing: 1px;
 }
 
 .lexend-giga-h1 {
-    font-family: "Lexend Giga", sans-serif;
+    font-family: var(--font-head);
     font-optical-sizing: auto;
     font-weight: 500;
     font-style: normal;
 }
 
-
-body, html {
+body,
+html {
     top: 0;
     width: 100%;
     height: 100%;
-    overflow-x: hidden;  
+    overflow-x: hidden;
     scroll-behavior: smooth;
+}
+
+body {
+    background: var(--bg);
+    margin: 0;
+    padding-top: 0;
+    font-family: var(--font-ui);
 }
 
 p {
     margin: 15px 0;
-}
-
-.main {
-    position: relative;
-    padding-top: 40px;
-    display: flex;
-    flex-direction: column; 
-    align-items: flex-start; 
-    width: 100%;
-    min-height: 100vh; 
-    margin-left: 10px;
-    margin-right: 10px;
-    padding-left: 50px;  
-    padding-bottom: 40px;     
-    gap: 40px;
-}
-
-.main-header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    padding: 20px;
-    padding-right: 105px;
-}
-
-hr.glass {
-    border: none;
-    height: 2px;
-    background: linear-gradient(90deg,
-            transparent 0%,
-            rgba(255, 255, 255, 0.5) 15%,
-            rgba(255, 255, 255, 0.7) 50%,
-            rgba(255, 255, 255, 0.5) 85%,
-            transparent 100%);
-}
-
-body {
-    background: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #7d6899 100%);
-    margin: 0;
-    padding-top: 0px;
 }
 
 a {
@@ -86,27 +81,51 @@ a:hover {
 }
 
 h1 {
-    margin: 0px;
+    margin: 0;
     line-height: 0.7;
     font-size: 50px;
-    font-family: 'Segoe UI';
+    font-family: var(--font-ui);
     letter-spacing: 7px;
 }
 
+hr.glass,
+.glass-two {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.5) 15%,
+            rgba(255, 255, 255, 0.7) 50%,
+            rgba(255, 255, 255, 0.5) 85%,
+            transparent 100%);
+}
+
+/* ===== ШАПКА ===== */
+.main-header {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    padding: 20px 105px 20px 20px;
+}
+
 nav {
-    margin-top: 0;
-    font-family: 'Segoe UI';
+    margin: 0 0 0 20px;
+    font-family: var(--font-ui);
     display: flex;
     font-size: 22px;
-    gap: 100px;
-    margin-left: 20px
+    gap: clamp(32px, 6vw, 100px);
 }
+
+nav a {
+    font-size: 20px;
+}
+
 .aboutMeRef {
     display: flex;
     align-items: center;
-}
-nav a {
-    font-size: 20px;
 }
 
 .dropdown {
@@ -116,14 +135,19 @@ nav a {
     font-size: 20px;
 }
 
+.dropdown span:hover {
+    color: rgb(224, 23, 157);
+    cursor: pointer;
+}
+
 .dropdown-content {
     z-index: 11;
     position: absolute;
     top: 25px;
     left: -50px;
-    background: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #7d6899 100%);
+    background: var(--bg);
     min-width: 230px;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     padding: 10px;
     border-radius: 30px;
     opacity: 0;
@@ -132,18 +156,19 @@ nav a {
     transition: all 0.2s ease;
 }
 
-.dropdown-content ol {
-    font-size: 20px;
-}
-
 .dropdown-content.show {
     opacity: 1;
     visibility: visible;
     transform: translateY(10px) translateX(15px);
 }
 
+.dropdown-content ol {
+    font-size: 20px;
+}
+
 .dropdown-content a {
     font-size: 20px;
+    line-height: 1.3;
     display: block;
     padding: 5px 0;
     color: black;
@@ -157,45 +182,69 @@ nav a {
     transform: scale(1.02);
 }
 
-.dropdown span:hover {
-    color: rgb(224, 23, 157);
-    cursor: pointer;
-}
-
-
-.greeting {
-    box-sizing: border-box;
-    border: 5px dotted #ffffff;
+/* ===== ГЛАВНЫЙ БЛОК ===== */
+.main {
     position: relative;
     display: flex;
-    z-index: 1;
-    align-items: flex-end;
+    flex-direction: column;
+    align-items: flex-start;
     width: 100%;
-    max-width: 1000px; 
-    height: 350px;
-    border-radius: 50px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    padding-bottom: 20px;
-    padding-left: 30px;
-    background: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #7d6899 100%);
+    min-height: 100vh;
+    margin: 0;
+    padding: 40px 0 40px 60px;
+    gap: 40px;
 }
 
+/* общий вид трёх блоков с текстом */
+.greeting,
+.greeting-three,
+.greeting-four {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1000px;
+    border: 5px dotted #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    background: var(--bg);
+    font-family: var(--font-ui);
+}
+
+/* --- 1. Заголовок --- */
+.greeting {
+    display: flex;
+    align-items: flex-end;
+    min-height: 350px;
+    border-radius: 50px;
+    padding: 30px 30px 24px;
+}
+
+.greeting h1 {
+    max-width: var(--text-w);
+    font-size: clamp(30px, 3.6vw, 50px);
+    letter-spacing: clamp(1px, 0.5vw, 7px);
+    line-height: 1.08;
+    overflow-wrap: anywhere;
+}
+
+.greeting h1 p {
+    margin: 0;
+}
+
+/* --- Правая панель с анимациями --- */
 .greeting-two {
+    position: absolute;
+    z-index: 10;
+    right: 65px;
+    top: 60px;
+    width: 475px;
+    min-height: 600px;
     display: flex;
     flex-direction: column;
-    z-index: 10;
-    position: absolute;
-    right: 125px;
-    top: 60px;  
-    width: 475px;
-    height: auto;              
-    min-height: 600px;
+    gap: 20px;
+    padding: 20px;
     border-radius: 50px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(10px); 
-    padding: 20px;
-    box-sizing: border-box;
-    gap: 20px;
+    backdrop-filter: blur(10px);
     transition: all 0.6s ease-in-out;
     opacity: 1;
     visibility: visible;
@@ -203,13 +252,13 @@ nav a {
 }
 
 .greeting-images {
+    position: relative;
     width: 100%;
     height: 290px;
     flex-shrink: 0;
     border-radius: 40px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    overflow: hidden;        
-    position: relative;       
+    overflow: hidden;
 }
 
 #particles-js {
@@ -220,40 +269,6 @@ nav a {
     background: #0d0619;
 }
 
-.greeting-three {
-    border: 5px dotted #ffffff;
-    box-sizing: border-box;
-    letter-spacing: 2px;
-    font-size: 16px;
-    font-family: 'Segoe UI';
-    display: flex;
-    flex-direction: column;
-    z-index: 1;
-    width: 100%;
-    max-width: 1000px; 
-    height: auto; 
-    min-height: 200px;
-    border-radius: 45px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    padding: 20px 125px 20px 30px; 
-    background: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #7d6899 100%);
-}
-
-.greeting-three h2 {
-    font-weight: 350;
-    font-size: 24px;
-    margin-left: 25px;
-    margin-right: 20px;
-    margin-bottom: 0px;
-    display: inline-block;
-    letter-spacing: 2px;
-}
-
-.greeting-three ul li {
-    padding-left: 10px;
-    font-size: 20px;
-}
-
 #css-animation {
     background: #1a0f2e;
     opacity: 0;
@@ -262,27 +277,53 @@ nav a {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
-
-.greeting-four {
-    border: 5px dotted #ffffff;
-    box-sizing: border-box;
+/* --- 2. «Чему посвящен сайт?» --- */
+.greeting-three {
     display: flex;
     flex-direction: column;
-    background: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #7d6899 100%);
-    font-family: 'Segoe UI';
-    width: 100%;
-    max-width: 1000px; 
-    height: auto; 
+    min-height: 200px;
+    border-radius: 45px;
+    padding: 24px 125px 24px 30px;
+    font-size: 16px;
+    letter-spacing: 1px;
+}
+
+.greeting-three h2 {
+    display: inline-block;
+    margin: 0 20px 6px 25px;
+    font-weight: 350;
+    font-size: 24px;
+    letter-spacing: 1.5px;
+}
+
+.greeting-three ul {
+    margin: 8px 0 0;
+}
+
+.greeting-three ul li {
+    padding-left: 10px;
+    margin-bottom: 6px;
+    font-size: 20px;
+    line-height: 1.5;
+}
+
+/* --- 3. «Человек — это то, что он создаёт» --- */
+.greeting-four {
+    display: flex;
+    flex-direction: column;
     min-height: 385px;
     border-radius: 60px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    padding: 20px 200px 28px 30px; 
+    padding: 24px 200px 28px 30px;
     font-size: 20px;
-
     opacity: 0;
     animation: fadeRight 0.8s ease forwards;
     animation-delay: 0.7s;
@@ -294,6 +335,7 @@ nav a {
         opacity: 0;
         transform: translateX(-100px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -301,83 +343,80 @@ nav a {
 }
 
 .greeting-four h2 {
-    margin-left: 18px;
-    margin-right: 20px;
-    margin-bottom: 0px;
+    margin: 0 20px 0 18px;
     font-size: 25px;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     font-weight: 650;
-}
-
-.greeting-four ul li {
-    padding-left: 10px;
-    font-size: 20px;
+    line-height: 1.3;
 }
 
 .greeting-four p {
+    max-width: var(--text-w);
+    margin: 14px 0 6px 20px;
     text-align: justify;
-    margin-left: 20px;
-    letter-spacing: 1px;
+    letter-spacing: 0.3px;
+    line-height: 1.65;
+    hyphens: auto;
+    overflow-wrap: break-word;
 }
 
 .greeting-four a {
     text-decoration: underline;
+    line-height: inherit;
+    font-size: inherit;
 }
 
-
+/* --- Переворачивающаяся карточка --- */
 .greeting-card {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    min-height: 100px;
+    max-width: var(--text-w);
+    margin: 14px 0 0 20px;
+    border-radius: 40px;
+    font-size: 30px;
+    font-weight: 600;
+    cursor: pointer;
     transition: transform 0.9s;
     transform-style: preserve-3d;
     perspective: 1000px;
-    position: relative;
-    cursor: pointer;
-    font-size: 30px;
-    font-weight: 600;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-    margin-left: 20px;
-    border-radius: 40px;
-    flex-grow: 1;
-    background: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #9a83b5 100%);
-}
-
-.face-card {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 40px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-}
-
-.back-card {
-    overflow: visible;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    border-radius: 40px;
-    box-shadow: 
-        0 0 20px rgba(240, 230, 245, 0.5),
-        0 0 40px rgba(235, 220, 240, 0.4),
-        0 0 75px rgba(200, 180, 220, 0.3),
-        0 0 105px rgba(150, 125, 180, 0.12);
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    transform: rotateY(180deg);
-    background: #9a83b5;
+    background: var(--bg);
 }
 
 .greeting-card-rotate {
     border-radius: 40px;
     transform: rotateY(180deg);
+}
+
+.face-card,
+.back-card {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 40px;
+    backface-visibility: hidden;
+}
+
+.face-card {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    font-size: clamp(18px, 4.4vw, 30px);
+    text-align: center;
+    padding: 0 10px;
+}
+
+.back-card {
+    overflow: visible;
+    gap: clamp(8px, 2vw, 20px);
+    padding: 0 10px;
+    box-shadow: var(--glow);
+    transform: rotateY(180deg);
+    background: #9a83b5;
 }
 
 .back-card-calculator,
@@ -386,15 +425,23 @@ nav a {
 .back-card-timer,
 .back-card-music {
     position: relative;
-    transition: all ease 0.2s;
+    flex: 0 1 80px;
+    min-width: 0;
+    max-width: 80px;
+    aspect-ratio: 1 / 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 80px;
-    height: 80px;
+    transition: all ease 0.2s;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    border-radius: 30px;
-    background: radial-gradient(circle at 30% 40%, #b8a2cc 0%, #9a83b5 70%, #9a83b5 100%);
+    border-radius: 30%;
+    background: var(--bg);
+}
+
+.back-card img {
+    width: 62%;
+    height: auto;
+    object-fit: contain;
 }
 
 .back-card-calculator:hover,
@@ -406,63 +453,39 @@ nav a {
     z-index: 10;
 }
 
-.glass-two {
-    border: none;
-    height: 2px;
-    background: linear-gradient(90deg,
-            transparent 0%,
-            rgba(255, 255, 255, 0.5) 15%,
-            rgba(255, 255, 255, 0.7) 50%,
-            rgba(255, 255, 255, 0.5) 85%,
-            transparent 100%);
-}
-
-
+/* ===== ПРОЕКТЫ ===== */
 .main-two {
+    --pad: 60px;
     position: relative;
-    padding-top: 50px;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+    column-gap: clamp(24px, 5vw, 80px);
+    row-gap: clamp(24px, 4vw, 50px);
     width: 100%;
-    height: 1500px;
-    gap: 20px;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 50px var(--pad) 100px;
 }
 
-.first-project-wrapper,
-.second-project-wrapper,
-.third-project-wrapper,
-.fourth-project-wrapper,
-.fifth-project-wrapper {
+[class*="-project-wrapper"] {
     perspective: 800px;
-    width: 50%;
+    width: 100%;
+    min-width: 0;
 }
 
-.first-project-wrapper,
-.third-project-wrapper,
-.fifth-project-wrapper {
-    margin-right: 50px;
-}
-
-.first-project-image,
-.second-project-image,
-.third-project-image,
-.fourth-project-image,
-.fifth-project-image {
-    transition: all ease 1s;
+[class*="-project-image"] {
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto;
     opacity: 0;
-    padding: 30px;
-    box-sizing: border-box;
-    margin-top: 30px;
-    height: 400px;
-    width: 100%; 
+    transition: all ease 1s;
 }
 
 .first-project-image,
 .third-project-image,
 .fifth-project-image {
     transform: scale(0.7) translateX(-50px) rotateY(-10deg);
-    margin-left: 60px;
 }
 
 .second-project-image,
@@ -470,53 +493,51 @@ nav a {
     transform: scale(0.7) translateX(-50px) rotateY(10deg);
 }
 
+[class*="-project-image"] img {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: contrast(1.2);
+    box-shadow: var(--glow);
+}
+
 .first-project-image img,
 .third-project-image img,
 .fifth-project-image img {
-    filter: contrast(1.2);
-    border-radius: 30px;
     transform: rotateY(7deg);
-    box-shadow: 
-        0 0 20px rgba(240, 230, 245, 0.5),
-        0 0 40px rgba(235, 220, 240, 0.4),
-        0 0 75px rgba(200, 180, 220, 0.3),
-        0 0 105px rgba(150, 125, 180, 0.12);
 }
-.fifth-project-image img{
-    border: 2px solid black;
+
+/* в картинках 1–4 рамка уже нарисована на самом скриншоте, поэтому скругление задано в % */
+.first-project-image img,
+.third-project-image img {
+    border: 1.5px solid black;
+    border-radius: var(--r-wide);
 }
 
 .second-project-image img,
 .fourth-project-image img {
-    border-radius: 33px;
+    border: 1.5px solid black;
+    border-radius: var(--r-soft);
     filter: contrast(1.2) brightness(0.9) saturate(1.15);
-    box-shadow: 
-        0 0 20px rgba(240, 230, 245, 0.5),
-        0 0 40px rgba(235, 220, 240, 0.4),
-        0 0 75px rgba(200, 180, 220, 0.3),
-        0 0 105px rgba(150, 125, 180, 0.12);
 }
 
-.first-project-text,
-.second-project-text,
-.third-project-text,
-.fourth-project-text,
-.fifth-project-text {
+.fifth-project-image img {
+    border: 2px solid black;
+    border-radius: var(--r-soft);
+}
+
+[class*="-project-text"] {
+    min-width: 0;
     opacity: 0;
     transition: all ease 1s;
-    box-sizing: border-box;
     text-align: justify;
-    display: flex;
-    align-items: center;
-    padding: 21px;
-    font-size: 20px;
-    font-family: 'Segoe UI';
-    height: 400px;
-    width: 40%;
-    margin-top: 30px;
-}
-.fifth-project-text{
-    margin-bottom: 100px;
+    padding: 10px 21px;
+    font-size: clamp(16px, 1.1vw + 5px, 20px);
+    line-height: 1.7;
+    letter-spacing: 0.2px;
+    hyphens: auto;
+    overflow-wrap: break-word;
+    text-wrap: pretty;
 }
 
 .first-project-text,
@@ -528,19 +549,18 @@ nav a {
 .second-project-text,
 .fourth-project-text {
     transform: scale(0.8) translateX(100px);
-    margin-left: 60px;
 }
 
 .first-project-image.animationImg,
 .third-project-image.animationImg,
 .fifth-project-image.animationImg {
-    transform: scale(1) translateX(0px) rotateY(7deg);
+    transform: scale(1) translateX(0) rotateY(7deg);
     opacity: 1;
 }
 
 .second-project-image.animationImg,
 .fourth-project-image.animationImg {
-    transform: scale(1) translateX(0px) rotateY(-7deg);
+    transform: scale(1) translateX(0) rotateY(-7deg);
     opacity: 1;
 }
 
@@ -548,24 +568,22 @@ nav a {
 .second-project-text.animationText,
 .third-project-text.animationText,
 .fourth-project-text.animationText,
-.fifth-project-text.animationText{
-    transform: scale(1) translateX(0px);
+.fifth-project-text.animationText {
+    transform: scale(1) translateX(0);
     opacity: 1;
 }
 
-
+/* ===== КНОПКА «НАВЕРХ» ===== */
 .scroll-top-btn {
     opacity: 0;
     z-index: 9999;
     transition: all ease 0.2s;
     position: fixed;
     border-radius: 20px;
-    box-sizing: border-box;
     width: 85px;
     height: 80px;
     bottom: 20px;
-    left: 90%;
-    padding-top: 1px;
+    right: 20px;
     pointer-events: auto;
 }
 
@@ -587,7 +605,7 @@ nav a {
     backdrop-filter: blur(5px);
 }
 
-
+/* ===== СКРОЛЛБАР ===== */
 body::-webkit-scrollbar {
     width: 10px;
 }
@@ -604,194 +622,103 @@ body::-webkit-scrollbar-thumb {
 }
 
 body::-webkit-scrollbar-thumb:hover {
-    background: #9e9e9e;  
+    background: #9e9e9e;
     cursor: default;
 }
 
+/* =====================================================
+   АДАПТИВНОСТЬ: 1270 / 1195 / 900 / 830 / 700 / 600 / 400
+   ===================================================== */
 
-@media (max-width: 1440px) {
-    .greeting-four p {
-        width: 700px;
-        height: 150px;
-    }
-    .first-project-image img,
-    .second-project-image img,
-    .third-project-image img,
-    .fourth-project-image img,
-    .fifth-project-image img {
-        height: 90%;
-        width: 90%; 
-    }
-}
-
-@media (max-width: 1370px) {
-    .greeting-four p {
-        width: 600px;
-        height: 150px;
-    }
-    .greeting-card {
-        width: 600px;
-        height: 65px;
-        flex-grow: 0; 
-        flex-shrink: 0; 
-        margin-top: 25px;
-    }
-    .back-card div {
-        width: 55px;
-        height: 55px;
-    }
-    .back-card img {
-        width: 38px;
-        height: 38px;
-    }
-}
-
-@media (max-width: 1295px) {
-    .lexend-giga-h1 {
-        width: 500px;
-    }
-    .greeting-four p {
-        height: 150px;
-    }
-    .main {
-        min-height: auto; 
-    }
-}
-
+/* Правая панель становится уже */
 @media (max-width: 1270px) {
-    .greeting-four p {
-        width: 600px;
-    }
     .greeting-two {
         width: 400px;
     }
-    .greeting-card {
-        width: 600px;
-        height: 65px;
-        flex-grow: 0; 
-        flex-shrink: 0; 
-        margin-top: 25px;
-    }
 }
 
+/* Панель скрыта — блоки на всю ширину, текст без отступов под неё */
 @media (max-width: 1195px) {
+    :root {
+        --text-w: none;
+    }
+
+    .main {
+        min-height: auto;
+        padding: 40px 60px;
+        align-items: center;
+    }
+
     .greeting-two {
-        width: 300px;
         opacity: 0;
         visibility: hidden;
+        pointer-events: none;
     }
-    .lexend-giga-h1 {
-        width: auto;
-    }
-    .greeting-four p {
-        width: 95%;
-        height: auto;
-    }
-    .greeting-card {
-        width: 95%;
-        height: auto;
-        min-height: 60px;
-    }
-    
+
     .greeting,
     .greeting-three,
     .greeting-four {
-        width: 90%;
         max-width: none;
-        padding-right: 30px;
+    }
+
+    .greeting h1 {
+        max-width: none;
+        font-size: clamp(26px, 5.2vw, 50px);
+    }
+
+    .greeting-three {
+        padding: 24px 30px;
+    }
+
+    .greeting-four {
+        padding: 24px 30px 28px;
+        min-height: 0;
+    }
+
+    .greeting-four p {
+        margin-right: 0;
+    }
+
+    .greeting-card {
+        flex-grow: 0;
+        height: clamp(64px, 17vw, 96px);
+        min-height: 0;
+        margin-right: 0;
     }
 }
 
-@media (max-width: 915px) {
-    .greeting-card {
-        height: 60px;
+@media (max-width: 900px) {
+    .main-header {
+        padding: 20px 30px;
     }
 }
+
+/* Проекты: одна колонка, картинка, затем текст */
 @media (max-width: 830px) {
     .main-two {
-        flex-direction: column;  
-        height: auto;            
-        gap: 10px;               
-        padding-top: 20px;
-    }
-    
-    
-    .first-project-image,
-    .second-project-image,
-    .third-project-image,
-    .fourth-project-image,
-    .fifth-project-image {
-        width: 100%;
-        padding-left: 10px;
-        padding-right: 10px; 
-        transform: none;
+        --pad: 20px;
+        grid-template-columns: minmax(0, 1fr);
+        row-gap: 14px;
+        padding-top: 30px;
     }
 
-    
-    .first-project-wrapper,
-    .second-project-wrapper,
-    .third-project-wrapper,
-    .fourth-project-wrapper,
-    .fifth-project-wrapper {
-        width: 80%;
-        padding-left: 10px;
-        padding-right: 10px;
+    [class*="-project-wrapper"] {
+        perspective: none;
+    }
+
+    [class*="-project-image"],
+    [class*="-project-text"] {
+        width: 100%;
+        max-width: 560px;
         margin-left: auto;
         margin-right: auto;
     }
 
-    
-    .first-project-text,
-    .second-project-text,
-    .third-project-text,
-    .fourth-project-text,
-    .fifth-project-text {
-        width: 80%;
-        margin: 0;
+    [class*="-project-image"] {
+        transform: translateY(24px);
         padding: 0;
     }
 
-    
-    .first-project-image,
-    .second-project-image,
-    .third-project-image,
-    .fourth-project-image,
-    .fifth-project-image {
-        margin-left: auto;
-        margin-right: auto;
-        height: auto;         
-        opacity: 1;  
-        transform: none;
-        opacity: 0;
-    }
-
-    
-    .first-project-text,
-    .second-project-text,
-    .third-project-text,
-    .fourth-project-text,
-    .fifth-project-text {
-        margin-left: auto;   
-        margin-right: auto;
-        height: auto;      
-        min-height: auto;
-        display: block;      
-        text-align: center;  
-    }
-    
-    
-    .first-project-image img,
-    .second-project-image img,
-    .third-project-image img,
-    .fourth-project-image img,
-    .fifth-project-image img {
-        transform: none;
-        perspective: none; 
-        display: block;      
-        margin: 0 auto;
-    }
-
-    
     .first-project-image.animationImg,
     .second-project-image.animationImg,
     .third-project-image.animationImg,
@@ -801,138 +728,270 @@ body::-webkit-scrollbar-thumb:hover {
         opacity: 1;
     }
 
-    
-    .first-project-wrapper { order: 1; }
-    .first-project-text    { order: 2; }
+    [class*="-project-image"] img {
+        transform: none;
+    }
 
-    .second-project-wrapper { order: 3; }  
-    .second-project-text    { order: 4; }  
+    /* рамка уже есть на скриншотах 1–4, поэтому CSS-рамку убираем — так углы не режутся */
+    .first-project-image img,
+    .second-project-image img,
+    .third-project-image img,
+    .fourth-project-image img {
+        border: 0;
+    }
 
-    .third-project-wrapper { order: 5; }
-    .third-project-text    { order: 6; }
+    [class*="-project-text"] {
+        transform: translateY(24px);
+        padding: 4px 4px 26px;
+        margin-top: 0;
+    }
 
-    .fourth-project-wrapper { order: 7; }  
-    .fourth-project-text    { order: 8; }
+    .first-project-text.animationText,
+    .second-project-text.animationText,
+    .third-project-text.animationText,
+    .fourth-project-text.animationText,
+    .fifth-project-text.animationText {
+        transform: none;
+    }
 
-    
-    .fifth-project-wrapper { order: 9; }  
-    .fifth-project-text    { order: 10; }
-}
-@media (max-width: 735px) {
-    .greeting-three {
-        height: auto;
-        min-height: unset;
-        padding: 20px 30px; 
+    .fifth-project-text {
+        padding-bottom: 50px;
+    }
+
+    .first-project-wrapper {
+        order: 1;
+    }
+
+    .first-project-text {
+        order: 2;
+    }
+
+    .second-project-wrapper {
+        order: 3;
+    }
+
+    .second-project-text {
+        order: 4;
+    }
+
+    .third-project-wrapper {
+        order: 5;
+    }
+
+    .third-project-text {
+        order: 6;
+    }
+
+    .fourth-project-wrapper {
+        order: 7;
+    }
+
+    .fourth-project-text {
+        order: 8;
+    }
+
+    .fifth-project-wrapper {
+        order: 9;
+    }
+
+    .fifth-project-text {
+        order: 10;
     }
 }
 
-@media (max-width: 715px) {
-    .greeting-four {
-        min-height: 420px;
-    }
-}
+/* Шапка и меню на планшетах и телефонах */
 @media (max-width: 700px) {
-    .main-header {
-        flex-direction: row;
-        align-items: center;  
-        justify-content: flex-start;
-        gap: 15px;              
-        padding: 15px 20px;
+    .main {
+        padding: 30px 20px;
+        gap: 28px;
     }
-    
-    .dropdown-content {
-        min-width: 0;           
-        width: 200px;
-        height: auto;           
-        max-height: 250px;      
-        overflow-y: auto;       
-        left: -100px;     
-        top: 45px;      
-    }
-    
-    .main-header nav {
-        font-size: 15px;
-        gap: 80px;     
-        margin-left: 30px;
-    }
-    
-    .dropdown-content ol,
-    .dropdown-content li {
-        font-size: 15px;
-    }
-    
-    .main-header nav a {
-        font-size: 20px;
-        line-height: 1.2;   
-        white-space: nowrap;
-    }
-}
 
-@media (max-width: 675px) {
+    .main-header {
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px 16px;
+        padding: 14px 20px;
+    }
+
+    nav {
+        margin-left: 0;
+        gap: clamp(16px, 5vw, 32px);
+        align-items: center;
+    }
+
+    nav a,
+    .dropdown {
+        font-size: 17px;
+    }
+
+    .dropdown {
+        align-items: center;
+        position: static;
+    }
+
+    /* меню привязано к шапке, а не к кнопке — не вылезает за экран */
+    .dropdown-content {
+        top: 100%;
+        left: auto;
+        right: 12px;
+        width: min(260px, calc(100vw - 24px));
+        min-width: 0;
+        max-height: 70vh;
+        overflow-y: auto;
+        padding: 12px 14px;
+        transform: translateY(-8px);
+    }
+
+    .dropdown-content.show {
+        transform: translateY(4px);
+    }
+
+    .dropdown-content ol {
+        font-size: 17px;
+        margin: 0;
+        padding-left: 22px;
+    }
+
+    .dropdown-content a {
+        font-size: 17px;
+    }
+
+    .greeting {
+        border-width: 4px;
+        border-radius: 36px;
+        min-height: 280px;
+        padding: 24px 22px 22px;
+    }
+
+    .greeting h1 {
+        letter-spacing: 1.5px;
+    }
+
+    .greeting-three,
     .greeting-four {
-        height: auto; 
-        min-height: 440px; 
-        padding: 20px 30px; 
+        border-width: 4px;
+        border-radius: 34px;
+    }
+
+    .greeting-three {
+        padding: 22px 22px;
+        letter-spacing: 0.3px;
+    }
+
+    .greeting-three h2 {
+        margin: 0 0 4px 0;
+        font-size: 21px;
+        letter-spacing: 0.5px;
+        display: block;
+    }
+
+    .greeting-three ul {
+        padding-left: 22px;
+    }
+
+    .greeting-three ul li {
+        font-size: 17px;
+        padding-left: 4px;
+    }
+
+    .greeting-four {
+        padding: 22px 22px 26px;
+        font-size: 17px;
+    }
+
+    .greeting-four h2 {
+        margin: 0;
+        font-size: 21px;
     }
 
     .greeting-four p {
-        margin-bottom: 5px; 
-        margin-top: 10px;   
+        margin: 12px 0 6px;
+        text-align: left;
+        letter-spacing: 0.1px;
+        line-height: 1.7;
     }
-    
+
     .greeting-card {
-        margin-top: 15px; 
+        margin: 14px 0 0;
+        border-radius: 28px;
+    }
+
+    .face-card,
+    .back-card {
+        border-radius: 28px;
     }
 }
-@media (max-width: 612px) {
-    .greeting-card{
-        font-size: 20px;
+
+/* Телефоны */
+@media (max-width: 600px) {
+    .main {
+        padding: 24px 14px;
     }
-    .main{
-        padding-left: 5px;
+
+    .main-header {
+        padding: 12px 14px;
     }
-    .greeting p{
-        font-size: 33px;
-        margin-top: 10px;
-        font-weight: 500;
-        line-height: 1.05;
+
+    #Montserrat {
+        font-size: 26px;
+        margin-left: 0;
+        font-weight: 600;
+        line-height: 1;
     }
-    .scroll-top-btn{
-        left: 80%;
+
+    nav a,
+    .dropdown {
+        font-size: 15px;
+    }
+
+    .greeting {
+        min-height: 240px;
+        padding: 22px 18px 20px;
+        border-radius: 30px;
+    }
+
+    .greeting-three,
+    .greeting-four {
+        border-radius: 28px;
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+    .scroll-top-btn {
+        right: 12px;
+        bottom: 14px;
         width: 55px;
         height: 50px;
     }
-    .top-arrow{
+
+    .top-arrow {
         width: 10px;
         height: 10px;
         margin-left: 21px;
         margin-top: 23px;
     }
-    #Montserrat{
-        font-size: 25px;
-        margin-left: 10px;
-        font-weight: 600;
-    }
-    .main-header nav {
-        gap: 20px;     
-        margin-left: 10px;
-    }
-    .main-header nav a {
-    font-size: 15px;
-    }
-    .main-header {             
-        padding: 10px 15px;
-    }
-    .main-header span{
-        font-size: 15px;
-        line-height: 0.5;
-    }
-    .dropdown-content {
-        padding: 15px;      
-        left: -140px;           
-    }
-    .dropdown{
-        align-items: center;
-    }
 }
 
+/* Узкие телефоны */
+@media (max-width: 400px) {
+    .main-two {
+        --pad: 14px;
+    }
+
+    .greeting h1 {
+        letter-spacing: 1px;
+    }
+
+    .greeting-three ul li {
+        font-size: 16px;
+    }
+
+    .greeting-four {
+        font-size: 16px;
+    }
+
+    .back-card {
+        padding: 0 6px;
+        gap: 6px;
+    }
+}
