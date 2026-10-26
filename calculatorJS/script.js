@@ -1813,11 +1813,29 @@ function saveTracksToStorage() {
 
 function loadTracksFromStorage() {
     let key = `tracks_user_${userID}`;
-    let savedTracks = localStorage.getItem(`${key}`);
+    let savedTracks = localStorage.getItem(key);
+    
+    let tracksArray = [];
+    
     if (savedTracks) {
-        return JSON.parse(savedTracks);
+        tracksArray = JSON.parse(savedTracks);
     }
-    return [];
+    
+    if (tracksArray.length === 0) {
+        const defaultTrack = {
+            url: './audio/test-audio.mp3', 
+            name: 'Mujuice - Zodiac(Test Audio)',
+            duration: 212, 
+            size: 5242880, 
+            publicId: 'local_test_track'
+        };
+        
+        tracksArray = [defaultTrack];
+        
+        localStorage.setItem(key, JSON.stringify(tracksArray));
+    }
+    
+    return tracksArray;
 }
 
 function renderMusicFileListDB() {
@@ -2180,13 +2198,29 @@ function hideLoadingModal() {
 
 function playTrack(index) {
     if (index < 0 || index >= tracks.length) return;
+    
     currentPlayingTrackIndex = index;
     audioPlayer.src = tracks[index].url;
-    audioPlayer.play().catch(function (e) { console.log('Ошибка воспроизведения:', e); });
-    isPlaying = true;
-    updatePlayBtnIcon();
-    updatePlayingTrackUI();
-    vizUpdateTrackName();
+    
+    audioPlayer.play().then(() => {
+        isPlaying = true;
+        updatePlayBtnIcon();
+        updatePlayingTrackUI();
+        vizUpdateTrackName();
+    }).catch(function (error) {
+        console.error("Ошибка воспроизведения:", error);
+        
+        if (error.name === 'NotAllowedError') {
+            showAlert('Браузер заблокировал автовоспроизведение. Попробуйте нажать Play вручную.', '⚠️');
+        } else if (error.name === 'NotSupportedError') {
+            showAlert('Ошибка: Файл не найден или формат не поддерживается. Проверьте путь: ' + tracks[index].url, '❌');
+        } else {
+            showAlert('Ошибка воспроизведения: ' + error.message, '❌');
+        }
+        
+        isPlaying = false;
+        updatePlayBtnIcon();
+    });
 }
 
 function nextTrack() {
