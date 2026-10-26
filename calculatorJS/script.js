@@ -635,53 +635,90 @@ musicPlayer.addEventListener('click', function () {
 
 
 
-//Обьект хранящий курсы валют
+// Объект хранящий курсы валют
 let currencyRates = {};
-//Функция получения API актуальных курсов валют отнгосительно BYN
+
+// Функция получения актуальных курсов валют
 async function loadCurrencyRates() {
     try {
-        let response = await fetch();
+        const url = `https://v6.exchangerate-api.com/v6/${API_KEY}/latest/USD`;
+        
+        let response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(`Ошибка сети: ${response.status}`);
+        }
+
         let data = await response.json();
-        currencyRates = data.conversion_rates;
+
+        if (data.result === "success") {
+            currencyRates = data.conversion_rates;
+            console.log("Курсы валют успешно загружены!", currencyRates);
+        } else {
+            throw new Error(data["error-type"] || "Ошибка API");
+        }
     } catch (error) {
-        console.log(error);
+        console.error("Ошибка загрузки курсов валют:", error);
+        showAlert('Не удалось загрузить курсы валют. Проверьте интернет.', '❌');
     }
 }
+
+// Вызываем функцию при загрузке скрипта
 loadCurrencyRates();
+
+// Функция конвертации
 function convertation() {
+    // Проверяем, загрузились ли курсы
     if (Object.keys(currencyRates).length === 0) {
-        showAlert('Подождите...Идет загрузка', '⏳');
+        showAlert('Подождите... Идет загрузка курсов валют', '⏳');
         return;
     }
+
     let resultStr = document.getElementById('toInput');
     let selectElementFrom = document.getElementById('fromCurrency');
     let selectElementTo = document.getElementById('toCurrency');
-    let selectValue = document.getElementById('fromInput').value;
-    let result = (selectValue / currencyRates[selectElementFrom.value]) * currencyRates[selectElementTo.value];
+    
+    let selectValue = parseFloat(document.getElementById('fromInput').value);
+
+    if (isNaN(selectValue) || selectValue === '') {
+        showAlert('Пожалуйста, введите корректную сумму!', '⚠️');
+        return;
+    }
+
+    let rateFrom = currencyRates[selectElementFrom.value];
+    let rateTo = currencyRates[selectElementTo.value];
+
+    
+    if (!rateFrom || !rateTo) {
+        showAlert('Ошибка: выбранная валюта не найдена в базе', '❌');
+        return;
+    }
+
+    
+    let result = (selectValue / rateFrom) * rateTo;
     resultStr.value = result.toFixed(3);
 }
-//обработчик кнопки 'кновертировать'
+
 let convertBtn = document.getElementById('convertBtn');
 convertBtn.addEventListener('click', convertation);
-//кнопка INFO
+
+// Кнопка INFO
 let infoConverter = document.getElementById('infoConverter');
 infoConverter.addEventListener('click', () => {
     showAlert('★ Возможности:\n' +
-        '   • Конвертация между 5 валютами\n' +
+        '   • Конвертация между популярными валютами\n' +
         '   • Актуальные курсы с ExchangeRate-API\n' +
-        '   • Обновление курсов при загрузке\n\n' +
+        '   • Обновление курсов при загрузке страницы\n\n' +
         '★ Использование:\n' +
         '   • Ввод суммы в левом поле\n' +
         '   • Выбор валюты "Из" и "В"\n' +
         '   • Результат до 3 знаков после запятой\n\n' +
-        '★ Советы:\n' +
-        '   • При загрузке курсов — ожидание\n\n' +
         '★ Примечания:\n' +
-        '   • BYN — Белорусский рубль\n' +
         '   • USD — Доллар США\n' +
+        '   • BYN — Белорусский рубль\n' +
         '   • EUR — Евро\n' +
         '   • RUB — Российский рубль\n' +
-        '   • CNY — Китайский юань', 'ⓘ')
+        '   • CNY — Китайский юань', 'ⓘ');
 });
 
 
