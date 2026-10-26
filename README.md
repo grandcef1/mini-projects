@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🎧 .noclips
+# ◉ .noclips
 
 ### Мини-проекты на чистом HTML, CSS и JavaScript
 
@@ -11,6 +11,7 @@
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![No build](https://img.shields.io/badge/сборка-не%20нужна-8b6fc8?style=for-the-badge)
+[![🌐 Живой проект](https://img.shields.io/badge/🌐_Открыть_сайт-grandcef1.github.io-1572B6?style=for-the-badge)](https://grandcef1.github.io/mini-projects/)
 
 [Проекты](#-проекты) · [Структура](#-структура-репозитория) · [Технологии](#-технологии) · [Запуск](#-запуск) · [Автор](#-автор)
 
@@ -81,7 +82,7 @@
 
 ## 📁 Структура репозитория
 
-```
+```text
 mini-projects/
 │
 ├── index.html                 # главная страница
@@ -142,7 +143,9 @@ mini-projects/
 
 ## ⚡ Запуск
 
-Сборка не нужна. Склонируйте репозиторий и откройте `index.html` в браузере:
+> 💡 **Самый простой способ:** просто откройте [живую версию сайта](https://grandcef1.github.io/mini-projects/) в браузере. Сборка не нужна!
+
+Если вы хотите запустить проект локально, склонируйте репозиторий:
 
 ```bash
 git clone https://github.com/grandcef1/mini-projects.git
@@ -151,12 +154,11 @@ cd mini-projects
 
 > 🌐 Для работы конвертера валют, загрузки треков и подгрузки библиотек с CDN нужен интернет.
 
-Если браузер блокирует часть функций при открытии файла напрямую, запустите локальный сервер:
+Если браузер блокирует часть функций при открытии файла напрямую (протокол `file://`), запустите локальный сервер:
 
 ```bash
 python -m http.server 8000
 ```
-
 и откройте <http://localhost:8000>.
 
 ---
